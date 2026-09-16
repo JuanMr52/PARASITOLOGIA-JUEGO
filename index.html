@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sala de Parásitos — entrenamiento de recuperación activa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --field:#170C2E;          /* fondo: campo de microscopio teñido */
+  --field-2:#20123F;
+  --giemsa:#6B3FA0;         /* violeta Giemsa */
+  --chromatin:#FF3D8B;      /* cromatina, acento principal */
+  --vital:#35E0D0;          /* correcto */
+  --serum:#FFB020;          /* tiempo */
+  --lysis:#FF4747;          /* error */
+  --slide:#EFE9FB;          /* texto */
+  --slide-dim:#A695C9;
+  --line:rgba(167,149,201,.22);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(900px 600px at 50% -10%, rgba(107,63,160,.55), transparent 60%),
+    radial-gradient(600px 500px at 90% 100%, rgba(255,61,139,.18), transparent 60%),
+    var(--field);
+  color:var(--slide);
+  font-family:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.55;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.display{font-family:'Bricolage Grotesque','Inter',ui-sans-serif,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:0}
+.wrap{max-width:820px;margin:0 auto;padding:28px 20px 80px}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--vital);outline-offset:3px}
+
+/* ---------- portada ---------- */
+#home h1{font-size:clamp(40px,9vw,76px)}
+#home h1 .stain{
+  background:linear-gradient(95deg,var(--chromatin),var(--serum));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.lede{color:var(--slide-dim);max-width:62ch;margin:14px 0 26px;font-size:15.5px}
+.recordbar{display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:28px}
+.rec{display:flex;flex-direction:column}
+.rec b{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;line-height:1}
+.rec span{font-size:12px;color:var(--slide-dim)}
+
+.sectitle{font-size:13px;color:var(--slide-dim);margin:26px 0 10px;display:flex;align-items:center;gap:10px}
+.sectitle:after{content:"";height:1px;flex:1;background:var(--line)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.mode{
+  text-align:left;padding:16px 16px 15px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  border:1px solid var(--line);transition:transform .12s ease,border-color .12s ease,background .12s ease;
+}
+.mode:hover{transform:translateY(-2px);border-color:var(--chromatin);background:rgba(255,61,139,.09)}
+.mode.on{border-color:var(--chromatin);background:rgba(255,61,139,.14)}
+.mode strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;letter-spacing:-.01em}
+.mode em{font-style:normal;display:block;color:var(--slide-dim);font-size:13.5px;margin-top:5px}
+.mode .tagline{display:inline-block;margin-top:9px;font-size:11.5px;color:var(--serum);border:1px solid rgba(255,176,32,.35);border-radius:99px;padding:2px 9px}
+.mode.hell .tagline{color:var(--lysis);border-color:rgba(255,71,71,.4)}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 14px;border-radius:99px;border:1px solid var(--line);font-size:14px;transition:.12s}
+.chip.on{background:var(--slide);color:#1B0F33;border-color:var(--slide);font-weight:600}
+.start{
+  margin-top:26px;width:100%;padding:18px;border-radius:14px;
+  background:var(--chromatin);color:#26071A;font-family:'Bricolage Grotesque',sans-serif;
+  font-size:21px;font-weight:800;letter-spacing:-.01em;transition:.12s;
+}
+.start:hover{background:var(--serum);transform:translateY(-2px)}
+.start small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:12.5px;opacity:.75;letter-spacing:0}
+
+/* ---------- juego ---------- */
+#game{display:none}
+.hud{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.hud .metric{font-size:13px;color:var(--slide-dim)}
+.hud .metric b{color:var(--slide);font-family:'Bricolage Grotesque',sans-serif;font-size:17px}
+.quit{margin-left:auto;font-size:13px;color:var(--slide-dim);text-decoration:underline;text-underline-offset:3px}
+.quit:hover{color:var(--chromatin)}
+
+.timerail{height:7px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:6px 0 4px}
+.timerfill{height:100%;width:100%;background:var(--vital);transform-origin:left}
+.timerfill.warn{background:var(--serum)}
+.timerfill.crit{background:var(--lysis)}
+.clock{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;color:var(--slide-dim);text-align:right}
+
+.combo{display:flex;align-items:baseline;gap:10px;margin:18px 0 4px;min-height:34px}
+.combo b{font-family:'Bricolage Grotesque',sans-serif;font-size:30px;line-height:1;color:var(--serum)}
+.combo .rank{font-size:14px;color:var(--chromatin);font-weight:600}
+.combo.pulse b{animation:pop .3s ease}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
+
+.qcard{border:1px solid var(--line);border-radius:18px;padding:22px;background:rgba(16,7,34,.55);backdrop-filter:blur(3px)}
+.qmeta{font-size:12px;color:var(--slide-dim);margin-bottom:10px}
+.qtext{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(21px,3.6vw,28px);font-weight:700;line-height:1.18;margin-bottom:18px}
+.opts{display:grid;gap:9px}
+.opt{
+  display:flex;gap:12px;align-items:flex-start;text-align:left;padding:13px 15px;border-radius:12px;
+  border:1px solid var(--line);background:rgba(255,255,255,.035);transition:.1s;font-size:15.5px;
+}
+.opt:hover:not(:disabled){border-color:var(--slide-dim);background:rgba(255,255,255,.075)}
+.opt .k{font-family:'Bricolage Grotesque',sans-serif;color:var(--slide-dim);min-width:16px}
+.opt.good{border-color:var(--vital);background:rgba(53,224,208,.16)}
+.opt.good .k{color:var(--vital)}
+.opt.bad{border-color:var(--lysis);background:rgba(255,71,71,.16)}
+.opt.bad .k{color:var(--lysis)}
+.opt:disabled{cursor:default}
+
+.typebox{display:flex;gap:9px;margin-top:4px}
+.typebox input{
+  flex:1;padding:14px 16px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:var(--slide);font-size:17px;font-family:'Inter',sans-serif;
+}
+.typebox input::placeholder{color:rgba(166,149,201,.6)}
+.typebox button{padding:0 20px;border-radius:12px;background:var(--slide);color:#1B0F33;font-weight:700}
+
+.verdict{margin-top:16px;border-left:3px solid var(--giemsa);padding:2px 0 2px 14px;font-size:14.5px;color:var(--slide-dim);display:none}
+.verdict strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;margin-bottom:3px}
+.verdict.good strong{color:var(--vital)}
+.verdict.bad strong{color:var(--lysis)}
+.verdict.bad{border-color:var(--lysis)}
+.next{margin-top:14px;padding:12px 22px;border-radius:12px;background:var(--chromatin);color:#26071A;font-weight:700;display:none}
+
+.shake{animation:shake .38s}
+@keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+.flashgood{animation:fg .4s}
+@keyframes fg{0%,100%{box-shadow:0 0 0 0 rgba(53,224,208,0)}35%{box-shadow:0 0 0 7px rgba(53,224,208,.22)}}
+
+/* ---------- fin ---------- */
+#over{display:none;text-align:center;padding-top:40px}
+#over h2{font-size:clamp(34px,8vw,62px);margin-bottom:6px}
+#over .msg{color:var(--slide-dim);max-width:48ch;margin:0 auto 22px}
+.statrow{display:flex;justify-content:center;gap:34px;flex-wrap:wrap;margin:24px 0 30px}
+.again{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.again button{padding:14px 26px;border-radius:12px;border:1px solid var(--line);font-weight:600}
+.again button.p{background:var(--chromatin);color:#26071A;border-color:var(--chromatin)}
+.leaks{text-align:left;max-width:640px;margin:34px auto 0;border-top:1px solid var(--line);padding-top:18px}
+.leaks h3{font-size:16px;margin-bottom:10px}
+.leaks li{font-size:14px;color:var(--slide-dim);margin-bottom:9px}
+.leaks li b{color:var(--slide);font-weight:600}
+
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:60;background:var(--slide);color:#1B0F33;
+  padding:9px 18px;border-radius:99px;font-weight:700;font-size:14px;opacity:0;transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(4px)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="toast" id="toast"></div>
+<div class="wrap">
+
+<section id="home">
+  <h1>Sala de<br><span class="stain">Parásitos</span></h1>
+  <p class="lede">Entrenamiento de recuperación activa sobre tus tres parciales corregidos. Diez segundos por pregunta. Si el reloj llega a cero cuenta como fallo. Elige hasta dónde quieres sufrir.</p>
+
+  <div class="recordbar">
+    <div class="rec"><b id="rBest">0</b><span>racha más larga</span></div>
+    <div class="rec"><b id="rRuns">0</b><span>intentos</span></div>
+    <div class="rec"><b id="rClear">0</b><span>rondas limpias</span></div>
+    <div class="rec"><b id="rQs">180</b><span>preguntas en el banco</span></div>
+  </div>
+
+  <div class="sectitle">Bloque de estudio</div>
+  <div class="chips" id="topics"></div>
+
+  <div class="sectitle">Modo</div>
+  <div class="grid" id="modes"></div>
+
+  <button class="start" id="btnStart">Empezar<small id="startHint"></small></button>
+</section>
+
+<section id="game">
+  <div class="hud">
+    <div class="metric">Pregunta <b id="hQ">1</b></div>
+    <div class="metric">Aciertos <b id="hHit">0</b></div>
+    <div class="metric" id="hLivesWrap">Vidas <b id="hLives">1</b></div>
+    <div class="metric">Restantes <b id="hLeft">0</b></div>
+    <button class="quit" id="btnQuit">Salir</button>
+  </div>
+  <div class="timerail"><div class="timerfill" id="tfill"></div></div>
+  <div class="clock" id="clock">10.0 s</div>
+
+  <div class="combo" id="comboBox"><b id="comboN"></b><span class="rank" id="comboRank"></span></div>
+
+  <div class="qcard" id="qcard">
+    <div class="qmeta" id="qmeta"></div>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="opts"></div>
+    <div class="typebox" id="typebox" style="display:none">
+      <input id="typein" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Escribe la respuesta exacta">
+      <button id="typego">Responder</button>
+    </div>
+    <div class="verdict" id="verdict"></div>
+    <button class="next" id="btnNext">Siguiente</button>
+  </div>
+</section>
+
+<section id="over">
+  <h2 id="overTitle"></h2>
+  <p class="msg" id="overMsg"></p>
+  <div class="statrow">
+    <div class="rec"><b id="oHit">0</b><span>aciertos</span></div>
+    <div class="rec"><b id="oStreak">0</b><span>mejor racha</span></div>
+    <div class="rec"><b id="oAcc">0%</b><span>precisión</span></div>
+  </div>
+  <div class="again">
+    <button class="p" id="btnRetry">Repetir el modo</button>
+    <button id="btnLeak">Practicar solo mis fallos</button>
+    <button id="btnHome">Cambiar de modo</button>
+  </div>
+  <div class="leaks" id="leaks"></div>
+</section>
+
+</div>
+<script>
+function Q(t,q,o,a,w,k){return{t:t,q:q,o:o,a:a,w:w,k:k?k.split('|'):null};}
+const BANK = [
+
+/* ============ PROTOZOARIOS Y GENERALIDADES ============ */
+Q('proto','¿Cuál es la forma activa, móvil y metabólicamente funcional de muchos protozoarios?',['Quiste','Trofozoíto','Ooquiste','Esporozoíto'],1,'El trofozoíto es la forma vegetativa activa; el quiste u ooquiste es la forma de resistencia.','trofozoito'),
+Q('proto','¿Qué forma protozoaria está destinada a sobrevivir fuera del huésped?',['Trofozoíto','Taquizoíto','Quiste u ooquiste','Amastigote'],2,'El quiste y el ooquiste son formas de resistencia ambiental.','quiste'),
+Q('proto','En una asociación donde ambos organismos se benefician hablamos de:',['Comensalismo','Mutualismo','Parasitismo','Foresis'],1,'Mutualismo: beneficio mutuo. No es sinónimo de comensalismo.','mutualismo'),
+Q('proto','Una especie se beneficia y la otra ni se perjudica ni se beneficia de forma importante. ¿Qué es?',['Mutualismo','Parasitismo','Comensalismo','Simbiosis'],2,'Eso define comensalismo.','comensalismo'),
+Q('proto','¿Qué término usó la profesora para la asociación íntima entre dos organismos (corrigió "mutualismo")?',['Comensalismo','Simbiosis','Foresis','Depredación'],1,'La profesora corrigió mutualismo por simbiosis: no son sinónimos.','simbiosis'),
+Q('proto','¿Dónde se localizan principalmente los coccidios intestinales del temario?',['Intestino grueso','Recto','Intestino delgado','Estómago'],2,'Cystoisospora y Cryptosporidium se relacionan con intestino delgado y enterocitos.','intestino delgado'),
+Q('proto','¿Qué células intestinales son el blanco de muchos coccidios intestinales?',['Células de Paneth','Enterocitos','Células caliciformes','Células M'],1,'La corrección manuscrita añadió "enterocitos".','enterocitos'),
+Q('proto','¿Qué ameba de vida libre causa meningoencefalitis amebiana primaria tras entrar por la mucosa nasal?',['Acanthamoeba','Balamuthia','Naegleria fowleri','Entamoeba histolytica'],2,'Exposición clásica: agua que entra por la nariz.','naegleria fowleri|naegleria'),
+Q('proto','¿Qué ameba de vida libre se asocia a queratitis y a encefalitis amebiana granulomatosa?',['Naegleria fowleri','Acanthamoeba','Iodamoeba bütschlii','Endolimax nana'],1,'Acanthamoeba: queratitis (lentes de contacto) y EAG de curso crónico.','acanthamoeba'),
+Q('proto','¿Acanthamoeba produce exclusivamente enfermedad intestinal?',['Verdadero','Falso'],1,'Falso: se asocia a queratitis y encefalitis amebiana granulomatosa, no a cuadro intestinal.'),
+Q('proto','¿Cuál es el flebótomo vector de Leishmania en América?',['Glossina','Simulium','Lutzomyia','Chrysops'],2,'Lutzomyia es el flebótomo vector americano.','lutzomyia'),
+Q('proto','¿Cuál es la forma infectante de Leishmania que el flebótomo inocula al humano?',['Amastigote','Promastigote metacíclico','Tripomastigote','Esporozoíto'],1,'Dentro de los tejidos humanos se transforma en amastigote.','promastigote metaciclico|promastigote'),
+Q('proto','Forma intracelular redondeada, sin flagelo libre, con núcleo y cinetoplasto, presente en tejidos: ¿cuál es?',['Promastigote','Epimastigote','Amastigote','Tripomastigote'],2,'Es el amastigote de Leishmania. No confundir con el "anillo con punto de cromatina" de Plasmodium.','amastigote'),
+Q('proto','¿Cuál es la forma infectante de Trypanosoma cruzi para el mamífero, presente en las heces del triatomino?',['Epimastigote','Tripomastigote metacíclico','Amastigote','Promastigote'],1,'El triatomino defeca al alimentarse y el tripomastigote metacíclico entra por la herida o mucosas.','tripomastigote metaciclico|tripomastigote'),
+Q('proto','¿Cómo se llama la masa de ADN mitocondrial característica de Leishmania y Trypanosoma?',['Citostoma','Cinetoplasto','Axostilo','Citopigio'],1,'Rasgo de los kinetoplástidos; no de los coccidios.','cinetoplasto'),
+Q('proto','¿El cinetoplasto es una estructura exclusiva de los coccidios intestinales?',['Verdadero','Falso'],1,'Falso: es característico de kinetoplástidos como Leishmania y Trypanosoma.'),
+Q('proto','¿Cuál es la forma de Plasmodium que el mosquito inocula al ser humano?',['Gametocito','Merozoíto','Esporozoíto','Ooquineto'],2,'El esporozoíto migra al hígado e invade hepatocitos.','esporozoito'),
+Q('proto','¿Qué formas de Plasmodium ingiere el mosquito al alimentarse de una persona infectada?',['Esporozoítos','Merozoítos','Gametocitos','Hipnozoítos'],2,'Inocula esporozoítos pero ingiere gametocitos: es una trampa clásica.','gametocitos|gametocito'),
+Q('proto','¿Cómo se llama la fase sexual del ciclo de malaria que ocurre en el mosquito y termina en esporozoítos?',['Esquizogonia','Esporogonia','Gametogonia hepática','Merogonia'],1,'La esporogonia ocurre en el vector.','esporogonia'),
+Q('proto','¿Con qué especies se asocian sobre todo los gránulos de Schüffner?',['P. falciparum','P. malariae','P. vivax y P. ovale','P. knowlesi'],2,'Schüffner: vivax y ovale. Maurer: falciparum.','granulos de schuffner|schuffner'),
+Q('proto','¿Qué gránulos eritrocitarios se asocian con Plasmodium falciparum?',['Schüffner','Maurer','Ziemann','James'],1,'Las manchas de Maurer son propias de falciparum.','granulos de maurer|maurer'),
+Q('proto','¿Qué especie de Plasmodium se asocia con anillos delicados o "anillo delgado" en el frotis?',['P. ovale','P. malariae','P. falciparum','P. vivax'],2,'La corrección reemplazó P. ovale por falciparum con anillo delgado.','plasmodium falciparum|falciparum'),
+Q('proto','¿Cómo se escribe correctamente el nombre binomial del agente de la malaria grave?',['Plasmodium Falciparum','plasmodium falciparum','Plasmodium falciparum','PLASMODIUM FALCIPARUM'],2,'Género con mayúscula, epíteto específico en minúscula y en cursiva.'),
+Q('proto','¿Cuál es la forma de multiplicación rápida de Toxoplasma gondii en la fase aguda?',['Bradizoíto','Taquizoíto','Ooquiste','Esporozoíto'],1,'Taquizoíto: rápido, agudo. Bradizoíto: lento, quiste tisular crónico.','taquizoito'),
+Q('proto','¿Qué formas de crecimiento lento de Toxoplasma están dentro de quistes tisulares crónicos?',['Taquizoítos','Merozoítos','Bradizoítos','Esporozoítos'],2,'Los bradizoítos corresponden a la fase crónica.','bradizoitos|bradizoito'),
+Q('proto','¿Por qué vía elimina el gato los ooquistes de Toxoplasma gondii?',['Orina','Saliva','Heces','Secreción uretral'],2,'Los felinos son los huéspedes definitivos y eliminan ooquistes en heces.','heces'),
+Q('proto','¿Qué coccidio puede tener al humano como huésped definitivo tras ingerir sarcoquistes en carne bovina?',['Cystoisospora belli','Sarcocystis hominis','Cryptosporidium hominis','Toxoplasma gondii'],1,'La profesora corrigió Cystoisospora belli por Sarcocystis hominis.','sarcocystis hominis'),
+Q('proto','¿Sarcocystis hominis se transmite al humano por picadura de un vector hematófago?',['Verdadero','Falso'],1,'Falso: se adquiere al ingerir sarcoquistes en carne.'),
+Q('proto','¿Qué coccidio intestinal invade enterocitos del intestino delgado y elimina ooquistes en heces, sobre todo en inmunodeprimidos?',['Cyclospora cayetanensis','Balantidium coli','Cystoisospora belli','Blastocystis hominis'],2,'Cystoisospora belli es un coccidio intestinal importante en inmunosupresión.','cystoisospora belli'),
+Q('proto','¿Qué coccidio transmitido por agua y alimentos produce diarrea acuosa prolongada y elimina ooquistes que deben esporular en el ambiente?',['Cryptosporidium hominis','Cyclospora cayetanensis','Cystoisospora belli','Sarcocystis hominis'],1,'Cyclospora cayetanensis es clave en brotes alimentarios e hídricos.','cyclospora cayetanensis'),
+Q('proto','¿Cryptosporidium hominis es un helminto intestinal?',['Verdadero','Falso'],1,'Falso: es un protozoario coccidio.'),
+Q('proto','¿Qué coccidio intestinal adaptado al humano fue la respuesta corregida del ítem 34 del parcial 1?',['Cryptosporidium parvum','Cryptosporidium hominis','Cyclospora cayetanensis','Cystoisospora belli'],1,'La profesora pide con frecuencia género + especie: Cryptosporidium hominis.','cryptosporidium hominis'),
+Q('proto','¿Qué estructura ventral usa Giardia para adherirse al epitelio intestinal?',['Citostoma','Cinetoplasto','Disco suctorio','Ventosa oral'],2,'Disco suctorio o adhesivo ventral. No es un citostoma.','disco suctorio|disco adhesivo|disco'),
+Q('proto','¿Qué flagelado intestinal posee trofozoíto, quiste y disco adhesivo ventral?',['Dientamoeba fragilis','Trichomonas vaginalis','Giardia lamblia','Chilomastix mesnili'],2,'Giardia lamblia, también llamada G. duodenalis.','giardia lamblia|giardia duodenalis|giardia'),
+Q('proto','¿Cómo se llama la abertura oral de un ciliado como Balantidium coli?',['Citopigio','Citostoma','Disco suctorio','Axostilo'],1,'El citostoma es la abertura oral por donde ingresan partículas.','citostoma'),
+Q('proto','¿Cómo se llama el poro anal o citoprocto de algunos protozoarios ciliados?',['Citostoma','Cinetoplasto','Citopigio','Blefaroplasto'],2,'Citopigio: abertura por donde se eliminan residuos. Cuida la ortografía.','citopigio'),
+Q('proto','¿Qué protozoario intestinal se observa principalmente como trofozoíto (sin quiste habitual)?',['Giardia lamblia','Dientamoeba fragilis','Entamoeba coli','Iodamoeba bütschlii'],1,'Dientamoeba fragilis; la profesora exige género y especie completos.','dientamoeba fragilis'),
+Q('proto','¿Qué ameba intestinal no patógena tiene un quiste con gran vacuola de glucógeno yodófila?',['Endolimax nana','Entamoeba coli','Iodamoeba bütschlii','Entamoeba hartmanni'],2,'Rasgo morfológico muy característico de Iodamoeba bütschlii.','iodamoeba butschlii|iodamoeba'),
+Q('proto','¿Qué dos especies de Entamoeba pueden verse muy similares por microscopía convencional?',['E. coli y E. hartmanni','E. histolytica y E. dispar','E. gingivalis y E. coli','E. dispar y E. nana'],1,'Diferenciarlas puede requerir pruebas adicionales; E. histolytica es la invasora.','entamoeba histolytica y entamoeba dispar|histolytica y dispar'),
+Q('proto','¿Qué cuatro ideas clave explican la patogenia de la amebiasis según la corrección?',['Anemia, fiebre, dolor y diarrea','Invasión a la mucosa, factores de virulencia, defensas del huésped y formación de úlceras','Quiste, trofozoíto, ooquiste y esporozoíto','Ingestión, migración, enquistamiento y eliminación'],1,'La amebiasis invasiva depende de la interacción parásito-huésped y del daño mucoso.'),
+Q('proto','¿Dónde se localizan principalmente las amebas intestinales como Entamoeba coli?',['Intestino delgado','Intestino grueso','Vías biliares','Estómago'],1,'Las amebas intestinales colonizan sobre todo el intestino grueso.','intestino grueso'),
+Q('proto','En un vector mecánico, ¿el parásito se desarrolla o multiplica dentro del vector?',['Sí, siempre','No, solo lo transporta'],1,'Eso define al vector biológico; el mecánico únicamente transporta.','vector mecanico'),
+Q('proto','¿Qué tipo de vector permite que el agente se desarrolle o se multiplique en su interior?',['Mecánico','Biológico','Paraténico','Accidental'],1,'El vector biológico es parte del ciclo.','vector biologico'),
+Q('proto','¿Qué tipo de artrópodo es Glossina (tse-tsé)?',['Mosquito','Mosca','Chinche','Garrapata'],1,'Glossina es una mosca, vector de la tripanosomiasis africana.','mosca'),
+Q('proto','¿Qué huésped fue aceptado por la profesora en el ítem 15 del parcial 1?',['Perro','Gato','Hombre','Cerdo'],2,'Respuesta aceptada: hombre. Recuerda que suele preguntar huésped definitivo vs intermediario.','hombre'),
+Q('proto','¿Qué especie de malaria fue aceptada por la profesora en el ítem 25 del parcial 1?',['Plasmodium malariae','Plasmodium vivax','Plasmodium ovale','Plasmodium knowlesi'],1,'Se conserva género + especie: Plasmodium vivax.','plasmodium vivax'),
+Q('proto','¿Qué signo morfológico fue aceptado por la profesora en el ítem 3 del parcial 1?',['Signo de coma','Signo del anillo','Signo de la bandera','Signo del huso'],0,'Dato corregido del ítem: memoriza el término sin inventarle contexto.','signo de coma'),
+Q('proto','¿Qué valor numérico corrigió la profesora en el ítem 45 del parcial 1?',['4','6','8','10'],2,'Dato corregido: 8. Memorízalo sin atribuirle un significado inventado.','8'),
+Q('proto','¿Giardia se fija al epitelio intestinal mediante un citostoma?',['Verdadero','Falso'],1,'Falso: usa un disco suctorio o adhesivo ventral.'),
+Q('proto','¿El bradizoíto es la forma de multiplicación rápida típica de la toxoplasmosis aguda?',['Verdadero','Falso'],1,'Falso: el bradizoíto es lento y vive en quistes tisulares crónicos. El rápido es el taquizoíto.'),
+Q('proto','¿El gametocito es la forma que el mosquito inocula al humano durante la malaria?',['Verdadero','Falso'],1,'Falso: el mosquito inocula esporozoítos e ingiere gametocitos.'),
+Q('proto','¿A qué invade el esporozoíto de Plasmodium después de ser inoculado?',['Eritrocitos','Hepatocitos','Enterocitos','Macrófagos del bazo'],1,'Primero hepatocitos (fase exoeritrocítica), luego eritrocitos.','hepatocitos'),
+
+/* ============ HELMINTOS ============ */
+Q('helm','¿En qué tejido se enquistan las larvas de Trichinella spiralis?',['Músculo cardíaco','Músculo esquelético estriado','Hígado','Pulmón'],1,'Localización larvaria clásica: músculo esquelético estriado.','musculo esqueletico estriado|musculo esqueletico|musculo estriado'),
+Q('helm','¿Qué nemátodo se adquiere por carne con larvas viables y se enquista en músculo estriado?',['Ascaris lumbricoides','Trichinella spiralis','Trichuris trichiura','Strongyloides stercoralis'],1,'Trichinella spiralis: carne de cerdo u otros mamíferos mal cocida.','trichinella spiralis'),
+Q('helm','¿Cuál es la forma infectante de Ascaris lumbricoides para el humano?',['Larva filariforme','Huevo embrionado','Cercaria','Metacercaria'],1,'Se ingiere el huevo embrionado; no penetra la piel.','huevo embrionado|huevo'),
+Q('helm','¿Dónde se localizan los adultos de Ascaris y de muchos helmintos intestinales?',['Intestino grueso','Intestino delgado','Conductos biliares','Estómago'],1,'Intestino delgado, la localización aceptada en el parcial.','intestino delgado'),
+Q('helm','¿Cómo se llama el síndrome de infiltrados pulmonares transitorios con eosinofilia por migración larvaria?',['Síndrome de Katayama','Síndrome de Löeffler','Síndrome de Meigs','Síndrome de Churg-Strauss'],1,'Síndrome de Löeffler, asociado a Ascaris y otros helmintos con fase pulmonar.','sindrome de loeffler|loeffler|sindrome de loffler'),
+Q('helm','¿Qué género de caracol es huésped intermediario clásico de Fasciola hepatica?',['Biomphalaria','Bulinus','Lymnaea','Oncomelania'],2,'Lymnaea para Fasciola; Biomphalaria para S. mansoni.','lymnaea'),
+Q('helm','¿Qué caracol es huésped intermediario de Schistosoma mansoni?',['Lymnaea','Biomphalaria','Bulinus','Planorbis'],1,'Biomphalaria es el intermediario clásico de S. mansoni.','biomphalaria'),
+Q('helm','¿Dónde se localizan con mayor precisión los adultos de Fasciola y Clonorchis?',['Luz del intestino delgado','Parénquima hepático difuso','Conductos biliares','Vesícula seminal'],2,'"Hígado" era demasiado general: la respuesta exacta es conductos biliares.','conductos biliares'),
+Q('helm','En el ciclo de Fasciola hepatica, ¿dónde se enquistan las metacercarias infectantes?',['En músculo de pez','En vegetación acuática','En la pulga','En el suelo seco'],1,'Las metacercarias se adhieren a plantas acuáticas como el berro.','planta acuatica|vegetacion acuatica'),
+Q('helm','¿Cómo se llama el extremo de fijación o "cabeza" de un céstodo?',['Rostelo','Proglótide','Escólex','Estróbila'],2,'El escólex es el órgano completo de fijación; el rostelo puede formar parte de él.','escolex'),
+Q('helm','¿Qué relación existe entre rostelo y escólex?',['Son sinónimos','El rostelo es un componente posible del escólex','El escólex es parte del rostelo','Ninguno existe en céstodos'],1,'Escólex = órgano completo de fijación; rostelo = componente que puede llevar ganchos.'),
+Q('helm','¿Cómo se llama el segmento de un céstodo lleno de huevos?',['Proglótide inmadura','Proglótide grávida','Estróbila','Oncosfera'],1,'Proglótide grávida: término clásico en Taenia.','proglotide gravida|proglotide'),
+Q('helm','¿Cómo se llama el embrión hexacanto contenido en el huevo de los céstodos?',['Cercaria','Miracidio','Oncosfera','Cisticerco'],2,'La oncosfera posee seis ganchos para penetrar tejidos.','oncosfera'),
+Q('helm','¿Qué especie de Taenia se asocia al cerdo y puede causar cisticercosis humana a partir de sus huevos?',['Taenia saginata','Taenia solium','Hymenolepis nana','Dipylidium caninum'],1,'T. solium: el humano puede actuar como huésped intermediario accidental.','taenia solium'),
+Q('helm','En la equinococosis humana, ¿qué papel cumple el ser humano?',['Huésped definitivo habitual','Huésped intermediario accidental','Vector biológico','Huésped paraténico obligado'],1,'El humano es huésped intermediario accidental de Echinococcus granulosus.','huesped intermediario accidental|huesped intermediario'),
+Q('helm','¿Qué céstodo produce hidatidosis o equinococosis quística?',['Taenia saginata','Echinococcus granulosus','Diphyllobothrium latum','Hymenolepis diminuta'],1,'Echinococcus granulosus; ciclo clásico perro-oveja.','echinococcus granulosus'),
+Q('helm','¿Cuál es el huésped intermediario herbívoro clásico de Echinococcus granulosus?',['Cerdo','Oveja','Pez de agua dulce','Pulga'],1,'La oveja es el ejemplo clásico del ciclo perro-oveja (también ganado bovino).','oveja'),
+Q('helm','¿Hymenolepis diminuta pertenece al grupo de los tremátodos?',['Verdadero','Falso'],1,'Falso: es un céstodo.'),
+Q('helm','¿Cuál es la escritura correcta del céstodo que se escribió como "Rhodenolepis diminuta"?',['Hymenolepis diminuta','Rodentolepis diminuta','Himenolepis diminuta','Hymenolepsis diminuta'],0,'La profesora penaliza la ortografía taxonómica: Hymenolepis diminuta.','hymenolepis diminuta'),
+Q('helm','¿Cuál es el nombre científico correcto del céstodo de perros y gatos transmitido por pulgas?',['Dipylidium caninum','Diphylidium caninum','Dipilidium caninum','Dipylidium canis'],0,'Dipylidium caninum; se adquiere al ingerir pulgas infectadas.','dipylidium caninum'),
+Q('helm','¿Cuál es el nombre científico correcto de la uncinaria escrita como "Ancylostoma duodenal"?',['Ancylostoma duodenalis','Ancylostoma duodenale','Ankylostoma duodenale','Ancylostomum duodenale'],1,'La terminación correcta es -duodenale.','ancylostoma duodenale'),
+Q('helm','¿Cuáles son los dos géneros clásicos de uncinarias humanas?',['Ascaris y Trichuris','Ancylostoma y Necator','Strongyloides y Enterobius','Wuchereria y Brugia'],1,'Especies clásicas: A. duodenale y N. americanus.','ancylostoma y necator'),
+Q('helm','¿Cuál es la forma infectante de Necator americanus?',['Huevo embrionado ingerido','Larva filariforme que penetra la piel','Cercaria','Metacercaria'],1,'La filariforme penetra clásicamente por los espacios interdigitales.','larva filariforme|filariforme'),
+Q('helm','¿Qué se observa dentro de los huevos de uncinarias recién eliminados en heces?',['Una larva filariforme ya desarrollada','Blastómeros','Un miracidio','Una oncosfera'],1,'Los huevos recién eliminados contienen blastómeros, no larvas desarrolladas.','blastomeros'),
+Q('helm','¿Qué nemátodo intestinal destaca por autoinfección e hiperinfección?',['Enterobius vermicularis','Strongyloides stercoralis','Trichuris trichiura','Ascaris lumbricoides'],1,'La autoinfección explica su persistencia por años y la hiperinfección en inmunosupresión.','strongyloides stercoralis'),
+Q('helm','¿Qué forma larvaria de Strongyloides se observa habitualmente en heces?',['Larva filariforme','Larva rabditiforme','Huevo embrionado','Cercaria'],1,'La rabditiforme (esófago rabditoide) es la forma diagnóstica habitual.','larva rabditiforme|rabditiforme'),
+Q('helm','¿Se adquiere Enterobius vermicularis por penetración cutánea de larvas filariformes?',['Verdadero','Falso'],1,'Falso: se adquiere por ingestión o inhalación de huevos embrionados.'),
+Q('helm','¿Qué rasgo morfológico del extremo anterior caracteriza al adulto de Enterobius vermicularis?',['Opérculo','Espina terminal','Aletas cefálicas','Escólex armado'],2,'Las aletas cefálicas son el dato morfológico clásico.','aletas cefalicas'),
+Q('helm','¿Los huevos de Enterobius vermicularis son operculados?',['Verdadero','Falso'],1,'Falso: no son operculados. El opérculo es de tremátodos y de Diphyllobothrium.'),
+Q('helm','¿Cuál es la complicación rectal clásica de una tricocefalosis intensa?',['Fístula perianal','Prolapso rectal','Megacolon tóxico','Hemorroides trombosadas'],1,'Prolapso rectal, especialmente en niños con cargas parasitarias altas.','prolapso rectal'),
+Q('helm','¿Los Schistosoma adultos son hermafroditas?',['Verdadero','Falso'],1,'Falso: son dioicos, con macho y hembra separados.'),
+Q('helm','¿Qué género de tremátodos sanguíneos es dioico y penetra al humano mediante cercarias?',['Fasciola','Schistosoma','Paragonimus','Clonorchis'],1,'Schistosoma: macho y hembra separados.','schistosoma'),
+Q('helm','¿Cuál es la forma infectante de Schistosoma que penetra activamente la piel humana?',['Miracidio','Cercaria','Metacercaria','Esporocisto'],1,'La cercaria sale del caracol y penetra la piel.','cercaria'),
+Q('helm','¿Qué fase larvaria eclosiona del huevo de Schistosoma y penetra al caracol?',['Cercaria','Miracidio','Redia','Plerocercoide'],1,'El miracidio entra al caracol; la cercaria sale de él.','miracidio'),
+Q('helm','En esquistosomiasis, ¿el miracidio sale del caracol y penetra la piel humana?',['Verdadero','Falso'],1,'Falso: es al revés. El miracidio entra al caracol y la cercaria sale y penetra la piel.'),
+Q('helm','¿Qué especie de Schistosoma se asocia con esquistosomiasis urinaria?',['S. mansoni','S. japonicum','S. haematobium','S. intercalatum'],2,'Huevos con espina terminal, eliminados por orina.','schistosoma haematobium'),
+Q('helm','¿Cuál es la forma infectante de Diphyllobothrium para el humano en el pescado?',['Metacercaria','Larva plerocercoide','Cisticerco','Cercaria'],1,'Plerocercoide en pescado; la metacercaria pertenece a tremátodos.','larva plerocercoide|plerocercoide'),
+Q('helm','¿Qué alimento contiene el plerocercoide infectante de Diphyllobothrium?',['Carne de cerdo','Pez de agua dulce crudo o mal cocido','Carne bovina','Vegetales acuáticos'],1,'Pescado de agua dulce crudo o insuficientemente cocido.','pez de agua dulce|pescado de agua dulce|pescado'),
+Q('helm','¿Con qué déficit se asocia clásicamente Diphyllobothrium latum?',['Hierro','Vitamina B12','Ácido fólico','Vitamina D'],1,'Déficit de vitamina B12 y anemia megaloblástica, no de hierro.','vitamina b12|b12'),
+Q('helm','¿Qué tiempo exacto corrigió la profesora en el primer espacio del ítem 15 del parcial 2?',['1 mes','2 meses','3 meses','6 meses'],2,'Dos correcciones en el mismo ítem: 3 meses y la asociación con vitamina B12.','3 meses'),
+Q('helm','¿Cuál es la forma infectante presente en la carne de pescado para varios tremátodos transmitidos por peces?',['Plerocercoide','Metacercaria','Cercaria','Miracidio'],1,'Metacercaria en carne de pez; no confundir con el plerocercoide de Diphyllobothrium.','metacercaria'),
+Q('helm','¿En qué dos tipos de muestra pueden encontrarse huevos de Paragonimus?',['Orina y sangre','Esputo y heces','LCR y esputo','Bilis y orina'],1,'Los huevos expectorados pueden ser deglutidos y aparecer en heces.','esputo y heces'),
+Q('helm','¿Qué filaria es transmitida por Chrysops?',['Onchocerca volvulus','Wuchereria bancrofti','Loa loa','Brugia malayi'],2,'Chrysops transmite Loa loa; Simulium transmite Onchocerca.','loa loa'),
+Q('helm','¿Qué vector transmite Onchocerca volvulus?',['Chrysops','Simulium','Culicoides','Anopheles'],1,'Simulium, la mosca negra.','simulium'),
+Q('helm','¿Qué filaria linfática tiene adultos en vasos linfáticos y microfilarias circulantes?',['Loa loa','Onchocerca volvulus','Wuchereria bancrofti','Mansonella perstans'],2,'Wuchereria bancrofti es la filaria linfática clásica.','wuchereria bancrofti'),
+Q('helm','¿Cómo se llama la estructura tipo "tapa" presente en huevos de varios tremátodos y de Diphyllobothrium?',['Espina terminal','Opérculo','Mamelón','Rostelo'],1,'El opérculo es un rasgo microscópico útil para identificar huevos.','operculo'),
+Q('helm','¿Dipylidium caninum puede adquirirse por ingestión de pulgas infectadas?',['Verdadero','Falso'],0,'Verdadero: perros y gatos son reservorios frecuentes.'),
+Q('helm','¿Los adultos de Fasciola hepatica viven en la luz del intestino delgado?',['Verdadero','Falso'],1,'Falso: se localizan en los conductos biliares.'),
+Q('helm','¿La cercaria es la forma infectante de Strongyloides stercoralis?',['Verdadero','Falso'],1,'Falso: Strongyloides usa larva filariforme; la cercaria es de tremátodos.'),
+Q('helm','¿Qué medida exacta corrigió la profesora en el ítem 11 del parcial 2?',['20 μm','30 μm','40 μm','50 μm'],1,'Dato corregido: 30 μm.','30 um|30 μm|30'),
+Q('helm','¿Qué valor numérico corrigió la profesora en el ítem 36 del parcial 2?',['100','150','200','250'],2,'Dato corregido: 200.','200'),
+Q('helm','¿Qué medida exacta corrigió la profesora en el ítem 43 del parcial 2?',['1 mm','2 mm','5 mm','2 cm'],1,'Dato corregido: 2 mm.','2 mm'),
+Q('helm','El valor escrito como "7 cm" fue corregido por la profesora a:',['1 cm','5 cm','10 cm','0.7 cm'],0,'Corrección de la anotación numérica extra: 1 cm.','1 cm'),
+Q('helm','¿Qué rango de medida corrigió la profesora en la segunda anotación numérica extra del parcial 2?',['2–60 μm','20–600 μm','200–600 μm','20–60 μm'],1,'Dato del parcial: 20–600 μm.','20-600 um|20-600'),
+Q('helm','¿Qué localización anatómica corrigió la profesora en el ítem 27 del parcial 2?',['Hígado','Pulmones','Riñones','Bazo'],1,'Dato corregido: pulmones.','pulmones|pulmon'),
+Q('helm','¿Qué respuesta indicó la profesora para el ítem 21 del parcial 2?',['No existe','Opérculo','Cercaria','Escólex'],0,'La profesora respondió "no existe": no le atribuyas una estructura concreta.','no existe'),
+
+/* ============ ARTRÓPODOS Y DIAGNÓSTICO ============ */
+Q('artro','¿Qué género de mosquito transmite dengue, Zika, chikungunya y fiebre amarilla?',['Anopheles','Culex','Aedes','Mansonia'],2,'Aedes es el vector de arbovirosis urbanas; Anopheles se asocia a malaria.','aedes'),
+Q('artro','¿Anopheles es el vector principal del dengue?',['Verdadero','Falso'],1,'Falso: Anopheles transmite malaria; el dengue lo transmite Aedes.'),
+Q('artro','¿Qué pulga penetra la piel y causa tungiasis?',['Ctenocephalides felis','Xenopsylla cheopis','Tunga penetrans','Pulex irritans'],2,'Tunga penetrans, especialmente en los pies.','tunga penetrans'),
+Q('artro','¿Cuál es el agente bacteriano de la peste transmitida por pulgas de roedores?',['Rickettsia prowazekii','Yersinia pestis','Borrelia recurrentis','Bartonella henselae'],1,'Yersinia pestis: asociación clásica de entomología médica.','yersinia pestis'),
+Q('artro','¿Cuál es el nombre correcto del ácaro causante de la escabiosis humana?',['Sarcoptes scabiei var. hominis','Scabiosis hominis','Demodex folliculorum','Sarcoptes hominis var. scabiei'],0,'"Escabiosis" es la enfermedad, no el género.','sarcoptes scabiei var hominis|sarcoptes scabiei|sarcoptes'),
+Q('artro','¿Qué dos géneros de escorpiones de importancia médica esperaba la profesora?',['Buthidae y Scorpionidae','Centruroides y Tityus','Latrodectus y Loxosceles','Tityus y Buthus'],1,'Pedía géneros, no familias: Centruroides y Tityus.','centruroides y tityus'),
+Q('artro','¿Cuál es uno de los principales péptidos citolíticos del veneno de abeja?',['Hialuronidasa','Melitina','Fosfolipasa D','Histamina'],1,'La melitina es el péptido citolítico principal; la hialuronidasa es factor de difusión.','melitina'),
+Q('artro','¿La hialuronidasa es el principal péptido citolítico del veneno de abeja?',['Verdadero','Falso'],1,'Falso: ese papel es de la melitina. La hialuronidasa facilita la difusión del veneno.'),
+Q('artro','¿Qué género de arañas incluye a las "viudas" y produce latrodectismo?',['Loxosceles','Phoneutria','Latrodectus','Atrax'],2,'Latrodectus: veneno predominantemente neurotóxico.','latrodectus'),
+Q('artro','¿Cuál es el nombre correcto del piojo de la cabeza?',['Pthirus pubis','Pediculus humanus capitis','Pediculus pubis','Phthirus capitis'],1,'Pediculus humanus capitis. El púbico es Pthirus pubis.','pediculus humanus capitis'),
+Q('artro','¿Cuál es el agente clásico de la pediculosis pubis?',['Pediculus humanus corporis','Pthirus pubis','Sarcoptes scabiei','Cimex lectularius'],1,'Pthirus pubis: cuida la ortografía exacta del género.','pthirus pubis'),
+Q('artro','¿Cuál es la medida terapéutica primaria en muchas miasis cutáneas localizadas?',['Ivermectina oral','Extracción de la larva','Antibiótico sistémico','Antihistamínicos'],1,'La profesora corrigió "ivermectina" por extracción de la larva.','extraccion de la larva|extraccion'),
+Q('artro','¿Cuántos pares de patas tienen los insectos adultos?',['Dos pares','Tres pares','Cuatro pares','Cinco pares'],1,'Tres pares = 6 patas. Los arácnidos tienen cuatro pares = 8 patas.','tres pares|3 pares|seis patas'),
+Q('artro','¿Cuántas patas tiene un arácnido adulto?',['Seis','Ocho','Diez','Doce'],1,'Cuatro pares = 8 patas.','ocho|8'),
+Q('artro','¿Qué género de pequeños dípteros hematófagos fue la lectura probable del ítem 18 del parcial 3?',['Chrysops','Glossina','Culicoides','Simulium'],2,'La corrección manuscrita parece decir Culicoides.','culicoides'),
+Q('artro','¿Qué método de concentración por sedimentación con formol-éter se usa en heces?',['Kato-Katz','Harada-Mori','Método de Ritchie','Graham'],2,'Ritchie concentra por sedimentación; no es flotación.','ritchie|metodo de ritchie'),
+Q('artro','¿El método de Ritchie es una técnica de flotación?',['Verdadero','Falso'],1,'Falso: es concentración por sedimentación.'),
+Q('artro','¿Qué técnica de cultivo en papel filtro favorece el desarrollo de larvas de nemátodos?',['Kato-Katz','Harada-Mori','Ritchie','Ziehl-Neelsen'],1,'Harada-Mori cultiva larvas; Kato-Katz cuantifica huevos.','harada-mori|harada mori'),
+Q('artro','¿Qué método se usa principalmente para cuantificar huevos de helmintos en heces?',['Ritchie','Harada-Mori','Kato-Katz','Baermann'],2,'Kato-Katz da carga parasitaria (huevos por gramo).','kato-katz|kato katz'),
+Q('artro','¿Kato-Katz es un cultivo en papel filtro para desarrollar larvas de nemátodos?',['Verdadero','Falso'],1,'Falso: eso es Harada-Mori. Kato-Katz cuantifica huevos.'),
+Q('artro','¿Fue aceptada "flotación" como respuesta en el ítem 13 del parcial 3?',['Sí, fue aceptada','No, fue marcada incorrecta'],1,'Fue marcada incorrecta. La alternativa correcta no es legible en el escaneo.'),
+Q('artro','¿Qué dosis o valor numérico exacto corrigió la profesora en el ítem 8 del parcial 3?',['5 mg','50 mg','100 mg','500 mg'],1,'Dato corregido: 50 mg.','50 mg'),
+Q('artro','¿Qué valor numérico fue aceptado en el ítem 9 del parcial 3?',['10','50','100','1000'],2,'Dato aceptado: 100.','100'),
+Q('artro','¿Qué valor exacto corrigió la profesora en el ítem 11 del parcial 3 (frente a 1200)?',['1080','1100','1180','1280'],2,'1180. La diferencia con 1200 demuestra que exige cifras precisas.','1180'),
+Q('artro','¿Qué género de arañas fue aceptado nuevamente en el ítem 19 del parcial 3?',['Loxosceles','Latrodectus','Phoneutria','Tityus'],1,'Latrodectus, relacionado con viudas y síndrome neurotóxico.','latrodectus'),
+Q('artro','¿Qué técnica es la adecuada para buscar huevos de Enterobius en la región perianal?',['Kato-Katz','Método de Graham (cinta adhesiva)','Ritchie','Harada-Mori'],1,'El método de Graham con cinta adhesiva es el estándar para Enterobius.','graham|metodo de graham|cinta adhesiva'),
+Q('artro','¿Qué vector transmite la tripanosomiasis africana?',['Lutzomyia','Glossina','Simulium','Culicoides'],1,'Glossina, la mosca tse-tsé.','glossina'),
+Q('artro','¿Qué género de mosquito es el vector de la malaria?',['Aedes','Culex','Anopheles','Mansonia'],2,'Anopheles transmite Plasmodium.','anopheles'),
+Q('artro','¿Sarcoptes scabiei var. hominis es un insecto?',['Verdadero','Falso'],1,'Falso: es un ácaro, es decir un arácnido.'),
+
+/* ============ TRAMPAS DE LA PROFESORA ============ */
+Q('trap','Se parece a Anopheles pero no lo es: ¿quién transmite dengue, Zika, chikungunya y fiebre amarilla?',['Anopheles','Aedes','Culex','Culicoides'],1,'Anopheles → malaria. Aedes → arbovirosis urbanas.'),
+Q('trap','Se parece a Chrysops pero no lo es: ¿quién transmite Onchocerca volvulus?',['Chrysops','Simulium','Glossina','Lutzomyia'],1,'Chrysops → Loa loa. Simulium → Onchocerca volvulus.'),
+Q('trap','Se parece a Glossina pero no lo es: ¿quién transmite Leishmania en América?',['Glossina','Simulium','Lutzomyia','Chrysops'],2,'Lutzomyia → Leishmania. Glossina → tripanosomiasis africana.'),
+Q('trap','Se parece a Biomphalaria pero no lo es: ¿qué caracol corresponde a Fasciola hepatica?',['Biomphalaria','Lymnaea','Bulinus','Oncomelania'],1,'Lymnaea → Fasciola. Biomphalaria → S. mansoni.'),
+Q('trap','Miracidio o cercaria: ¿cuál entra al caracol?',['Cercaria','Miracidio'],1,'El miracidio entra al caracol; la cercaria sale y penetra la piel humana.'),
+Q('trap','Metacercaria o plerocercoide: ¿cuál corresponde a Diphyllobothrium?',['Metacercaria','Plerocercoide'],1,'Metacercaria → tremátodos. Plerocercoide → Diphyllobothrium.'),
+Q('trap','Filariforme o cercaria: ¿cuál pertenece a uncinarias y Strongyloides?',['Cercaria','Filariforme'],1,'Filariforme → uncinarias/Strongyloides. Cercaria → tremátodos.'),
+Q('trap','Rostelo o escólex: ¿cuál es el órgano completo de fijación del céstodo?',['Rostelo','Escólex'],1,'Escólex = órgano completo. Rostelo = componente posible del escólex.'),
+Q('trap','Schüffner o Maurer: ¿cuál corresponde a P. vivax y P. ovale?',['Maurer','Schüffner'],1,'Schüffner → vivax/ovale. Maurer → falciparum.'),
+Q('trap','Taquizoíto o bradizoíto: ¿cuál corresponde al quiste tisular crónico?',['Taquizoíto','Bradizoíto'],1,'Taquizoíto → fase aguda. Bradizoíto → quiste crónico.'),
+Q('trap','Ritchie o Harada-Mori: ¿cuál concentra por sedimentación?',['Harada-Mori','Ritchie'],1,'Ritchie concentra por sedimentación; Harada-Mori cultiva larvas.'),
+Q('trap','Kato-Katz o Harada-Mori: ¿cuál cuantifica huevos?',['Kato-Katz','Harada-Mori'],0,'Kato-Katz cuantifica huevos; Harada-Mori recupera larvas.'),
+Q('trap','Pediculus humanus capitis o Pthirus pubis: ¿cuál es el del pubis?',['Pediculus humanus capitis','Pthirus pubis'],1,'Cabeza vs pubis: el género y la ortografía importan.'),
+Q('trap','Cystoisospora belli o Sarcocystis hominis: ¿cuál se adquiere por carne bovina con sarcoquistes?',['Cystoisospora belli','Sarcocystis hominis'],1,'La profesora corrigió exactamente este par.'),
+Q('trap','Huevo embrionado o larva filariforme: ¿cómo se adquiere Ascaris lumbricoides?',['Huevo embrionado','Larva filariforme'],0,'Ascaris se ingiere como huevo embrionado; la filariforme es de uncinarias.'),
+Q('trap','Esporozoíto o gametocito: ¿qué inocula el mosquito al humano?',['Gametocito','Esporozoíto'],1,'Inocula esporozoítos e ingiere gametocitos.'),
+Q('trap','Hierro o vitamina B12: ¿qué déficit se asocia a Diphyllobothrium latum?',['Hierro','Vitamina B12'],1,'Vitamina B12, con anemia megaloblástica.'),
+Q('trap','Intestino grueso o delgado: ¿dónde están Giardia y los coccidios intestinales?',['Intestino grueso','Intestino delgado'],1,'Intestino delgado; la profesora corrigió "grueso".'),
+Q('trap','Hígado o conductos biliares: ¿dónde viven los adultos de Fasciola?',['Hígado (respuesta general)','Conductos biliares'],1,'"Hígado" era demasiado general; exige conductos biliares.'),
+Q('trap','Citostoma o disco suctorio: ¿qué usa Giardia para adherirse?',['Citostoma','Disco suctorio'],1,'El citostoma es de ciliados como Balantidium.'),
+];
+</script>
+<script>
+/* ---------------- configuración ---------------- */
+const TOPICS = [
+  {id:'todo', name:'Todo el semestral'},
+  {id:'proto', name:'Protozoarios'},
+  {id:'helm', name:'Helmintos'},
+  {id:'artro', name:'Artrópodos y diagnóstico'},
+  {id:'trap', name:'Solo trampas'}
+];
+
+const MODES = {
+  entrenamiento:{name:'Entrenamiento',desc:'Recorres el bloque completo con 12 segundos por pregunta. Los fallos no te expulsan, pero quedan anotados.',tag:'12 s · sin castigo',lives:Infinity,time:12,reset:false,endless:false},
+  manicomio:{name:'Manicomio',desc:'Diez segundos. Un solo fallo o un reloj en cero te devuelve a cero y baraja todo de nuevo. Solo sales cuando limpias el bloque entero seguido.',tag:'1 fallo = vuelves al inicio',lives:1,time:10,reset:true,endless:false,hell:true},
+  dominio:{name:'Dominio total',desc:'Cada pregunta debe salirte bien dos veces seguidas para retirarse. Si fallas, vuelve a la cola desde cero. No termina hasta que domines todas.',tag:'no termina hasta saberlas',lives:Infinity,time:10,reset:false,endless:false,srs:true},
+  subita:{name:'Muerte súbita',desc:'Preguntas al azar sin fin. Solo importa tu racha más larga. El primer fallo cierra la partida.',tag:'racha infinita',lives:1,time:10,reset:false,endless:true},
+  escritura:{name:'Escritura exacta',desc:'Nada de opciones: escribes el nombre completo. Género y especie, ortografía incluida, como lo exige la profesora.',tag:'15 s · tres vidas',lives:3,time:15,reset:false,endless:false,typed:true},
+  rafaga:{name:'Ráfaga de trampas',desc:'Solo los pares que ya te costaron puntos. Ocho segundos y cero margen de error.',tag:'8 s · 1 fallo = reinicio',lives:1,time:8,reset:true,endless:false,forceTopic:'trap',hell:true}
+};
+
+const RANKS=[[3,'calentando'],[5,'en racha'],[8,'ojo clínico'],[12,'lectura de lámina'],[16,'sin dudar'],[21,'imparable'],[27,'memoria de atlas'],[35,'intocable'],[45,'nivel profesora']];
+
+/* ---------------- estado ---------------- */
+let S = {mode:'manicomio', topic:'todo', queue:[], i:0, hits:0, tries:0, streak:0, best:0,
+         lives:1, leaks:[], locked:false, srs:null, resets:0};
+let META = {best:0, runs:0, clears:0};
+let timerRAF=null, tEnd=0, tTotal=10;
+
+const $=id=>document.getElementById(id);
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function lev(a,b){const m=[];for(let i=0;i<=b.length;i++)m[i]=[i];for(let j=0;j<=a.length;j++)m[0][j]=j;
+  for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++)m[i][j]=b[i-1]===a[j-1]?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1);
+  return m[b.length][a.length];}
+
+/* ---------------- audio ---------------- */
+let AC=null;
+function tone(freq,dur,type,vol){
+  try{
+    if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.type=type||'sine';o.frequency.value=freq;o.connect(g);g.connect(AC.destination);
+    g.gain.setValueAtTime(0,AC.currentTime);
+    g.gain.linearRampToValueAtTime(vol||.13,AC.currentTime+.012);
+    g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+(dur||.16));
+    o.start();o.stop(AC.currentTime+(dur||.16)+.02);
+  }catch(e){}
+}
+function sGood(streak){const base=440*Math.pow(2,Math.min(streak,16)/16);tone(base,.12,'triangle',.11);setTimeout(()=>tone(base*1.5,.14,'triangle',.09),70);}
+function sBad(){tone(150,.3,'sawtooth',.1);setTimeout(()=>tone(95,.4,'sawtooth',.1),90);}
+function sTick(){tone(1100,.04,'square',.035);}
+function sWin(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.3,'triangle',.12),i*110));}
+
+/* ---------------- confeti ---------------- */
+const cv=$('fx'),cx=cv.getContext('2d');let parts=[],fxOn=false;
+function sizeFx(){cv.width=innerWidth;cv.height=innerHeight;}sizeFx();addEventListener('resize',sizeFx);
+function burst(n,cols){
+  for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*160,y:innerHeight*0.42,
+    vx:(Math.random()-.5)*11,vy:-Math.random()*13-3,g:.42,s:3+Math.random()*5,
+    c:cols[Math.floor(Math.random()*cols.length)],life:70+Math.random()*40,r:Math.random()*6});
+  if(!fxOn)loopFx();
+}
+function loopFx(){
+  fxOn=true;cx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.life-->0);
+  parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=.2;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.7);cx.restore();});
+  if(parts.length)requestAnimationFrame(loopFx);else{cx.clearRect(0,0,cv.width,cv.height);fxOn=false;}
+}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1400);}
+
+/* ---------------- almacenamiento ---------------- */
+async function loadMeta(){
+  try{const r=await window.storage.get('parasito:meta');if(r&&r.value)META=JSON.parse(r.value);}catch(e){}
+  paintMeta();
+}
+async function saveMeta(){try{await window.storage.set('parasito:meta',JSON.stringify(META));}catch(e){}}
+function paintMeta(){$('rBest').textContent=META.best||0;$('rRuns').textContent=META.runs||0;$('rClear').textContent=META.clears||0;$('rQs').textContent=BANK.length;}
+
+/* ---------------- portada ---------------- */
+function paintHome(){
+  $('topics').innerHTML=TOPICS.map(t=>`<button class="chip${t.id===S.topic?' on':''}" data-t="${t.id}">${t.name}</button>`).join('');
+  $('modes').innerHTML=Object.keys(MODES).map(k=>{const m=MODES[k];
+    return `<button class="mode${k===S.mode?' on':''}${m.hell?' hell':''}" data-m="${k}"><strong>${m.name}</strong><em>${m.desc}</em><span class="tagline">${m.tag}</span></button>`;}).join('');
+  $('topics').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.topic=b.dataset.t;paintHome();});
+  $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{S.mode=b.dataset.m;paintHome();});
+  const m=MODES[S.mode];
+  const t=m.forceTopic?TOPICS.find(x=>x.id===m.forceTopic).name:TOPICS.find(x=>x.id===S.topic).name;
+  $('startHint').textContent=`${m.name} · ${t} · ${pool().length} preguntas`;
+}
+function pool(){
+  const m=MODES[S.mode];const top=m.forceTopic||S.topic;
+  let p=BANK.filter(q=>top==='todo'?true:q.t===top);
+  if(m.typed)p=p.filter(q=>q.k&&q.k.length);
+  return p;
+}
+
+/* ---------------- arranque ---------------- */
+function start(custom){
+  const m=MODES[S.mode];
+  let p=custom&&custom.length?custom.slice():pool();
+  if(!p.length){toast('No hay preguntas en esa combinación');return;}
+  S.queue=shuffle(p.slice());S.i=0;S.hits=0;S.tries=0;S.streak=0;S.best=0;
+  S.lives=m.lives;S.leaks=[];S.locked=false;
+  S.srs=m.srs?new Map(S.queue.map(q=>[q,0])):null;
+  if(m.endless)S.total=Infinity;
+  META.runs=(META.runs||0)+1;saveMeta();
+  $('home').style.display='none';$('over').style.display='none';$('game').style.display='block';
+  $('hLivesWrap').style.display=isFinite(m.lives)?'':'none';
+  ask();
+}
+function currentQ(){
+  const m=MODES[S.mode];
+  if(m.endless){if(S.i>=S.queue.length){S.queue=shuffle(S.queue);S.i=0;}return S.queue[S.i];}
+  return S.queue[S.i];
+}
+function ask(){
+  const m=MODES[S.mode];
+  if(!m.endless&&S.i>=S.queue.length){finish(true);return;}
+  const q=currentQ();S.locked=false;
+  $('qcard').className='qcard';
+  $('verdict').style.display='none';$('btnNext').style.display='none';
+  $('hQ').textContent=S.tries+1;$('hHit').textContent=S.hits;
+  $('hLives').textContent=isFinite(S.lives)?S.lives:'∞';
+  $('hLeft').textContent=m.endless?'∞':(S.queue.length-S.i);
+  const names={proto:'Protozoarios',helm:'Helmintos',artro:'Artrópodos y diagnóstico',trap:'Trampa de la profesora'};
+  $('qmeta').textContent=names[q.t]+(m.srs?` · dominio ${S.srs.get(q)||0}/2`:'');
+  $('qtext').textContent=q.q;
+  paintCombo();
+  if(m.typed){
+    $('opts').innerHTML='';$('typebox').style.display='flex';
+    $('typein').value='';$('typein').disabled=false;setTimeout(()=>$('typein').focus(),40);
+  }else{
+    $('typebox').style.display='none';
+    const letters=['A','B','C','D','E'];
+    $('opts').innerHTML=q.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${letters[i]}</span><span>${o}</span></button>`).join('');
+    $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(parseInt(b.dataset.i)));
+  }
+  runTimer(m.time);
+}
+function paintCombo(){
+  const box=$('comboBox');
+  if(S.streak<2){$('comboN').textContent='';$('comboRank').textContent='';return;}
+  $('comboN').textContent='×'+S.streak;
+  let r='';for(const [n,label] of RANKS)if(S.streak>=n)r=label;
+  $('comboRank').textContent=r;
+  box.classList.remove('pulse');void box.offsetWidth;box.classList.add('pulse');
+}
+
+/* ---------------- temporizador ---------------- */
+function runTimer(sec){
+  tTotal=sec;tEnd=performance.now()+sec*1000;let lastTick=99;
+  cancelAnimationFrame(timerRAF);
+  const f=$('tfill');f.className='timerfill';
+  (function step(){
+    const left=Math.max(0,tEnd-performance.now())/1000;
+    f.style.transform='scaleX('+(left/tTotal)+')';
+    $('clock').textContent=left.toFixed(1)+' s';
+    f.className='timerfill'+(left<tTotal*0.5?(left<tTotal*0.25?' crit':' warn'):'');
+    const whole=Math.ceil(left);
+    if(left<=3&&whole<lastTick&&whole>0){sTick();lastTick=whole;}
+    if(left<=0){timeout();return;}
+    timerRAF=requestAnimationFrame(step);
+  })();
+}
+function stopTimer(){cancelAnimationFrame(timerRAF);}
+
+/* ---------------- respuesta ---------------- */
+function timeout(){if(S.locked)return;resolve(false,true);}
+function answer(i){
+  if(S.locked)return;const q=currentQ();
+  $('opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;
+    if(k===q.a)b.classList.add('good');else if(k===i)b.classList.add('bad');});
+  resolve(i===q.a,false);
+}
+function answerTyped(){
+  if(S.locked)return;const q=currentQ();
+  const v=norm($('typein').value);
+  if(!v)return;
+  let ok=q.k.some(k=>{const n=norm(k);return v===n||(n.length>7&&lev(v,n)<=1);});
+  $('typein').disabled=true;
+  resolve(ok,false);
+}
+function resolve(ok,timedOut){
+  S.locked=true;stopTimer();S.tries++;
+  const m=MODES[S.mode],q=currentQ(),v=$('verdict');
+  const correcta = (q.o&&q.o[q.a])?q.o[q.a]:q.k[0];
+  if(ok){
+    S.hits++;S.streak++;if(S.streak>S.best)S.best=S.streak;
+    sGood(S.streak);$('qcard').classList.add('flashgood');
+    v.className='verdict good';v.innerHTML='<strong>Correcto</strong>'+q.w;v.style.display='block';
+    if([5,10,15,20,25,30,40,50].includes(S.streak)){
+      burst(60,['#FF3D8B','#FFB020','#35E0D0','#EFE9FB']);
+      let r='';for(const [n,label] of RANKS)if(S.streak>=n)r=label;
+      toast('Racha ×'+S.streak+' — '+r);
+    }
+    if(m.srs){const c=(S.srs.get(q)||0)+1;S.srs.set(q,c);
+      if(c<2){S.queue.push(q);}  /* vuelve al final hasta dominarla */
+    }
+    $('hHit').textContent=S.hits;
+    S.i++;paintCombo();
+    setTimeout(()=>{if(!MODES[S.mode].endless&&S.i>=S.queue.length){finish(true);}else ask();},950);
+    return;
+  }
+  /* fallo */
+  S.streak=0;sBad();$('qcard').classList.add('shake');
+  if(!S.leaks.some(x=>x.q===q.q))S.leaks.push(q);
+  v.className='verdict bad';
+  v.innerHTML='<strong>'+(timedOut?'Se acabó el tiempo':'Incorrecto')+'</strong>Respuesta: <b style="color:var(--slide)">'+correcta+'</b>. '+q.w;
+  v.style.display='block';paintCombo();
+  if(m.reset){
+    setTimeout(()=>finish(false,'reset'),2400);return;
+  }
+  if(isFinite(S.lives)){S.lives--;$('hLives').textContent=S.lives;
+    if(S.lives<=0){setTimeout(()=>finish(false,'lives'),2400);return;}}
+  if(m.srs){S.srs.set(q,0);S.queue.push(q);}
+  if(m.endless){setTimeout(()=>finish(false,'lives'),2400);return;}
+  S.i++;
+  $('btnNext').style.display='inline-block';$('btnNext').focus();
+}
+$('btnNext').onclick=()=>{if(!MODES[S.mode].endless&&S.i>=S.queue.length)finish(true);else ask();};
+$('typego').onclick=answerTyped;
+$('typein').addEventListener('keydown',e=>{if(e.key==='Enter')answerTyped();});
+
+/* ---------------- fin ---------------- */
+function finish(won,why){
+  stopTimer();
+  const m=MODES[S.mode];
+  if(S.best>(META.best||0)){META.best=S.best;}
+  if(won&&!m.endless){META.clears=(META.clears||0)+1;}
+  saveMeta();paintMeta();
+  $('game').style.display='none';$('over').style.display='block';
+  $('oHit').textContent=S.hits;$('oStreak').textContent=S.best;
+  $('oAcc').textContent=S.tries?Math.round(S.hits/S.tries*100)+'%':'0%';
+  const T=$('overTitle'),M=$('overMsg');
+  if(won){
+    sWin();burst(150,['#FF3D8B','#FFB020','#35E0D0','#EFE9FB','#6B3FA0']);
+    T.textContent='Bloque limpio';
+    M.textContent=m.srs?'Respondiste dos veces seguidas cada pregunta del bloque. Eso ya es memoria, no suerte. Sube al modo Manicomio con el semestral completo.'
+      :'Terminaste el bloque. Si aún no lo has hecho en Manicomio con todo el semestral, ese es el siguiente paso.';
+  }else if(why==='reset'){
+    T.textContent='Vuelves a cero';
+    M.textContent='Un fallo reinicia la ronda entera. Lee la respuesta que acabas de ver, dila en voz alta y arranca otra vez.';
+  }else{
+    T.textContent = m.endless?('Racha rota en '+S.best):'Sin vidas';
+    M.textContent = m.endless?'Tu racha más larga queda registrada. Intenta superarla.':'Se te acabaron las vidas. Repasa tus fallos antes de repetir.';
+  }
+  const seen=new Set();
+  $('leaks').innerHTML = S.leaks.length
+    ? '<h3>Lo que se te escapó en esta ronda</h3><ul>'+S.leaks.filter(q=>!seen.has(q.q)&&seen.add(q.q)).map(q=>
+        '<li><b>'+q.q+'</b><br>'+((q.o&&q.o[q.a])?q.o[q.a]:q.k[0])+' — '+q.w+'</li>').join('')+'</ul>'
+    : (won?'':'<h3>Sin fallos anotados en esta ronda</h3>');
+  $('btnLeak').style.display=S.leaks.length?'inline-block':'none';
+}
+$('btnRetry').onclick=()=>start();
+$('btnLeak').onclick=()=>{const l=S.leaks.slice();if(MODES[S.mode].reset)S.mode='entrenamiento';start(l);};
+$('btnHome').onclick=goHome;
+$('btnQuit').onclick=()=>{stopTimer();goHome();};
+function goHome(){stopTimer();$('game').style.display='none';$('over').style.display='none';$('home').style.display='block';paintHome();}
+$('btnStart').onclick=()=>start();
+
+/* ---------------- teclado ---------------- */
+addEventListener('keydown',e=>{
+  if($('game').style.display!=='block')return;
+  if(MODES[S.mode].typed)return;
+  const k=e.key.toLowerCase();
+  const map={'1':0,'2':1,'3':2,'4':3,'5':4,'a':0,'b':1,'c':2,'d':3,'e':4};
+  if(k in map&&!S.locked){const b=$('opts').querySelector('[data-i="'+map[k]+'"]');if(b)b.click();}
+  if((k==='enter'||k===' ')&&S.locked&&$('btnNext').style.display!=='none'){e.preventDefault();$('btnNext').click();}
+});
+
+paintHome();loadMeta();
+</script>
+</body>
+</html>
