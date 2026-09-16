@@ -3,194 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sala de Parásitos — entrenamiento de recuperación activa</title>
+<title>Sala de Parásitos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --field:#170C2E;          /* fondo: campo de microscopio teñido */
-  --field-2:#20123F;
-  --giemsa:#6B3FA0;         /* violeta Giemsa */
-  --chromatin:#FF3D8B;      /* cromatina, acento principal */
-  --vital:#35E0D0;          /* correcto */
-  --serum:#FFB020;          /* tiempo */
-  --lysis:#FF4747;          /* error */
-  --slide:#EFE9FB;          /* texto */
-  --slide-dim:#A695C9;
-  --line:rgba(167,149,201,.22);
+  --field:#150A2B; --field2:#1E1040;
+  --giemsa:#6B3FA0; --chromatin:#FF3D8B; --vital:#35E0D0; --serum:#FFB020; --lysis:#FF4747;
+  --slide:#F0EAFC; --dim:#A695C9; --line:rgba(167,149,201,.22);
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  background:
-    radial-gradient(900px 600px at 50% -10%, rgba(107,63,160,.55), transparent 60%),
-    radial-gradient(600px 500px at 90% 100%, rgba(255,61,139,.18), transparent 60%),
-    var(--field);
-  color:var(--slide);
-  font-family:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-size:16px;line-height:1.55;
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 620px at 50% -12%,rgba(107,63,160,.6),transparent 62%),
+             radial-gradient(620px 520px at 92% 100%,rgba(255,61,139,.16),transparent 60%),var(--field);
+  color:var(--slide);font-family:'Inter',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;
+  min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
-h1,h2,h3,.display{font-family:'Bricolage Grotesque','Inter',ui-sans-serif,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:0}
-.wrap{max-width:820px;margin:0 auto;padding:28px 20px 80px}
+h1,h2,h3{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:0}
+.wrap{max-width:840px;margin:0 auto;padding:26px 18px 90px;position:relative;z-index:2}
 button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
 button:focus-visible,input:focus-visible{outline:3px solid var(--vital);outline-offset:3px}
 
-/* ---------- portada ---------- */
-#home h1{font-size:clamp(40px,9vw,76px)}
-#home h1 .stain{
-  background:linear-gradient(95deg,var(--chromatin),var(--serum));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.lede{color:var(--slide-dim);max-width:62ch;margin:14px 0 26px;font-size:15.5px}
-.recordbar{display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:28px}
+#home h1{font-size:clamp(40px,9vw,74px)}
+#home h1 span{background:linear-gradient(95deg,var(--chromatin),var(--serum));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{color:var(--dim);max-width:60ch;margin:14px 0 24px;font-size:15.5px}
+.recordbar{display:flex;gap:24px;flex-wrap:wrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:24px}
 .rec{display:flex;flex-direction:column}
 .rec b{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;line-height:1}
-.rec span{font-size:12px;color:var(--slide-dim)}
-
-.sectitle{font-size:13px;color:var(--slide-dim);margin:26px 0 10px;display:flex;align-items:center;gap:10px}
+.rec span{font-size:12px;color:var(--dim)}
+.sectitle{font-size:13px;color:var(--dim);margin:24px 0 10px;display:flex;align-items:center;gap:10px}
 .sectitle:after{content:"";height:1px;flex:1;background:var(--line)}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-.mode{
-  text-align:left;padding:16px 16px 15px;border-radius:14px;
-  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
-  border:1px solid var(--line);transition:transform .12s ease,border-color .12s ease,background .12s ease;
-}
-.mode:hover{transform:translateY(-2px);border-color:var(--chromatin);background:rgba(255,61,139,.09)}
-.mode.on{border-color:var(--chromatin);background:rgba(255,61,139,.14)}
-.mode strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;letter-spacing:-.01em}
-.mode em{font-style:normal;display:block;color:var(--slide-dim);font-size:13.5px;margin-top:5px}
-.mode .tagline{display:inline-block;margin-top:9px;font-size:11.5px;color:var(--serum);border:1px solid rgba(255,176,32,.35);border-radius:99px;padding:2px 9px}
-.mode.hell .tagline{color:var(--lysis);border-color:rgba(255,71,71,.4)}
-
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{padding:8px 14px;border-radius:99px;border:1px solid var(--line);font-size:14px;transition:.12s}
+.chip small{opacity:.55;margin-left:6px}
 .chip.on{background:var(--slide);color:#1B0F33;border-color:var(--slide);font-weight:600}
-.start{
-  margin-top:26px;width:100%;padding:18px;border-radius:14px;
-  background:var(--chromatin);color:#26071A;font-family:'Bricolage Grotesque',sans-serif;
-  font-size:21px;font-weight:800;letter-spacing:-.01em;transition:.12s;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:12px}
+.mode{text-align:left;padding:16px;border-radius:14px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));transition:.12s}
+.mode:hover{transform:translateY(-2px);border-color:var(--chromatin);background:rgba(255,61,139,.09)}
+.mode.on{border-color:var(--chromatin);background:rgba(255,61,139,.15)}
+.mode strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:19px}
+.mode em{font-style:normal;display:block;color:var(--dim);font-size:13.5px;margin-top:5px}
+.mode .tag{display:inline-block;margin-top:9px;font-size:11.5px;color:var(--serum);border:1px solid rgba(255,176,32,.35);border-radius:99px;padding:2px 9px}
+.mode.hell .tag{color:var(--lysis);border-color:rgba(255,71,71,.4)}
+.start{margin-top:24px;width:100%;padding:18px;border-radius:14px;background:var(--chromatin);color:#26071A;
+  font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:800;transition:.12s}
 .start:hover{background:var(--serum);transform:translateY(-2px)}
-.start small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:12.5px;opacity:.75;letter-spacing:0}
+.start small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:12.5px;opacity:.75}
 
-/* ---------- juego ---------- */
 #game{display:none}
-.hud{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
-.hud .metric{font-size:13px;color:var(--slide-dim)}
-.hud .metric b{color:var(--slide);font-family:'Bricolage Grotesque',sans-serif;font-size:17px}
-.quit{margin-left:auto;font-size:13px;color:var(--slide-dim);text-decoration:underline;text-underline-offset:3px}
-.quit:hover{color:var(--chromatin)}
-
-.timerail{height:7px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:6px 0 4px}
+.xprow{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.lvl{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;color:var(--serum);white-space:nowrap}
+.xpbar{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.xpfill{height:100%;width:0;background:linear-gradient(90deg,var(--giemsa),var(--chromatin),var(--serum));transition:width .5s cubic-bezier(.2,.9,.3,1)}
+.hud{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.hud .m{font-size:13px;color:var(--dim)}
+.hud .m b{color:var(--slide);font-family:'Bricolage Grotesque',sans-serif;font-size:17px}
+.quit{margin-left:auto;font-size:13px;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
+.timerail{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:6px 0 3px}
 .timerfill{height:100%;width:100%;background:var(--vital);transform-origin:left}
 .timerfill.warn{background:var(--serum)}
 .timerfill.crit{background:var(--lysis)}
-.clock{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;color:var(--slide-dim);text-align:right}
-
-.combo{display:flex;align-items:baseline;gap:10px;margin:18px 0 4px;min-height:34px}
-.combo b{font-family:'Bricolage Grotesque',sans-serif;font-size:30px;line-height:1;color:var(--serum)}
+.clock{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;color:var(--dim);text-align:right}
+.clock.crit{color:var(--lysis);font-size:20px;animation:beat .5s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}30%{transform:scale(1.22)}}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:3;opacity:0;
+  box-shadow:inset 0 0 130px 30px rgba(255,71,71,.55);transition:opacity .2s}
+#vignette.on{animation:vig .55s infinite}
+@keyframes vig{0%,100%{opacity:.25}50%{opacity:.85}}
+.combo{display:flex;align-items:baseline;gap:10px;margin:16px 0 4px;min-height:36px}
+.combo b{font-family:'Bricolage Grotesque',sans-serif;font-size:32px;line-height:1;color:var(--serum)}
 .combo .rank{font-size:14px;color:var(--chromatin);font-weight:600}
-.combo.pulse b{animation:pop .3s ease}
-@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
-
-.qcard{border:1px solid var(--line);border-radius:18px;padding:22px;background:rgba(16,7,34,.55);backdrop-filter:blur(3px)}
-.qmeta{font-size:12px;color:var(--slide-dim);margin-bottom:10px}
-.qtext{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(21px,3.6vw,28px);font-weight:700;line-height:1.18;margin-bottom:18px}
+.combo.pulse b{animation:pop .32s}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.5)}100%{transform:scale(1)}}
+.qcard{border:1px solid var(--line);border-radius:18px;padding:22px;background:rgba(14,6,30,.6)}
+.qmeta{font-size:12px;color:var(--dim);margin-bottom:10px}
+.qtext{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(20px,3.5vw,27px);font-weight:700;line-height:1.2;margin-bottom:18px}
 .opts{display:grid;gap:9px}
-.opt{
-  display:flex;gap:12px;align-items:flex-start;text-align:left;padding:13px 15px;border-radius:12px;
-  border:1px solid var(--line);background:rgba(255,255,255,.035);transition:.1s;font-size:15.5px;
-}
-.opt:hover:not(:disabled){border-color:var(--slide-dim);background:rgba(255,255,255,.075)}
-.opt .k{font-family:'Bricolage Grotesque',sans-serif;color:var(--slide-dim);min-width:16px}
-.opt.good{border-color:var(--vital);background:rgba(53,224,208,.16)}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:13px 15px;border-radius:12px;
+  border:1px solid var(--line);background:rgba(255,255,255,.035);transition:.1s;font-size:15.5px}
+.opt:hover:not(:disabled){border-color:var(--dim);background:rgba(255,255,255,.08)}
+.opt .k{font-family:'Bricolage Grotesque',sans-serif;color:var(--dim);min-width:16px}
+.opt.good{border-color:var(--vital);background:rgba(53,224,208,.18)}
 .opt.good .k{color:var(--vital)}
-.opt.bad{border-color:var(--lysis);background:rgba(255,71,71,.16)}
+.opt.bad{border-color:var(--lysis);background:rgba(255,71,71,.18)}
 .opt.bad .k{color:var(--lysis)}
 .opt:disabled{cursor:default}
-
-.typebox{display:flex;gap:9px;margin-top:4px}
-.typebox input{
-  flex:1;padding:14px 16px;border-radius:12px;border:1px solid var(--line);
-  background:rgba(255,255,255,.05);color:var(--slide);font-size:17px;font-family:'Inter',sans-serif;
-}
-.typebox input::placeholder{color:rgba(166,149,201,.6)}
+.typebox{display:flex;gap:9px}
+.typebox input{flex:1;padding:14px 16px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:var(--slide);font-size:17px}
 .typebox button{padding:0 20px;border-radius:12px;background:var(--slide);color:#1B0F33;font-weight:700}
-
-.verdict{margin-top:16px;border-left:3px solid var(--giemsa);padding:2px 0 2px 14px;font-size:14.5px;color:var(--slide-dim);display:none}
+.verdict{margin-top:16px;border-left:3px solid var(--giemsa);padding:2px 0 2px 14px;font-size:14.5px;color:var(--dim);display:none}
 .verdict strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;margin-bottom:3px}
 .verdict.good strong{color:var(--vital)}
-.verdict.bad strong{color:var(--lysis)}
 .verdict.bad{border-color:var(--lysis)}
+.verdict.bad strong{color:var(--lysis)}
 .next{margin-top:14px;padding:12px 22px;border-radius:12px;background:var(--chromatin);color:#26071A;font-weight:700;display:none}
-
 .shake{animation:shake .38s}
-@keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
-.flashgood{animation:fg .4s}
-@keyframes fg{0%,100%{box-shadow:0 0 0 0 rgba(53,224,208,0)}35%{box-shadow:0 0 0 7px rgba(53,224,208,.22)}}
-
-/* ---------- fin ---------- */
-#over{display:none;text-align:center;padding-top:40px}
+@keyframes shake{10%,90%{transform:translateX(-3px)}20%,80%{transform:translateX(5px)}30%,50%,70%{transform:translateX(-9px)}40%,60%{transform:translateX(9px)}}
+.flashgood{animation:fg .45s}
+@keyframes fg{0%,100%{box-shadow:0 0 0 0 rgba(53,224,208,0)}35%{box-shadow:0 0 0 8px rgba(53,224,208,.25)}}
+#screenflash{position:fixed;inset:0;pointer-events:none;z-index:4;opacity:0}
+#screenflash.g{animation:sfg .35s}
+#screenflash.r{animation:sfr .35s}
+@keyframes sfg{0%{opacity:.30;background:#35E0D0}100%{opacity:0;background:#35E0D0}}
+@keyframes sfr{0%{opacity:.33;background:#FF4747}100%{opacity:0;background:#FF4747}}
+#banner{position:fixed;left:50%;top:34%;transform:translate(-50%,-50%) scale(.6);z-index:60;opacity:0;
+  font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(34px,8vw,68px);font-weight:800;
+  color:var(--serum);text-shadow:0 0 28px rgba(255,176,32,.55);pointer-events:none;text-align:center;white-space:nowrap}
+#banner.show{animation:ban 1.15s ease-out}
+@keyframes ban{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}32%{transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%) scale(1)}}
+#over{display:none;text-align:center;padding-top:36px}
 #over h2{font-size:clamp(34px,8vw,62px);margin-bottom:6px}
-#over .msg{color:var(--slide-dim);max-width:48ch;margin:0 auto 22px}
-.statrow{display:flex;justify-content:center;gap:34px;flex-wrap:wrap;margin:24px 0 30px}
+#over .msg{color:var(--dim);max-width:48ch;margin:0 auto 20px}
+.statrow{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin:22px 0 28px}
 .again{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.again button{padding:14px 26px;border-radius:12px;border:1px solid var(--line);font-weight:600}
+.again button{padding:14px 24px;border-radius:12px;border:1px solid var(--line);font-weight:600}
 .again button.p{background:var(--chromatin);color:#26071A;border-color:var(--chromatin)}
-.leaks{text-align:left;max-width:640px;margin:34px auto 0;border-top:1px solid var(--line);padding-top:18px}
+.leaks{text-align:left;max-width:660px;margin:32px auto 0;border-top:1px solid var(--line);padding-top:18px}
 .leaks h3{font-size:16px;margin-bottom:10px}
-.leaks li{font-size:14px;color:var(--slide-dim);margin-bottom:9px}
+.leaks li{font-size:14px;color:var(--dim);margin-bottom:9px}
 .leaks li b{color:var(--slide);font-weight:600}
-
 canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
-.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:60;background:var(--slide);color:#1B0F33;
-  padding:9px 18px;border-radius:99px;font-weight:700;font-size:14px;opacity:0;transition:opacity .2s,transform .2s}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(4px)}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);z-index:61;background:var(--slide);color:#1B0F33;
+  padding:9px 18px;border-radius:99px;font-weight:700;font-size:14px;opacity:0;transition:opacity .2s}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
 <body>
 <canvas id="fx"></canvas>
+<div id="vignette"></div>
+<div id="screenflash"></div>
+<div id="banner"></div>
 <div class="toast" id="toast"></div>
 <div class="wrap">
 
 <section id="home">
-  <h1>Sala de<br><span class="stain">Parásitos</span></h1>
-  <p class="lede">Entrenamiento de recuperación activa sobre tus tres parciales corregidos. Diez segundos por pregunta. Si el reloj llega a cero cuenta como fallo. Elige hasta dónde quieres sufrir.</p>
-
+  <h1>Sala de<br><span>Parásitos</span></h1>
+  <p class="lede">Recuperación activa sobre tus parciales corregidos y el resumen completo: nematodos, cestodos, tremátodos, artrópodos, venenos, técnicas de laboratorio y una sección entera solo de medidas. Diez segundos por pregunta.</p>
   <div class="recordbar">
     <div class="rec"><b id="rBest">0</b><span>racha más larga</span></div>
-    <div class="rec"><b id="rRuns">0</b><span>intentos</span></div>
+    <div class="rec"><b id="rLvl">1</b><span>nivel</span></div>
     <div class="rec"><b id="rClear">0</b><span>rondas limpias</span></div>
-    <div class="rec"><b id="rQs">180</b><span>preguntas en el banco</span></div>
+    <div class="rec"><b id="rQs">0</b><span>preguntas</span></div>
   </div>
-
-  <div class="sectitle">Bloque de estudio</div>
+  <div class="sectitle">Bloque</div>
   <div class="chips" id="topics"></div>
-
   <div class="sectitle">Modo</div>
   <div class="grid" id="modes"></div>
-
   <button class="start" id="btnStart">Empezar<small id="startHint"></small></button>
 </section>
 
 <section id="game">
+  <div class="xprow"><span class="lvl" id="lvlTag">Nivel 1</span><div class="xpbar"><div class="xpfill" id="xpfill"></div></div><span class="lvl" id="xpTag">0 XP</span></div>
   <div class="hud">
-    <div class="metric">Pregunta <b id="hQ">1</b></div>
-    <div class="metric">Aciertos <b id="hHit">0</b></div>
-    <div class="metric" id="hLivesWrap">Vidas <b id="hLives">1</b></div>
-    <div class="metric">Restantes <b id="hLeft">0</b></div>
+    <div class="m">Pregunta <b id="hQ">1</b></div>
+    <div class="m">Aciertos <b id="hHit">0</b></div>
+    <div class="m" id="hLivesWrap">Vidas <b id="hLives">1</b></div>
+    <div class="m">Restantes <b id="hLeft">0</b></div>
     <button class="quit" id="btnQuit">Salir</button>
   </div>
   <div class="timerail"><div class="timerfill" id="tfill"></div></div>
   <div class="clock" id="clock">10.0 s</div>
-
   <div class="combo" id="comboBox"><b id="comboN"></b><span class="rank" id="comboRank"></span></div>
-
   <div class="qcard" id="qcard">
     <div class="qmeta" id="qmeta"></div>
     <div class="qtext" id="qtext"></div>
@@ -211,6 +189,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
     <div class="rec"><b id="oHit">0</b><span>aciertos</span></div>
     <div class="rec"><b id="oStreak">0</b><span>mejor racha</span></div>
     <div class="rec"><b id="oAcc">0%</b><span>precisión</span></div>
+    <div class="rec"><b id="oXp">0</b><span>XP ganado</span></div>
   </div>
   <div class="again">
     <button class="p" id="btnRetry">Repetir el modo</button>
@@ -222,10 +201,8 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
 
 </div>
 <script>
-function Q(t,q,o,a,w,k){return{t:t,q:q,o:o,a:a,w:w,k:k?k.split('|'):null};}
-const BANK = [
-
-/* ============ PROTOZOARIOS Y GENERALIDADES ============ */
+function Q(t,q,o,a,w,k){return{t:t,q:q,o:o,a:a,w:w,k:k?k.split("|"):null};}
+const RAW = [
 Q('proto','¿Cuál es la forma activa, móvil y metabólicamente funcional de muchos protozoarios?',['Quiste','Trofozoíto','Ooquiste','Esporozoíto'],1,'El trofozoíto es la forma vegetativa activa; el quiste u ooquiste es la forma de resistencia.','trofozoito'),
 Q('proto','¿Qué forma protozoaria está destinada a sobrevivir fuera del huésped?',['Trofozoíto','Taquizoíto','Quiste u ooquiste','Amastigote'],2,'El quiste y el ooquiste son formas de resistencia ambiental.','quiste'),
 Q('proto','En una asociación donde ambos organismos se benefician hablamos de:',['Comensalismo','Mutualismo','Parasitismo','Foresis'],1,'Mutualismo: beneficio mutuo. No es sinónimo de comensalismo.','mutualismo'),
@@ -257,7 +234,6 @@ Q('proto','¿Sarcocystis hominis se transmite al humano por picadura de un vecto
 Q('proto','¿Qué coccidio intestinal invade enterocitos del intestino delgado y elimina ooquistes en heces, sobre todo en inmunodeprimidos?',['Cyclospora cayetanensis','Balantidium coli','Cystoisospora belli','Blastocystis hominis'],2,'Cystoisospora belli es un coccidio intestinal importante en inmunosupresión.','cystoisospora belli'),
 Q('proto','¿Qué coccidio transmitido por agua y alimentos produce diarrea acuosa prolongada y elimina ooquistes que deben esporular en el ambiente?',['Cryptosporidium hominis','Cyclospora cayetanensis','Cystoisospora belli','Sarcocystis hominis'],1,'Cyclospora cayetanensis es clave en brotes alimentarios e hídricos.','cyclospora cayetanensis'),
 Q('proto','¿Cryptosporidium hominis es un helminto intestinal?',['Verdadero','Falso'],1,'Falso: es un protozoario coccidio.'),
-Q('proto','¿Qué coccidio intestinal adaptado al humano fue la respuesta corregida del ítem 34 del parcial 1?',['Cryptosporidium parvum','Cryptosporidium hominis','Cyclospora cayetanensis','Cystoisospora belli'],1,'La profesora pide con frecuencia género + especie: Cryptosporidium hominis.','cryptosporidium hominis'),
 Q('proto','¿Qué estructura ventral usa Giardia para adherirse al epitelio intestinal?',['Citostoma','Cinetoplasto','Disco suctorio','Ventosa oral'],2,'Disco suctorio o adhesivo ventral. No es un citostoma.','disco suctorio|disco adhesivo|disco'),
 Q('proto','¿Qué flagelado intestinal posee trofozoíto, quiste y disco adhesivo ventral?',['Dientamoeba fragilis','Trichomonas vaginalis','Giardia lamblia','Chilomastix mesnili'],2,'Giardia lamblia, también llamada G. duodenalis.','giardia lamblia|giardia duodenalis|giardia'),
 Q('proto','¿Cómo se llama la abertura oral de un ciliado como Balantidium coli?',['Citopigio','Citostoma','Disco suctorio','Axostilo'],1,'El citostoma es la abertura oral por donde ingresan partículas.','citostoma'),
@@ -270,396 +246,640 @@ Q('proto','¿Dónde se localizan principalmente las amebas intestinales como Ent
 Q('proto','En un vector mecánico, ¿el parásito se desarrolla o multiplica dentro del vector?',['Sí, siempre','No, solo lo transporta'],1,'Eso define al vector biológico; el mecánico únicamente transporta.','vector mecanico'),
 Q('proto','¿Qué tipo de vector permite que el agente se desarrolle o se multiplique en su interior?',['Mecánico','Biológico','Paraténico','Accidental'],1,'El vector biológico es parte del ciclo.','vector biologico'),
 Q('proto','¿Qué tipo de artrópodo es Glossina (tse-tsé)?',['Mosquito','Mosca','Chinche','Garrapata'],1,'Glossina es una mosca, vector de la tripanosomiasis africana.','mosca'),
-Q('proto','¿Qué huésped fue aceptado por la profesora en el ítem 15 del parcial 1?',['Perro','Gato','Hombre','Cerdo'],2,'Respuesta aceptada: hombre. Recuerda que suele preguntar huésped definitivo vs intermediario.','hombre'),
-Q('proto','¿Qué especie de malaria fue aceptada por la profesora en el ítem 25 del parcial 1?',['Plasmodium malariae','Plasmodium vivax','Plasmodium ovale','Plasmodium knowlesi'],1,'Se conserva género + especie: Plasmodium vivax.','plasmodium vivax'),
-Q('proto','¿Qué signo morfológico fue aceptado por la profesora en el ítem 3 del parcial 1?',['Signo de coma','Signo del anillo','Signo de la bandera','Signo del huso'],0,'Dato corregido del ítem: memoriza el término sin inventarle contexto.','signo de coma'),
-Q('proto','¿Qué valor numérico corrigió la profesora en el ítem 45 del parcial 1?',['4','6','8','10'],2,'Dato corregido: 8. Memorízalo sin atribuirle un significado inventado.','8'),
 Q('proto','¿Giardia se fija al epitelio intestinal mediante un citostoma?',['Verdadero','Falso'],1,'Falso: usa un disco suctorio o adhesivo ventral.'),
 Q('proto','¿El bradizoíto es la forma de multiplicación rápida típica de la toxoplasmosis aguda?',['Verdadero','Falso'],1,'Falso: el bradizoíto es lento y vive en quistes tisulares crónicos. El rápido es el taquizoíto.'),
 Q('proto','¿El gametocito es la forma que el mosquito inocula al humano durante la malaria?',['Verdadero','Falso'],1,'Falso: el mosquito inocula esporozoítos e ingiere gametocitos.'),
 Q('proto','¿A qué invade el esporozoíto de Plasmodium después de ser inoculado?',['Eritrocitos','Hepatocitos','Enterocitos','Macrófagos del bazo'],1,'Primero hepatocitos (fase exoeritrocítica), luego eritrocitos.','hepatocitos'),
-
-/* ============ HELMINTOS ============ */
-Q('helm','¿En qué tejido se enquistan las larvas de Trichinella spiralis?',['Músculo cardíaco','Músculo esquelético estriado','Hígado','Pulmón'],1,'Localización larvaria clásica: músculo esquelético estriado.','musculo esqueletico estriado|musculo esqueletico|musculo estriado'),
-Q('helm','¿Qué nemátodo se adquiere por carne con larvas viables y se enquista en músculo estriado?',['Ascaris lumbricoides','Trichinella spiralis','Trichuris trichiura','Strongyloides stercoralis'],1,'Trichinella spiralis: carne de cerdo u otros mamíferos mal cocida.','trichinella spiralis'),
-Q('helm','¿Cuál es la forma infectante de Ascaris lumbricoides para el humano?',['Larva filariforme','Huevo embrionado','Cercaria','Metacercaria'],1,'Se ingiere el huevo embrionado; no penetra la piel.','huevo embrionado|huevo'),
-Q('helm','¿Dónde se localizan los adultos de Ascaris y de muchos helmintos intestinales?',['Intestino grueso','Intestino delgado','Conductos biliares','Estómago'],1,'Intestino delgado, la localización aceptada en el parcial.','intestino delgado'),
-Q('helm','¿Cómo se llama el síndrome de infiltrados pulmonares transitorios con eosinofilia por migración larvaria?',['Síndrome de Katayama','Síndrome de Löeffler','Síndrome de Meigs','Síndrome de Churg-Strauss'],1,'Síndrome de Löeffler, asociado a Ascaris y otros helmintos con fase pulmonar.','sindrome de loeffler|loeffler|sindrome de loffler'),
-Q('helm','¿Qué género de caracol es huésped intermediario clásico de Fasciola hepatica?',['Biomphalaria','Bulinus','Lymnaea','Oncomelania'],2,'Lymnaea para Fasciola; Biomphalaria para S. mansoni.','lymnaea'),
-Q('helm','¿Qué caracol es huésped intermediario de Schistosoma mansoni?',['Lymnaea','Biomphalaria','Bulinus','Planorbis'],1,'Biomphalaria es el intermediario clásico de S. mansoni.','biomphalaria'),
-Q('helm','¿Dónde se localizan con mayor precisión los adultos de Fasciola y Clonorchis?',['Luz del intestino delgado','Parénquima hepático difuso','Conductos biliares','Vesícula seminal'],2,'"Hígado" era demasiado general: la respuesta exacta es conductos biliares.','conductos biliares'),
-Q('helm','En el ciclo de Fasciola hepatica, ¿dónde se enquistan las metacercarias infectantes?',['En músculo de pez','En vegetación acuática','En la pulga','En el suelo seco'],1,'Las metacercarias se adhieren a plantas acuáticas como el berro.','planta acuatica|vegetacion acuatica'),
-Q('helm','¿Cómo se llama el extremo de fijación o "cabeza" de un céstodo?',['Rostelo','Proglótide','Escólex','Estróbila'],2,'El escólex es el órgano completo de fijación; el rostelo puede formar parte de él.','escolex'),
-Q('helm','¿Qué relación existe entre rostelo y escólex?',['Son sinónimos','El rostelo es un componente posible del escólex','El escólex es parte del rostelo','Ninguno existe en céstodos'],1,'Escólex = órgano completo de fijación; rostelo = componente que puede llevar ganchos.'),
-Q('helm','¿Cómo se llama el segmento de un céstodo lleno de huevos?',['Proglótide inmadura','Proglótide grávida','Estróbila','Oncosfera'],1,'Proglótide grávida: término clásico en Taenia.','proglotide gravida|proglotide'),
-Q('helm','¿Cómo se llama el embrión hexacanto contenido en el huevo de los céstodos?',['Cercaria','Miracidio','Oncosfera','Cisticerco'],2,'La oncosfera posee seis ganchos para penetrar tejidos.','oncosfera'),
-Q('helm','¿Qué especie de Taenia se asocia al cerdo y puede causar cisticercosis humana a partir de sus huevos?',['Taenia saginata','Taenia solium','Hymenolepis nana','Dipylidium caninum'],1,'T. solium: el humano puede actuar como huésped intermediario accidental.','taenia solium'),
-Q('helm','En la equinococosis humana, ¿qué papel cumple el ser humano?',['Huésped definitivo habitual','Huésped intermediario accidental','Vector biológico','Huésped paraténico obligado'],1,'El humano es huésped intermediario accidental de Echinococcus granulosus.','huesped intermediario accidental|huesped intermediario'),
-Q('helm','¿Qué céstodo produce hidatidosis o equinococosis quística?',['Taenia saginata','Echinococcus granulosus','Diphyllobothrium latum','Hymenolepis diminuta'],1,'Echinococcus granulosus; ciclo clásico perro-oveja.','echinococcus granulosus'),
-Q('helm','¿Cuál es el huésped intermediario herbívoro clásico de Echinococcus granulosus?',['Cerdo','Oveja','Pez de agua dulce','Pulga'],1,'La oveja es el ejemplo clásico del ciclo perro-oveja (también ganado bovino).','oveja'),
-Q('helm','¿Hymenolepis diminuta pertenece al grupo de los tremátodos?',['Verdadero','Falso'],1,'Falso: es un céstodo.'),
-Q('helm','¿Cuál es la escritura correcta del céstodo que se escribió como "Rhodenolepis diminuta"?',['Hymenolepis diminuta','Rodentolepis diminuta','Himenolepis diminuta','Hymenolepsis diminuta'],0,'La profesora penaliza la ortografía taxonómica: Hymenolepis diminuta.','hymenolepis diminuta'),
-Q('helm','¿Cuál es el nombre científico correcto del céstodo de perros y gatos transmitido por pulgas?',['Dipylidium caninum','Diphylidium caninum','Dipilidium caninum','Dipylidium canis'],0,'Dipylidium caninum; se adquiere al ingerir pulgas infectadas.','dipylidium caninum'),
-Q('helm','¿Cuál es el nombre científico correcto de la uncinaria escrita como "Ancylostoma duodenal"?',['Ancylostoma duodenalis','Ancylostoma duodenale','Ankylostoma duodenale','Ancylostomum duodenale'],1,'La terminación correcta es -duodenale.','ancylostoma duodenale'),
-Q('helm','¿Cuáles son los dos géneros clásicos de uncinarias humanas?',['Ascaris y Trichuris','Ancylostoma y Necator','Strongyloides y Enterobius','Wuchereria y Brugia'],1,'Especies clásicas: A. duodenale y N. americanus.','ancylostoma y necator'),
-Q('helm','¿Cuál es la forma infectante de Necator americanus?',['Huevo embrionado ingerido','Larva filariforme que penetra la piel','Cercaria','Metacercaria'],1,'La filariforme penetra clásicamente por los espacios interdigitales.','larva filariforme|filariforme'),
-Q('helm','¿Qué se observa dentro de los huevos de uncinarias recién eliminados en heces?',['Una larva filariforme ya desarrollada','Blastómeros','Un miracidio','Una oncosfera'],1,'Los huevos recién eliminados contienen blastómeros, no larvas desarrolladas.','blastomeros'),
-Q('helm','¿Qué nemátodo intestinal destaca por autoinfección e hiperinfección?',['Enterobius vermicularis','Strongyloides stercoralis','Trichuris trichiura','Ascaris lumbricoides'],1,'La autoinfección explica su persistencia por años y la hiperinfección en inmunosupresión.','strongyloides stercoralis'),
-Q('helm','¿Qué forma larvaria de Strongyloides se observa habitualmente en heces?',['Larva filariforme','Larva rabditiforme','Huevo embrionado','Cercaria'],1,'La rabditiforme (esófago rabditoide) es la forma diagnóstica habitual.','larva rabditiforme|rabditiforme'),
-Q('helm','¿Se adquiere Enterobius vermicularis por penetración cutánea de larvas filariformes?',['Verdadero','Falso'],1,'Falso: se adquiere por ingestión o inhalación de huevos embrionados.'),
-Q('helm','¿Qué rasgo morfológico del extremo anterior caracteriza al adulto de Enterobius vermicularis?',['Opérculo','Espina terminal','Aletas cefálicas','Escólex armado'],2,'Las aletas cefálicas son el dato morfológico clásico.','aletas cefalicas'),
-Q('helm','¿Los huevos de Enterobius vermicularis son operculados?',['Verdadero','Falso'],1,'Falso: no son operculados. El opérculo es de tremátodos y de Diphyllobothrium.'),
-Q('helm','¿Cuál es la complicación rectal clásica de una tricocefalosis intensa?',['Fístula perianal','Prolapso rectal','Megacolon tóxico','Hemorroides trombosadas'],1,'Prolapso rectal, especialmente en niños con cargas parasitarias altas.','prolapso rectal'),
-Q('helm','¿Los Schistosoma adultos son hermafroditas?',['Verdadero','Falso'],1,'Falso: son dioicos, con macho y hembra separados.'),
-Q('helm','¿Qué género de tremátodos sanguíneos es dioico y penetra al humano mediante cercarias?',['Fasciola','Schistosoma','Paragonimus','Clonorchis'],1,'Schistosoma: macho y hembra separados.','schistosoma'),
-Q('helm','¿Cuál es la forma infectante de Schistosoma que penetra activamente la piel humana?',['Miracidio','Cercaria','Metacercaria','Esporocisto'],1,'La cercaria sale del caracol y penetra la piel.','cercaria'),
-Q('helm','¿Qué fase larvaria eclosiona del huevo de Schistosoma y penetra al caracol?',['Cercaria','Miracidio','Redia','Plerocercoide'],1,'El miracidio entra al caracol; la cercaria sale de él.','miracidio'),
-Q('helm','En esquistosomiasis, ¿el miracidio sale del caracol y penetra la piel humana?',['Verdadero','Falso'],1,'Falso: es al revés. El miracidio entra al caracol y la cercaria sale y penetra la piel.'),
-Q('helm','¿Qué especie de Schistosoma se asocia con esquistosomiasis urinaria?',['S. mansoni','S. japonicum','S. haematobium','S. intercalatum'],2,'Huevos con espina terminal, eliminados por orina.','schistosoma haematobium'),
-Q('helm','¿Cuál es la forma infectante de Diphyllobothrium para el humano en el pescado?',['Metacercaria','Larva plerocercoide','Cisticerco','Cercaria'],1,'Plerocercoide en pescado; la metacercaria pertenece a tremátodos.','larva plerocercoide|plerocercoide'),
-Q('helm','¿Qué alimento contiene el plerocercoide infectante de Diphyllobothrium?',['Carne de cerdo','Pez de agua dulce crudo o mal cocido','Carne bovina','Vegetales acuáticos'],1,'Pescado de agua dulce crudo o insuficientemente cocido.','pez de agua dulce|pescado de agua dulce|pescado'),
-Q('helm','¿Con qué déficit se asocia clásicamente Diphyllobothrium latum?',['Hierro','Vitamina B12','Ácido fólico','Vitamina D'],1,'Déficit de vitamina B12 y anemia megaloblástica, no de hierro.','vitamina b12|b12'),
-Q('helm','¿Qué tiempo exacto corrigió la profesora en el primer espacio del ítem 15 del parcial 2?',['1 mes','2 meses','3 meses','6 meses'],2,'Dos correcciones en el mismo ítem: 3 meses y la asociación con vitamina B12.','3 meses'),
-Q('helm','¿Cuál es la forma infectante presente en la carne de pescado para varios tremátodos transmitidos por peces?',['Plerocercoide','Metacercaria','Cercaria','Miracidio'],1,'Metacercaria en carne de pez; no confundir con el plerocercoide de Diphyllobothrium.','metacercaria'),
-Q('helm','¿En qué dos tipos de muestra pueden encontrarse huevos de Paragonimus?',['Orina y sangre','Esputo y heces','LCR y esputo','Bilis y orina'],1,'Los huevos expectorados pueden ser deglutidos y aparecer en heces.','esputo y heces'),
-Q('helm','¿Qué filaria es transmitida por Chrysops?',['Onchocerca volvulus','Wuchereria bancrofti','Loa loa','Brugia malayi'],2,'Chrysops transmite Loa loa; Simulium transmite Onchocerca.','loa loa'),
-Q('helm','¿Qué vector transmite Onchocerca volvulus?',['Chrysops','Simulium','Culicoides','Anopheles'],1,'Simulium, la mosca negra.','simulium'),
-Q('helm','¿Qué filaria linfática tiene adultos en vasos linfáticos y microfilarias circulantes?',['Loa loa','Onchocerca volvulus','Wuchereria bancrofti','Mansonella perstans'],2,'Wuchereria bancrofti es la filaria linfática clásica.','wuchereria bancrofti'),
-Q('helm','¿Cómo se llama la estructura tipo "tapa" presente en huevos de varios tremátodos y de Diphyllobothrium?',['Espina terminal','Opérculo','Mamelón','Rostelo'],1,'El opérculo es un rasgo microscópico útil para identificar huevos.','operculo'),
-Q('helm','¿Dipylidium caninum puede adquirirse por ingestión de pulgas infectadas?',['Verdadero','Falso'],0,'Verdadero: perros y gatos son reservorios frecuentes.'),
-Q('helm','¿Los adultos de Fasciola hepatica viven en la luz del intestino delgado?',['Verdadero','Falso'],1,'Falso: se localizan en los conductos biliares.'),
-Q('helm','¿La cercaria es la forma infectante de Strongyloides stercoralis?',['Verdadero','Falso'],1,'Falso: Strongyloides usa larva filariforme; la cercaria es de tremátodos.'),
-Q('helm','¿Qué medida exacta corrigió la profesora en el ítem 11 del parcial 2?',['20 μm','30 μm','40 μm','50 μm'],1,'Dato corregido: 30 μm.','30 um|30 μm|30'),
-Q('helm','¿Qué valor numérico corrigió la profesora en el ítem 36 del parcial 2?',['100','150','200','250'],2,'Dato corregido: 200.','200'),
-Q('helm','¿Qué medida exacta corrigió la profesora en el ítem 43 del parcial 2?',['1 mm','2 mm','5 mm','2 cm'],1,'Dato corregido: 2 mm.','2 mm'),
-Q('helm','El valor escrito como "7 cm" fue corregido por la profesora a:',['1 cm','5 cm','10 cm','0.7 cm'],0,'Corrección de la anotación numérica extra: 1 cm.','1 cm'),
-Q('helm','¿Qué rango de medida corrigió la profesora en la segunda anotación numérica extra del parcial 2?',['2–60 μm','20–600 μm','200–600 μm','20–60 μm'],1,'Dato del parcial: 20–600 μm.','20-600 um|20-600'),
-Q('helm','¿Qué localización anatómica corrigió la profesora en el ítem 27 del parcial 2?',['Hígado','Pulmones','Riñones','Bazo'],1,'Dato corregido: pulmones.','pulmones|pulmon'),
-Q('helm','¿Qué respuesta indicó la profesora para el ítem 21 del parcial 2?',['No existe','Opérculo','Cercaria','Escólex'],0,'La profesora respondió "no existe": no le atribuyas una estructura concreta.','no existe'),
-
-/* ============ ARTRÓPODOS Y DIAGNÓSTICO ============ */
-Q('artro','¿Qué género de mosquito transmite dengue, Zika, chikungunya y fiebre amarilla?',['Anopheles','Culex','Aedes','Mansonia'],2,'Aedes es el vector de arbovirosis urbanas; Anopheles se asocia a malaria.','aedes'),
-Q('artro','¿Anopheles es el vector principal del dengue?',['Verdadero','Falso'],1,'Falso: Anopheles transmite malaria; el dengue lo transmite Aedes.'),
-Q('artro','¿Qué pulga penetra la piel y causa tungiasis?',['Ctenocephalides felis','Xenopsylla cheopis','Tunga penetrans','Pulex irritans'],2,'Tunga penetrans, especialmente en los pies.','tunga penetrans'),
-Q('artro','¿Cuál es el agente bacteriano de la peste transmitida por pulgas de roedores?',['Rickettsia prowazekii','Yersinia pestis','Borrelia recurrentis','Bartonella henselae'],1,'Yersinia pestis: asociación clásica de entomología médica.','yersinia pestis'),
-Q('artro','¿Cuál es el nombre correcto del ácaro causante de la escabiosis humana?',['Sarcoptes scabiei var. hominis','Scabiosis hominis','Demodex folliculorum','Sarcoptes hominis var. scabiei'],0,'"Escabiosis" es la enfermedad, no el género.','sarcoptes scabiei var hominis|sarcoptes scabiei|sarcoptes'),
-Q('artro','¿Qué dos géneros de escorpiones de importancia médica esperaba la profesora?',['Buthidae y Scorpionidae','Centruroides y Tityus','Latrodectus y Loxosceles','Tityus y Buthus'],1,'Pedía géneros, no familias: Centruroides y Tityus.','centruroides y tityus'),
-Q('artro','¿Cuál es uno de los principales péptidos citolíticos del veneno de abeja?',['Hialuronidasa','Melitina','Fosfolipasa D','Histamina'],1,'La melitina es el péptido citolítico principal; la hialuronidasa es factor de difusión.','melitina'),
-Q('artro','¿La hialuronidasa es el principal péptido citolítico del veneno de abeja?',['Verdadero','Falso'],1,'Falso: ese papel es de la melitina. La hialuronidasa facilita la difusión del veneno.'),
-Q('artro','¿Qué género de arañas incluye a las "viudas" y produce latrodectismo?',['Loxosceles','Phoneutria','Latrodectus','Atrax'],2,'Latrodectus: veneno predominantemente neurotóxico.','latrodectus'),
-Q('artro','¿Cuál es el nombre correcto del piojo de la cabeza?',['Pthirus pubis','Pediculus humanus capitis','Pediculus pubis','Phthirus capitis'],1,'Pediculus humanus capitis. El púbico es Pthirus pubis.','pediculus humanus capitis'),
-Q('artro','¿Cuál es el agente clásico de la pediculosis pubis?',['Pediculus humanus corporis','Pthirus pubis','Sarcoptes scabiei','Cimex lectularius'],1,'Pthirus pubis: cuida la ortografía exacta del género.','pthirus pubis'),
-Q('artro','¿Cuál es la medida terapéutica primaria en muchas miasis cutáneas localizadas?',['Ivermectina oral','Extracción de la larva','Antibiótico sistémico','Antihistamínicos'],1,'La profesora corrigió "ivermectina" por extracción de la larva.','extraccion de la larva|extraccion'),
-Q('artro','¿Cuántos pares de patas tienen los insectos adultos?',['Dos pares','Tres pares','Cuatro pares','Cinco pares'],1,'Tres pares = 6 patas. Los arácnidos tienen cuatro pares = 8 patas.','tres pares|3 pares|seis patas'),
-Q('artro','¿Cuántas patas tiene un arácnido adulto?',['Seis','Ocho','Diez','Doce'],1,'Cuatro pares = 8 patas.','ocho|8'),
-Q('artro','¿Qué género de pequeños dípteros hematófagos fue la lectura probable del ítem 18 del parcial 3?',['Chrysops','Glossina','Culicoides','Simulium'],2,'La corrección manuscrita parece decir Culicoides.','culicoides'),
-Q('artro','¿Qué método de concentración por sedimentación con formol-éter se usa en heces?',['Kato-Katz','Harada-Mori','Método de Ritchie','Graham'],2,'Ritchie concentra por sedimentación; no es flotación.','ritchie|metodo de ritchie'),
-Q('artro','¿El método de Ritchie es una técnica de flotación?',['Verdadero','Falso'],1,'Falso: es concentración por sedimentación.'),
-Q('artro','¿Qué técnica de cultivo en papel filtro favorece el desarrollo de larvas de nemátodos?',['Kato-Katz','Harada-Mori','Ritchie','Ziehl-Neelsen'],1,'Harada-Mori cultiva larvas; Kato-Katz cuantifica huevos.','harada-mori|harada mori'),
-Q('artro','¿Qué método se usa principalmente para cuantificar huevos de helmintos en heces?',['Ritchie','Harada-Mori','Kato-Katz','Baermann'],2,'Kato-Katz da carga parasitaria (huevos por gramo).','kato-katz|kato katz'),
-Q('artro','¿Kato-Katz es un cultivo en papel filtro para desarrollar larvas de nemátodos?',['Verdadero','Falso'],1,'Falso: eso es Harada-Mori. Kato-Katz cuantifica huevos.'),
-Q('artro','¿Fue aceptada "flotación" como respuesta en el ítem 13 del parcial 3?',['Sí, fue aceptada','No, fue marcada incorrecta'],1,'Fue marcada incorrecta. La alternativa correcta no es legible en el escaneo.'),
-Q('artro','¿Qué dosis o valor numérico exacto corrigió la profesora en el ítem 8 del parcial 3?',['5 mg','50 mg','100 mg','500 mg'],1,'Dato corregido: 50 mg.','50 mg'),
-Q('artro','¿Qué valor numérico fue aceptado en el ítem 9 del parcial 3?',['10','50','100','1000'],2,'Dato aceptado: 100.','100'),
-Q('artro','¿Qué valor exacto corrigió la profesora en el ítem 11 del parcial 3 (frente a 1200)?',['1080','1100','1180','1280'],2,'1180. La diferencia con 1200 demuestra que exige cifras precisas.','1180'),
-Q('artro','¿Qué género de arañas fue aceptado nuevamente en el ítem 19 del parcial 3?',['Loxosceles','Latrodectus','Phoneutria','Tityus'],1,'Latrodectus, relacionado con viudas y síndrome neurotóxico.','latrodectus'),
-Q('artro','¿Qué técnica es la adecuada para buscar huevos de Enterobius en la región perianal?',['Kato-Katz','Método de Graham (cinta adhesiva)','Ritchie','Harada-Mori'],1,'El método de Graham con cinta adhesiva es el estándar para Enterobius.','graham|metodo de graham|cinta adhesiva'),
-Q('artro','¿Qué vector transmite la tripanosomiasis africana?',['Lutzomyia','Glossina','Simulium','Culicoides'],1,'Glossina, la mosca tse-tsé.','glossina'),
-Q('artro','¿Qué género de mosquito es el vector de la malaria?',['Aedes','Culex','Anopheles','Mansonia'],2,'Anopheles transmite Plasmodium.','anopheles'),
-Q('artro','¿Sarcoptes scabiei var. hominis es un insecto?',['Verdadero','Falso'],1,'Falso: es un ácaro, es decir un arácnido.'),
-
-/* ============ TRAMPAS DE LA PROFESORA ============ */
-Q('trap','Se parece a Anopheles pero no lo es: ¿quién transmite dengue, Zika, chikungunya y fiebre amarilla?',['Anopheles','Aedes','Culex','Culicoides'],1,'Anopheles → malaria. Aedes → arbovirosis urbanas.'),
-Q('trap','Se parece a Chrysops pero no lo es: ¿quién transmite Onchocerca volvulus?',['Chrysops','Simulium','Glossina','Lutzomyia'],1,'Chrysops → Loa loa. Simulium → Onchocerca volvulus.'),
-Q('trap','Se parece a Glossina pero no lo es: ¿quién transmite Leishmania en América?',['Glossina','Simulium','Lutzomyia','Chrysops'],2,'Lutzomyia → Leishmania. Glossina → tripanosomiasis africana.'),
-Q('trap','Se parece a Biomphalaria pero no lo es: ¿qué caracol corresponde a Fasciola hepatica?',['Biomphalaria','Lymnaea','Bulinus','Oncomelania'],1,'Lymnaea → Fasciola. Biomphalaria → S. mansoni.'),
-Q('trap','Miracidio o cercaria: ¿cuál entra al caracol?',['Cercaria','Miracidio'],1,'El miracidio entra al caracol; la cercaria sale y penetra la piel humana.'),
+Q('nema','En los nematodos, ¿qué sexo es de mayor tamaño?',['El macho','La hembra','Son iguales','Depende de la especie'],1,'Regla general de los nematodos: los machos son más pequeños que las hembras.','la hembra|hembra'),
+Q('nema','¿Dónde vive el adulto de Ascaris lumbricoides, específicamente?',['Yeyuno','Duodeno','Ciego','Íleon terminal'],1,'Intestino delgado, específicamente duodeno.','duodeno'),
+Q('nema','¿Cuánto vive aproximadamente el adulto de Ascaris lumbricoides?',['1 mes','1 año','3 años','10 años'],1,'Vive cerca de 1 año y puede eliminarse solo.','1 ano|un ano'),
+Q('nema','¿Cuántos huevos diarios puede poner la hembra de Ascaris lumbricoides?',['2 000','20 000','200 000','2 000 000'],2,'Hasta 200 000 huevos diarios.','200000|200 000'),
+Q('nema','¿Qué características tiene el macho de Ascaris lumbricoides?',['Parte posterior recta y 1 espícula','Termina curvo y tiene 2 espículas','No tiene espículas','Tiene bursa copulatriz'],1,'El macho de Ascaris mide 15-20 cm, termina curvo y tiene 2 espículas.'),
+Q('nema','¿Cómo se origina el huevo infértil de Ascaris lumbricoides?',['Por sobreinfección','Cuando no hay macho y la hembra se autofecunda','Por temperatura alta','Al contacto con bilis'],1,'El huevo infértil aparece cuando no hay macho; es más grande y tiene granulaciones de lecitina.'),
+Q('nema','¿Qué rasgo distingue al huevo infértil de Ascaris frente al fértil?',['Es más pequeño','Tiene opérculo','Es más grande y con granulaciones de lecitina','Tiene tapones polares'],2,'El infértil es más grande, con granulaciones de lecitina.','granulaciones de lecitina|lecitina'),
+Q('nema','¿Qué membranas tiene el huevo fértil de Ascaris lumbricoides?',['Una membrana única','Doble membrana lisa sin más','2 membranas lisas y 1 mamelonada','Membrana con filamentos polares'],2,'Huevo fértil: 60 µm, 2 membranas lisas y 1 mamelonada.'),
+Q('nema','Ordena la migración del adulto de Ascaris tras la ingestión del huevo.',['Duodeno → sangre → corazón → pulmones → faringe → estómago → duodeno','Duodeno → linfa → hígado → duodeno','Piel → pulmones → intestino grueso','Estómago → colon → hígado'],0,'Larva en duodeno, pasa a sangre, corazón, pulmones, faringe, se deglute y vuelve al duodeno como adulto.'),
+Q('nema','¿Qué complica la migración de Ascaris adulto hacia las vías biliares?',['Anemia megaloblástica','Ictericia por invasión del colédoco','Prolapso rectal','Elefantiasis'],1,'Los adultos pueden invadir el conducto colédoco y producir ictericia.','ictericia'),
+Q('nema','¿Qué lesión pulmonar producen las larvas de Ascaris al migrar?',['Fibrosis crónica','Rotura de vasos capilares y pared alveolar','Cavitación','Derrame pleural quiloso'],1,'Rompen capilares y pared alveolar: hemorragia, inflamación y síndrome de Löeffler.'),
+Q('nema','¿Cuál es la forma patógena de Ascaris lumbricoides?',['Huevo','Larva rabditiforme','Adulto','Metacercaria'],2,'Forma infectante: huevo embrionado. Forma patógena: adulto.','adulto'),
+Q('nema','¿Dónde se localiza el adulto de Trichuris trichiura?',['Intestino delgado','Intestino grueso','Conductos biliares','Vejiga'],1,'Vive en intestino grueso, con el esófago delgado insertado en la mucosa.','intestino grueso'),
+Q('nema','¿Cuánto vive Trichuris trichiura?',['1 mes','1 a 3 años','10 años','30 años'],1,'Vive de 1 a 3 años.','1 a 3 anos'),
+Q('nema','¿Qué forma tiene el huevo de Trichuris trichiura?',['Forma de D','Forma de limón con dos tapones polares','Ovalado con opérculo','Redondo con filamentos polares'],1,'Huevo en forma de limón o barril, con tapones polares en los extremos.','forma de limon|limon'),
+Q('nema','¿Cuántos huevos al día produce la hembra de Trichuris trichiura?',['200 a 500','3 000 a 20 000','100 000','200 000'],1,'Entre 3 000 y 20 000 huevos diarios.'),
+Q('nema','¿Con qué estructura se fija Trichuris trichiura a la mucosa?',['Disco suctorio','Lanceta retráctil','Cápsula bucal con dientes','Escólex'],1,'Se fija por medio de una lanceta retráctil.','lanceta retractil|lanceta'),
+Q('nema','¿Dónde ocurre el desarrollo larvario de Trichuris trichiura?',['En las criptas de Lieberkühn','En los alvéolos','En el hígado','En el músculo estriado'],0,'El desarrollo larvario ocurre en las criptas de Lieberkühn.','criptas de lieberkuhn'),
+Q('nema','Además del prolapso rectal, ¿qué signo característico se asocia a la tricocefalosis intensa?',['Elefantiasis','Dedos en palillo de tambor','Ictericia','Edema palpebral'],1,'Prolapso rectal y dedos en palillo de tambor son los dos hallazgos característicos.','dedos en palillo de tambor'),
+Q('nema','¿Qué técnica permite conocer la intensidad del parasitismo por Trichuris?',['Graham','PCR y recuento de huevos','Knott','Baermann'],1,'Examen coprológico con recuento de huevos y PCR para intensidad.'),
+Q('nema','¿En qué condiciones desarrollan larvas los huevos de Trichuris en la tierra?',['Tierra seca a 5 °C en 2 días','Tierra húmeda de 14 a 30 °C en 2 semanas','Agua salada en 1 mes','No requieren maduración'],1,'Tierra húmeda entre 14 y 30 °C, larva a las 2 semanas.'),
+Q('nema','¿Qué forma tiene el extremo anterior de Ancylostoma duodenale?',['Forma de "S"','Forma de "C"','Recto','Espiralado'],1,'A. duodenale tiene forma de "C"; Necator americanus forma de "S".','forma de c'),
+Q('nema','¿Qué estructura bucal tiene Ancylostoma duodenale?',['2 pares de placas cortantes','2 pares de dientes puntiagudos','Estilete','Sin cavidad bucal'],1,'A. duodenale: 2 pares de dientes puntiagudos. N. americanus: 2 pares de placas cortantes.','dientes puntiagudos'),
+Q('nema','¿Qué estructura bucal caracteriza a Necator americanus?',['Dientes puntiagudos','2 pares de placas cortantes','Lanceta retráctil','Rostelo'],1,'Necator americanus posee placas cortantes.','placas cortantes'),
+Q('nema','¿Qué estructura posterior identifica al macho de las uncinarias?',['Espícula única','Bursa copulatriz','Aletas cefálicas','Ctenidios'],1,'El macho tiene bursa copulatriz y cápsula bucal grande.','bursa copulatriz'),
+Q('nema','¿Por qué los huevos de Ancylostoma y Necator se reportan juntos?',['Porque son de la misma especie','Porque son indistinguibles entre sí','Porque no se pueden teñir','Porque no son diagnósticos'],1,'Son indistinguibles, por eso se reporta "huevo de Ancylostoma duodenale / Necator americanus".'),
+Q('nema','¿Qué larva de uncinaria sale del huevo en la tierra?',['Filariforme','Rabditiforme','Plerocercoide','Microfilaria'],1,'Sale la rabditiforme, que luego muda a filariforme infectante.','rabditiforme|larva rabditiforme'),
+Q('nema','¿Qué característica tiene la larva filariforme de uncinaria?',['Cavidad bucal larga','No tiene cavidad bucal, mide 250 µm y es muy móvil','Tiene opérculo','Tiene cilios'],1,'Filariforme: muy móvil, 250 µm, membrana transparente y sin cavidad bucal.'),
+Q('nema','¿Qué tipo de anemia produce la uncinariasis?',['Megaloblástica','Microcítica (ferropénica)','Hemolítica autoinmune','Aplásica'],1,'Anemia microcítica por succión de sangre, con letargo, palidez y retraso del desarrollo.','microcitica|anemia microcitica'),
+Q('nema','En casos extremos de uncinariasis, ¿qué complicación grave puede aparecer?',['Insuficiencia cardíaca','Prolapso rectal','Neurocisticercosis','Elefantiasis'],0,'La anemia severa puede llevar a insuficiencia cardíaca.','insuficiencia cardiaca'),
+Q('nema','¿Cuál es el recorrido de la larva filariforme de uncinaria tras penetrar la piel?',['Piel → hígado → intestino grueso','Piel → circulación → corazón → pulmones → tráquea → deglución → intestino delgado','Piel → músculo → enquistamiento','Piel → linfáticos → ganglios'],1,'Igual que Ascaris en la parte pulmonar, pero la entrada es cutánea.'),
+Q('nema','¿Qué lesiones cutáneas produce la entrada de la larva de uncinaria?',['Úlcera indolora','Pápula, edema y pústulas','Mancha de violín','Escara negra'],1,'La dermatitis de entrada cursa con pápula, edema y pústulas.'),
+Q('nema','¿Cuánto mide la hembra adulta de Enterobius vermicularis?',['0.5 cm','1 cm','2 cm','5 cm'],1,'Hembra 1 cm; macho 0.5 cm.','1 cm'),
+Q('nema','¿Cuándo y dónde deposita los huevos la hembra de Enterobius vermicularis?',['De día en el intestino delgado','De noche en la región perianal','En el agua','En el músculo'],1,'Sale de noche a la región perianal y deposita los huevos hasta quedarse sin ellos.','region perianal|perianal'),
+Q('nema','¿Qué forma tiene el huevo de Enterobius vermicularis?',['Forma de limón','Forma de D (aplanado de un lado)','Redondo con filamentos','Con opérculo'],1,'Huevo en forma de D, 50 x 25 µm, doble membrana, frecuentemente con larva.','forma de d'),
+Q('nema','¿Cuándo se vuelven infecciosos los huevos de Enterobius vermicularis?',['A los 15 días en tierra','Apenas salen','Tras pasar por un caracol','Nunca, la larva es la infectante'],1,'Son infecciosos apenas salen, lo que explica la reinfección y el contagio familiar.'),
+Q('nema','¿Cuál es el método diagnóstico de la oxiuriasis?',['Kato-Katz','Método de Graham o cinta engomada','Harada-Mori','Knott'],1,'Cinta adhesiva perianal por la mañana.','metodo de graham|graham|cinta engomada'),
+Q('nema','En oxiuriasis, ¿a quién se trata?',['Solo al paciente','A toda la familia','Solo a los niños','Solo si hay síntomas'],1,'El tratamiento es para toda la familia.','toda la familia'),
+Q('nema','¿Cuál es la vía de infección de Enterobius vermicularis?',['Cutánea','Oral y respiratoria','Vectorial','Transplacentaria'],1,'Los huevos larvados se ingieren o se inhalan.','oral respiratoria|oral|oral/respiratoria'),
+Q('nema','¿Qué complicación ginecológica puede causar Enterobius vermicularis?',['Endometritis crónica','Vulvovaginitis','Salpingitis tuberculosa','Cistitis hemorrágica'],1,'Al migrar a genitales femeninos puede producir vulvovaginitis.','vulvovaginitis'),
+Q('nema','¿Dónde vive el adulto de Strongyloides stercoralis?',['Intestino grueso','Duodeno y yeyuno','Conductos biliares','Vasos linfáticos'],1,'Intestino delgado, específicamente duodeno y yeyuno.','duodeno y yeyuno'),
+Q('nema','¿Qué sale al exterior en la estrongiloidiasis?',['Huevos','Solo larvas','Proglótides','Quistes'],1,'A diferencia de las uncinarias, en heces se encuentran larvas, no huevos.','larvas|solo larvas'),
+Q('nema','¿Cuánto tiempo puede vivir Strongyloides stercoralis en el intestino?',['6 meses','1 año','Hasta 5 años','20 años'],2,'Hasta 5 años, gracias a la autoinfección.','5 anos'),
+Q('nema','¿Qué característica tiene la hembra parásita de Strongyloides stercoralis?',['Es rabditoide y opaca','Es filariforme, transparente y puede autofecundarse','Es vivípara y mide 4 cm','Tiene bursa copulatriz'],1,'La hembra parásita es filariforme, transparente, partenogenética y solo existe en el hombre.'),
+Q('nema','¿Existe macho parásito de Strongyloides stercoralis en el hombre?',['Sí','No, solo existe como forma de vida libre'],1,'El macho solo existe en el ciclo de vida libre.'),
+Q('nema','¿Cómo se distingue la larva rabditiforme de Strongyloides de la filariforme?',['La rabditiforme tiene cavidad bucal corta y primordio genital grande','La rabditiforme mide 700 µm','La filariforme tiene cavidad bucal larga','La filariforme tiene cilios'],0,'Rabditiforme: cavidad bucal corta, primordio genital grande en media luna, 250 µm.'),
+Q('nema','¿Qué mide la larva filariforme de Strongyloides stercoralis?',['100 µm','250 µm','500 a 700 µm','2 mm'],2,'Filariforme de Strongyloides: 500-700 µm, sin cavidad bucal y con estilete anterior.','500 a 700|500-700'),
+Q('nema','¿Dónde penetran las larvas en el ciclo de autoinfección de Strongyloides?',['Piel de los pies','Mucosa del intestino delgado o región perianal','Alvéolos','Conjuntiva'],1,'Las rabditiformes maduran en la luz intestinal y penetran mucosa o piel perianal.'),
+Q('nema','¿En qué pacientes es más grave la estrongiloidiasis?',['Ancianos sanos','Inmunocomprometidos','Niños vacunados','Embarazadas sanas'],1,'La hiperinfección se presenta sobre todo en inmunocomprometidos y puede ser mortal.','inmunocomprometidos'),
+Q('nema','¿Qué pruebas se usan para diagnosticar Strongyloides stercoralis?',['Kato-Katz y Graham','Examen coprológico y ELISA','Knott y gota gruesa','Biopsia muscular'],1,'Coprológico (larvas rabditiformes) y ELISA.'),
+Q('nema','¿Cuál es el reservorio clásico de Trichinella spiralis?',['Bovino','Cerdo','Pez de agua dulce','Perro'],1,'Zoonosis con reservorio en el cerdo; se adquiere por carne cruda o mal cocida.','cerdo'),
+Q('nema','¿Qué particularidad reproductiva tiene la hembra de Trichinella spiralis?',['Es ovípara','Es vivípara, con larvas dentro del útero','Es hermafrodita','Se autofecunda'],1,'Es vivípara: se observan larvas en el interior del útero.','vivipara'),
+Q('nema','En la triquinosis, ¿qué órganos invaden transitoriamente las larvas?',['Riñón y bazo','Pulmones, miocardio y encéfalo','Hígado y páncreas','Médula ósea'],1,'Invaden transitoriamente pulmones, miocardio y encéfalo antes de enquistarse en músculo.'),
+Q('nema','¿Qué músculos afecta preferentemente Trichinella spiralis?',['Solo el diafragma','Ojos, lengua y músculos de las costillas','Músculo liso intestinal','Miocardio exclusivamente'],1,'Afecta músculos muy activos: oculares, lengua e intercostales.'),
+Q('nema','¿Qué manifestación clínica es clásica de la fase muscular inicial de la triquinosis?',['Prolapso rectal','Fiebre, cefalea, dolores musculares y edema palpebral','Ictericia','Elefantiasis'],1,'El edema palpebral con mialgias y fiebre es el cuadro típico.','edema palpebral'),
+Q('nema','¿Cuál es el diagnóstico de elección en la fase muscular de la triquinosis?',['Examen coprológico','Biopsia de músculo con tinción de hematoxilina-eosina','Método de Graham','Kato-Katz'],1,'Biopsia muscular; también ELISA, Western blot e inmunofluorescencia indirecta.','biopsia de musculo|biopsia muscular'),
+Q('nema','En la fase crónica de la triquinosis, ¿qué ocurre con el quiste?',['Se rompe siempre','Puede recubrirse de sales de calcio y la larva muere','Migra al cerebro','Se transforma en adulto'],1,'El quiste es defensa del huésped y protección de la larva; puede calcificarse.'),
+Q('nema','¿Por dónde viajan las larvas de Trichinella hacia todo el organismo?',['Por los alvéolos pulmonares','Por capilares, torrente sanguíneo, pulmones sin pasar alvéolos y vía arterial','Por los linfáticos exclusivamente','Por los conductos biliares'],1,'Pasan por pulmones sin atravesar los alvéolos y se distribuyen por vía arterial.'),
+Q('nema','¿Dónde viven los adultos de Wuchereria bancrofti?',['Tejido subcutáneo','Sistema linfático','Venas mesentéricas','Músculo estriado'],1,'Adultos en linfáticos; las microfilarias circulan en sangre periférica.','sistema linfatico|linfaticos'),
+Q('nema','¿Qué periodicidad tienen las microfilarias de Wuchereria bancrofti?',['Diurna','Nocturna','Sin periodicidad','Estacional'],1,'Periodicidad nocturna: la toma de sangre debe hacerse de noche.','nocturna'),
+Q('nema','¿Qué géneros de mosquito transmiten Wuchereria bancrofti?',['Solo Anopheles','Culex, Anopheles, Aedes y Mansonia','Simulium y Chrysops','Lutzomyia y Glossina'],1,'Varios géneros de culícidos actúan como huésped intermediario.'),
+Q('nema','¿Qué rasgo tiene la microfilaria de Wuchereria bancrofti?',['Núcleos hasta el extremo caudal','Manchas nucleares que no llegan al extremo posterior','Sin vaina','Cola bifurcada'],1,'Las manchas nucleares no alcanzan el extremo posterior; mide 25 µm de ancho.'),
+Q('nema','¿Cuál es la manifestación crónica clásica de la filariasis linfática?',['Oncocercosis','Elefantiasis','Distomatosis','Hidatidosis'],1,'Obstrucción linfática progresiva: piel engrosada, áspera y verrucosa.','elefantiasis'),
+Q('nema','¿Qué técnicas se usan para buscar microfilarias en sangre?',['Kato-Katz y Graham','Extendidos, gota gruesa, Knott o QBC','Harada-Mori','Baermann'],1,'Extendido o gota gruesa, concentración de Knott o QBC.','knott'),
+Q('nema','¿Cuál es el vector de Brugia malayi?',['Chrysops','Mosquito Mansonia','Simulium','Culicoides'],1,'Brugia malayi: vector Mansonia, periodicidad nocturna, Asia y Pacífico.','mansonia'),
+Q('nema','¿Dónde se localizan los adultos de Onchocerca volvulus?',['Sistema linfático','Tejido conjuntivo y subcutáneo de la piel','Venas mesentéricas','Cavidad abdominal'],1,'Forman ovillos encapsulados (nódulos) en tejido conjuntivo y subcutáneo.','tejido subcutaneo|tejido conjuntivo y subcutaneo'),
+Q('nema','¿Qué periodicidad tienen las microfilarias de Onchocerca volvulus?',['Nocturna','Diurna','Sin periodicidad','Solo al atardecer'],2,'Onchocerca no tiene periodicidad; se buscan en dermis superficial.','sin periodicidad'),
+Q('nema','¿Cuál es el diagnóstico de la oncocercosis?',['Gota gruesa','Biopsia del nódulo (o de piel)','Examen coprológico','Kato-Katz'],1,'Biopsia del nódulo para ver microfilarias en dermis.','biopsia del nodulo|biopsia de piel'),
+Q('nema','¿Qué manifestación grave define a la oncocercosis?',['Elefantiasis','Lesiones oculares que pueden llevar a ceguera','Prolapso rectal','Ictericia'],1,'Se conoce como "enfermedad de robles" o ceguera de los ríos: lesiones oculares y dermatitis.','lesiones oculares'),
+Q('nema','¿Cómo se organizan los adultos de Onchocerca en el nódulo?',['Libres en sangre','En ovillos encapsulados, generalmente 3 hembras y 1 macho','En quistes musculares','En racimos hepáticos'],1,'Ovillos encapsulados con más de una pareja.'),
+Q('nema','¿Qué periodicidad tiene Loa loa?',['Nocturna','Diurna','Sin periodicidad','Solo al amanecer'],1,'Loa loa tiene periodicidad diurna y la transmite Chrysops, que pica de día.','diurna'),
+Q('nema','¿Cuánto puede vivir el adulto de Loa loa?',['1 año','5 años','17 años','30 años'],2,'Pueden vivir hasta 17 años en el tejido conectivo.','17 anos'),
+Q('nema','¿Qué manifestación caracteriza a la loasis?',['Elefantiasis','Edemas subcutáneos (edema de Calabar) y lesiones oculares','Anemia megaloblástica','Prolapso rectal'],1,'Edemas subcutáneos migratorios y paso del gusano por la conjuntiva.','edemas subcutaneos'),
+Q('nema','¿Cuál es la forma infectante de Loa loa?',['Huevo','Microfilaria','Cercaria','Metacercaria'],1,'La forma infectante indicada es la microfilaria transmitida por Chrysops.','microfilarias|microfilaria'),
+Q('nema','¿Cuál es el huésped intermediario de Mansonella ozzardi?',['Simulium y Culicoides','Anopheles','Lymnaea','Cyclops'],0,'Mansonella ozzardi: vectores Simulium y Culicoides, en América.','culicoides'),
+Q('nema','¿Dónde viven los adultos de Mansonella ozzardi?',['Sistema linfático','Cavidades torácica y abdominal','Conductos biliares','Músculo estriado'],1,'Viven libres en cavidades torácica y abdominal.','cavidades toracica y abdominal'),
+Q('nema','¿Cómo suele cursar la infección por Mansonella ozzardi?',['Siempre mortal','Generalmente asintomática','Con elefantiasis','Con anemia grave'],1,'Suele ser asintomática; algunos casos presentan lesiones oculares.'),
+Q('nema','¿Cómo se detecta habitualmente Mansonella ozzardi?',['Biopsia muscular','Gota gruesa (la misma usada para malaria)','Graham','Ritchie'],1,'Se observa en gota gruesa para malaria.','gota gruesa'),
+Q('nema','¿Qué rasgo tiene la microfilaria de Mansonella ozzardi?',['Con vaina y núcleos hasta la cola','Sin membrana envolvente, extremidad caudal fusiforme y no encorvada','Con cola bifurcada','Con opérculo'],1,'Sin membrana envolvente, extremidad anterior libre de núcleos.'),
+Q('cest','¿Cuál es el huésped intermediario de Taenia solium?',['Bovino','Cerdo','Pez','Copépodo'],1,'HI cerdo (forma las larvas); HD hombre.','cerdo'),
+Q('cest','¿Cuál es el huésped intermediario de Taenia saginata?',['Cerdo','Vacas o bovinos','Perro','Crustáceo'],1,'HI vacas/bovinos; HD hombre.','vacas|bovino|vaca'),
+Q('cest','¿Qué escólex corresponde a Taenia solium?',['4 ventosas sin rostelo','4 ventosas con doble corona de unos 30 ganchos','2 botrias','Rostelo retráctil con una sola corona'],1,'T. solium: escólex armado con doble corona de ~30 ganchos y 4 ventosas.','doble corona de ganchos'),
+Q('cest','¿Qué escólex corresponde a Taenia saginata?',['4 ventosas, sin rostelo ni ganchos','Doble corona de ganchos','2 botrias','Rostelo con 30 ganchos'],0,'T. saginata es inerme: 4 ventosas sin rostelo ni ganchos.','sin rostelo ni ganchos|4 ventosas sin ganchos'),
+Q('cest','¿Cuántas proglótides tiene aproximadamente Taenia solium?',['200','1000','2000','5000'],1,'T. solium ~1000 proglótides; T. saginata ~2000.','1000'),
+Q('cest','¿Cuántas ramas uterinas laterales tiene la proglótide grávida de Taenia solium?',['Más de 12','Aproximadamente 12','Más de 20','Ninguna'],1,'T. solium: 12 ramas laterales. T. saginata: más de 12.','12'),
+Q('cest','¿Qué diferencia el aparato genital de T. solium y T. saginata?',['T. solium tiene esfínter vaginal','T. solium carece de esfínter vaginal y tiene 3 lóbulos ováricos','T. saginata tiene 3 lóbulos ováricos','Ninguna tiene ovarios'],1,'T. solium: 3 lóbulos ováricos y sin esfínter vaginal. T. saginata: 2 lóbulos y con esfínter.'),
+Q('cest','¿Cuánto mide el adulto de Taenia saginata?',['1 m','3 m','5 m','10 m'],3,'T. saginata hasta 10 m; T. solium hasta 5 m.','10 m'),
+Q('cest','¿Dónde se fija el adulto de Taenia solium?',['Intestino grueso','Intestino delgado, yeyuno','Conductos biliares','Estómago'],1,'Se fija en intestino delgado, a nivel del yeyuno.','yeyuno'),
+Q('cest','¿Dónde se localiza el cisticerco en el huésped intermediario?',['Hígado','Músculo estriado del animal','Pulmón','Riñón'],1,'Cisticerco en músculo estriado, 5 mm de ancho x 10 mm de largo, con escólex invaginado.','musculo estriado'),
+Q('cest','¿Cuánto puede vivir el cisticerco?',['1 año','5 años','20 años','50 años'],2,'El cisticerco puede vivir unos 20 años.','20 anos'),
+Q('cest','¿Cómo se adquiere la neurocisticercosis humana?',['Comiendo carne de cerdo con cisticercos','Ingiriendo los huevos de Taenia solium','Por picadura de mosquito','Por penetración cutánea'],1,'La ingestión de huevos convierte al humano en huésped intermediario.','ingiriendo los huevos|huevos'),
+Q('cest','¿El huevo de Taenia necesita embrionar en el ambiente?',['Sí, 2 semanas','No, apenas sale ya es infectante'],1,'El huevo de Taenia es infectante apenas sale.'),
+Q('cest','¿Qué contiene en su interior el huevo de Taenia?',['Un miracidio','Una oncosfera con 3 pares de ganchos','Un procercoide','Blastómeros'],1,'Embrión hexacanto (oncosfera) con 6 ganchos, es decir 3 pares.','oncosfera'),
+Q('cest','¿Cómo es la membrana del huevo de Taenia?',['Única y delgada','Doble, gruesa y radiada','Con opérculo','Con filamentos polares'],1,'Membrana doble gruesa y radiada, color café, 30-40 µm.','doble gruesa radiada|radiada'),
+Q('cest','¿Cuál es el periodo prepatente de Taenia solium?',['1 semana','2 a 3 meses','1 año','3 semanas'],1,'Periodo prepatente de 2-3 meses.','2 a 3 meses'),
+Q('cest','¿Cómo se diagnostica la teniasis?',['Gota gruesa','Examen microscópico de proglótides y huevos, ELISA, PCR','Biopsia muscular','Knott'],1,'Se reporta como "huevos de Taenia"; la especie se define por las proglótides.'),
+Q('cest','¿Cuáles son los huéspedes intermediarios de Diphyllobothrium latum?',['Solo peces','Copépodos (Cyclops, Diaptomus) y luego peces','Cerdo y bovino','Caracol y planta acuática'],1,'HI1 copépodos, HI2 peces de agua dulce como truchas y salmón.','copepodos y peces'),
+Q('cest','¿Cómo se llama el primer estado larvario ciliado de Diphyllobothrium que se libera en el agua?',['Miracidio','Coracidio','Procercoide','Plerocercoide'],1,'El coracidio, ciliado, es ingerido por el copépodo.','coracidio'),
+Q('cest','¿Qué larva se desarrolla dentro del copépodo en el ciclo de Diphyllobothrium?',['Coracidio','Procercoide','Plerocercoide','Cisticercoide'],1,'En el copépodo se forma el procercoide; en el pez, el plerocercoide.','procercoide'),
+Q('cest','¿Qué estructuras de fijación tiene el escólex de Diphyllobothrium latum?',['4 ventosas','Dos ventosas alargadas llamadas botrias','Rostelo con ganchos','Ninguna'],1,'Escólex con dos botrias, de 2 mm de largo.','botrias'),
+Q('cest','¿Cuántos huevos al día produce Diphyllobothrium latum?',['20 000','100 000','1 millón','200'],2,'Hasta un millón de huevos diarios.','1 millon'),
+Q('cest','¿Qué rasgo tiene el huevo de Diphyllobothrium latum?',['Forma de D','Ovalado con opérculo','Con tapones polares','Con filamentos polares'],1,'Huevo ovalado de 70 x 45 µm con opérculo.','operculo'),
+Q('cest','¿Cuánto vive el adulto de Diphyllobothrium latum?',['1 año','5 años','10 años','30 años'],2,'Vive unos 10 años en el intestino delgado.','10 anos'),
+Q('cest','¿Cuál es el cestodo más pequeño del temario y no necesita huésped intermediario?',['Hymenolepis diminuta','Hymenolepis nana','Dipylidium caninum','Taenia solium'],1,'H. nana (Rodentolepis nana) mide 2-4 cm y no requiere HI.','hymenolepis nana'),
+Q('cest','¿Qué escólex tiene Hymenolepis nana?',['Sin ganchos','4 ventosas con rostelo retráctil y corona de ganchos','2 botrias','Rostelo fijo con 30 ganchos'],1,'H. nana: rostelo retráctil armado; H. diminuta: escólex sin ganchos.'),
+Q('cest','¿Qué rasgo distingue al huevo de Hymenolepis nana?',['Tapones polares','Filamentos polares en forma de mechón desde la membrana interna','Opérculo','Espina lateral'],1,'Filamentos polares y oncosfera con tres pares de ganchos.','filamentos polares'),
+Q('cest','¿Dónde ocurre el desarrollo larvario (cisticercoide) de Hymenolepis nana?',['En una pulga','En la mucosa intestinal del propio hombre','En el cerdo','En el pez'],1,'La oncosfera penetra la mucosa del duodeno y forma el cisticercoide allí mismo.','mucosa intestinal'),
+Q('cest','¿Cuánto tarda el ciclo completo de Hymenolepis nana?',['3 días','3 semanas','3 meses','1 año'],1,'Demora unas 3 semanas.','3 semanas'),
+Q('cest','¿Tiene huésped intermediario Hymenolepis diminuta?',['No','Sí, artrópodos como escarabajos o pulgas'],1,'El humano o el roedor se infecta al ingerir el artrópodo con cisticercoide, en cereales o granos.'),
+Q('cest','¿Cuáles son los huéspedes definitivos de Dipylidium caninum?',['Hombre','Perros y gatos','Cerdos','Roedores'],1,'HD perros y gatos; HA humanos, sobre todo niños; HI pulgas y piojos.','perros y gatos'),
+Q('cest','¿Cómo se agrupan los huevos de Dipylidium caninum?',['Sueltos en la materia fecal','En cápsulas ovígeras de 5 a 13 huevos','Con filamentos polares','Con opérculo'],1,'Se agrupan en cápsulas ovígeras, expulsadas en proglótides con forma de grano de arroz.','capsula ovigera|capsulas ovigeras'),
+Q('cest','¿Qué larva se forma dentro de la pulga en el ciclo de Dipylidium caninum?',['Cisticerco','Cisticercoide','Plerocercoide','Procercoide'],1,'El cisticercoide infectante se desarrolla dentro de la pulga o del piojo.','cisticercoide'),
+Q('cest','¿Qué forma tienen las proglótides grávidas de Dipylidium caninum?',['Más anchas que largas','Como granos de arroz, con movimiento propio','Cuadradas','Con útero central'],1,'Las grávidas son más largas que anchas y parecen granos de arroz móviles.'),
+Q('cest','¿Cuál es el huésped definitivo de Echinococcus granulosus?',['Oveja','Perro','Zorro','Felino salvaje'],1,'HD perro; HI oveja y ganado. El humano es HI accidental.','perro'),
+Q('cest','¿Cuánto mide el adulto de Echinococcus granulosus?',['2 a 10 mm','2 a 10 cm','1 m','30 cm'],0,'Es un cestodo diminuto: 2-10 mm, con 2 a 5 proglótides.','2 a 10 mm'),
+Q('cest','¿Qué tipo de quiste produce Echinococcus granulosus?',['Multilocular infiltrativo','Unilocular de crecimiento lento y delimitado','Poliquístico','Uniquístico en corazón'],1,'Hidatidosis quística: quiste unilocular, sobre todo hepático y pulmonar.','unilocular|quiste unilocular'),
+Q('cest','¿Qué órganos afecta con mayor frecuencia la hidatidosis quística?',['Riñón y bazo','Hígado y pulmón','Cerebro y ojo','Corazón'],1,'Hígado y pulmón concentran cerca del 40% de los casos.','higado y pulmon'),
+Q('cest','¿Cómo se infecta el perro en el ciclo de Echinococcus granulosus?',['Comiendo huevos','Comiendo vísceras crudas de oveja con quistes','Por picadura','Por la piel'],1,'De ahí la prevención: evitar que las vísceras de los HI sean consumidas por los HD.'),
+Q('cest','¿Cuáles son los huéspedes de Echinococcus multilocularis?',['HD perro, HI oveja','HD zorros y lobos, HI roedores','HD perro de monte, HI capibara','HD felinos salvajes, HI roedores'],1,'E. multilocularis: zorros y lobos como HD, roedores como HI.','zorros y lobos'),
+Q('cest','¿Cómo se comporta el quiste de Echinococcus multilocularis?',['Unilocular y delimitado','Múltiple en racimos, bordes indefinidos, invade como un cáncer','Poliquístico con arena hidatídica','Único y calcificado'],1,'Hidatidosis alveolar: comportamiento infiltrativo similar a un tumor.','hidatidosis alveolar'),
+Q('cest','¿Qué especie produce hidatidosis poliquística?',['E. granulosus','E. multilocularis','E. vogeli','E. oligarthrus'],2,'E. vogeli: HD perro de monte, HI capibara/paca.','echinococcus vogeli'),
+Q('cest','¿Qué forma la arena hidatídica en el quiste de Echinococcus vogeli?',['Sales de calcio','Vesículas prolígeras y protoescólices','Fibrina','Eosinófilos'],1,'Las vesículas prolígeras y los protoescólices forman la arena hidatídica.','arena hidatidica'),
+Q('cest','¿Cuál es el huésped definitivo de Echinococcus oligarthrus?',['Perro doméstico','Felinos salvajes como puma y jaguar','Zorro','Perro de monte'],1,'E. oligarthrus: HD felinos salvajes, HI roedores; produce hidatidosis uniquística.','felinos salvajes'),
+Q('cest','¿Qué capas tiene el quiste hidatídico?',['Solo membrana externa','Capa laminada y capa germinal','Capa muscular y serosa','Solo capa fibrosa'],1,'Capa laminada por fuera y capa germinal por dentro, que genera protoescólices.','capa laminada y germinal'),
+Q('cest','¿Cómo se diagnostica la hidatidosis?',['Coprológico','Pruebas inmunológicas y diagnóstico parasitológico','Gota gruesa','Graham'],1,'Se evita la punción a ciegas; se usan pruebas inmunológicas e imagen.'),
+Q('trem','¿Cuál es la secuencia larvaria de Fasciola hepatica?',['Huevo → coracidio → procercoide → plerocercoide','Huevo → miracidio → esporoquiste → redia → cercaria → metacercaria → adulto','Huevo → oncosfera → cisticerco','Huevo → rabditiforme → filariforme'],1,'Es la secuencia clásica de los tremátodos.','miracidio esporoquiste redia cercaria metacercaria'),
+Q('trem','¿Dónde se localizan los adultos de Fasciola hepatica?',['Intestino delgado','Hígado y conductos biliares','Pulmón','Venas mesentéricas'],1,'Adultos en conductos biliares, causando obstrucción biliar.','conductos biliares'),
+Q('trem','¿Cuántas ventosas tiene el adulto de Fasciola hepatica?',['Ninguna','Una oral','Una oral y una ventral','Dos botrias'],2,'Ventosa oral y ventosa ventral; es hermafrodita.','ventosa oral y ventral'),
+Q('trem','¿Cómo es el aparato digestivo de Fasciola hepatica?',['Completo con ano','Faringe, esófago e intestino ciego','Ausente','Tubo recto con ano terminal'],1,'Los tremátodos tienen intestino ciego, sin ano.','intestino ciego'),
+Q('trem','¿Cómo se infecta el humano con Fasciola hepatica?',['Comiendo pescado crudo','Comiendo plantas acuáticas con metacercarias','Por penetración cutánea','Por picadura de vector'],1,'Las metacercarias se enquistan sobre vegetación acuática, como el berro.','plantas acuaticas'),
+Q('trem','¿Qué prueba se usa para el diagnóstico de fascioliasis?',['Knott','ELISA','Gota gruesa','Graham'],1,'ELISA, además de la búsqueda de huevos operculados.','elisa'),
+Q('trem','¿Qué caracol es el huésped intermediario de Clonorchis sinensis?',['Biomphalaria','Lymnaea','Bulinus','Oncomelania'],1,'HI1 caracol Lymnaea; HI2 pescado.','lymnaea'),
+Q('trem','¿Cuál es la forma infectante de Clonorchis sinensis para el humano?',['Cercaria','Metacercaria en pescado','Plerocercoide','Miracidio'],1,'Se adquiere al comer pescado crudo con metacercarias.','metacercaria'),
+Q('trem','¿Dónde se localizan los adultos de Clonorchis sinensis?',['Intestino delgado','Conductos biliares','Pulmón','Vejiga'],1,'Conductos biliares del hombre y otros animales.','conductos biliares'),
+Q('trem','¿Qué complicación neoplásica se asocia a Clonorchis sinensis?',['Carcinoma gástrico','Colangiocarcinoma','Hepatocarcinoma viral','Linfoma'],1,'La inflamación crónica biliar puede llevar a colangiocarcinoma.','colangiocarcinoma'),
+Q('trem','¿Cuál es el periodo prepatente de Clonorchis sinensis?',['1 semana','1 mes','3 meses','1 año'],1,'Aproximadamente 1 mes.','1 mes'),
+Q('trem','¿Qué rasgo tiene la cercaria de Clonorchis sinensis?',['Cola bifurcada','Cola larga no bifurcada','Sin cola','Cilios'],1,'Cola larga no bifurcada; la de Schistosoma sí es bifurcada.','cola larga no bifurcada'),
+Q('trem','¿Dónde vive el adulto de Fasciolopsis buski?',['Conductos biliares','Intestino delgado','Pulmón','Venas mesentéricas'],1,'Es un tremátodo intestinal de gran tamaño (20-75 mm).','intestino delgado'),
+Q('trem','¿Cómo se infecta el humano con Fasciolopsis buski?',['Comiendo pescado','Ingiriendo plantas acuáticas con metacercarias','Por la piel','Por vector'],1,'Igual que Fasciola: metacercarias sobre plantas acuáticas.','plantas acuaticas'),
+Q('trem','¿Cuántas cercarias puede originar un solo miracidio que invade el caracol en la esquistosomiasis?',['100 a 500','5 000 a 10 000','50 000 a 300 000','1 a 10'],2,'Multiplicación asexual masiva dentro del caracol.','50000 a 300000'),
+Q('trem','¿Qué rasgo tiene la cercaria de Schistosoma?',['Cola no bifurcada','Cola bifurcada','Cilios','Opérculo'],1,'Cercaria de cola bifurcada, forma infectante que penetra piel.','cola bifurcada'),
+Q('trem','¿Dónde viven los adultos de Schistosoma mansoni?',['Plexo venoso vesical','Vénulas mesentéricas del colon','Venas mesentéricas del intestino delgado','Conductos biliares'],1,'S. mansoni: vénulas mesentéricas del colon.','venulas mesentericas del colon'),
+Q('trem','¿Dónde viven los adultos de Schistosoma haematobium?',['Plexo venoso vesical','Vénulas del colon','Vena porta','Linfáticos'],0,'Plexo venoso vesical; elimina huevos por la orina.','plexo venoso vesical'),
+Q('trem','¿Dónde viven los adultos de Schistosoma japonicum?',['Plexo vesical','Venas mesentéricas del intestino delgado','Conductos biliares','Pulmón'],1,'S. japonicum: venas mesentéricas del intestino delgado.','venas mesentericas del intestino delgado'),
+Q('trem','¿Cuál es el caracol intermediario de Schistosoma haematobium?',['Biomphalaria','Bulinus','Oncomelania','Lymnaea'],1,'Bulinus para S. haematobium.','bulinus'),
+Q('trem','¿Cuál es el caracol intermediario de Schistosoma japonicum?',['Bulinus','Biomphalaria','Oncomelania','Lymnaea'],2,'Oncomelania para S. japonicum.','oncomelania'),
+Q('trem','¿Qué huevo tiene espina lateral grande?',['S. haematobium','S. mansoni','S. japonicum','Fasciola'],1,'S. mansoni: espina lateral. S. haematobium: espina terminal. S. japonicum: espina pequeña o rudimentaria.','schistosoma mansoni'),
+Q('trem','¿Qué especie de Schistosoma se encuentra en América?',['S. japonicum','S. haematobium','S. mansoni','S. intercalatum'],2,'Solo S. mansoni está presente en América.','schistosoma mansoni'),
+Q('trem','¿Cómo se llama el canal del macho de Schistosoma que aloja a la hembra?',['Canal medular','Canal ginecóforo','Ventosa ventral','Botria'],1,'El canal ginecóforo aloja a la hembra de forma permanente.','canal ginecoforo|ginecoforo'),
+Q('trem','¿Por qué los Schistosoma adultos vivos no causan daño en las vénulas?',['Porque no se alimentan','Porque adquieren antígenos similares a los del huésped','Porque son muy pequeños','Porque están encapsulados'],1,'Se camuflan con antígenos del huésped; el daño lo causan los huevos y los adultos muertos.'),
+Q('trem','¿Qué causa los granulomas en la esquistosomiasis?',['Los adultos vivos','Los huevos atrapados en los tejidos','Las cercarias','El miracidio'],1,'La respuesta inmune a los huevos en tejidos forma granulomas.','los huevos'),
+Q('trem','¿Qué ocurre al penetrar las cercarias de Schistosoma en la piel?',['Nada','Dermatitis con reacción alérgica y aumento de eosinófilos','Escara negra','Nódulo subcutáneo'],1,'Dermatitis cercariana en la fase de invasión.','dermatitis'),
+Q('trem','¿Cuánto pueden vivir los adultos de Schistosoma mansoni?',['1 año','5 años','30 años','100 años'],2,'Pueden vivir hasta 30 años.','30 anos'),
+Q('trem','¿Cuáles son los huéspedes intermediarios de Paragonimus westermani?',['Solo caracol','Caracol (HI1) y crustáceos o cangrejos (HI2)','Copépodo y pez','Planta acuática'],1,'El humano se infecta al ingerir crustáceos crudos con metacercarias.','caracol y cangrejo|caracol y crustaceos'),
+Q('trem','¿Dónde se localizan los adultos de Paragonimus westermani?',['Intestino delgado','Pulmones','Conductos biliares','Vejiga'],1,'Producen distomatosis pulmonar.','pulmones'),
+Q('trem','¿Qué rasgo morfológico tiene el adulto de Paragonimus westermani?',['Liso y transparente','Café rojizo, cubierto de pequeñas espinas en forma de escamas','Con ventosas botridiales','Con canal ginecóforo'],1,'Adulto aplanado de 1-2 cm, café rojizo y cubierto de espinas escamosas.'),
+Q('trem','¿En qué muestras se buscan los huevos de Paragonimus?',['Solo orina','Materia fecal o esputo/pus','LCR únicamente','Sangre'],1,'Se eliminan por esputo y, al deglutirse, también aparecen en heces.','esputo y heces'),
+Q('trem','¿Qué rasgo comparten los huevos de Fasciola, Clonorchis, Paragonimus y Diphyllobothrium?',['Espina lateral','Opérculo','Tapones polares','Filamentos polares'],1,'Todos son huevos operculados.','operculo'),
+Q('artro','¿Qué define a la transmisión mecánica?',['El parásito se multiplica en el vector','El vector solo transporta el agente, sin que sufra transformación','El artrópodo es indispensable','Requiere un vector específico'],1,'Transporte del agente causal, sin transformación; se considera accidental.','transmision mecanica'),
+Q('artro','¿Qué define a la transmisión biológica?',['El agente solo se transporta externamente','El artrópodo es indispensable y permite crecimiento o multiplicación del agente','Ocurre solo por saliva','No requiere vector específico'],1,'El artrópodo es indispensable para completar el ciclo biológico.','transmision biologica'),
+Q('artro','¿Cuáles son los principales vectores mecánicos?',['Mosquito y garrapata','Mosca y cucaracha','Pulga y piojo','Caracol y copépodo'],1,'Mosca y cucaracha transportan agentes en su cuerpo o saliva.','mosca y cucaracha'),
+Q('artro','¿Cómo se llama la relación de artrópodos que viven con humanos sin alimentarse de ellos?',['Foresis','Sinantropía','Comensalismo estricto','Mutualismo'],1,'Sinantropía, como en cucarachas domésticas y hormigas.','sinantropia'),
+Q('artro','¿Qué tipo de metamorfosis tiene Musca domestica?',['Incompleta','Completa: huevo, larva, pupa y adulto','Directa','Sin estadios larvarios'],1,'Metamorfosis completa; dura unas 3 semanas.','completa'),
+Q('artro','¿Cuántos huevos pone Musca domestica y cuánto vive?',['200 huevos, 1 semana','2 000 huevos, vive 1 mes','20 000 huevos, 1 año','50 huevos, 3 días'],1,'Pone 2 000 huevos y vive alrededor de un mes.','2000 huevos'),
+Q('artro','¿Cómo se alimenta la mosca doméstica?',['Mastica sólidos','Licúa el alimento con saliva que regurgita','Solo sangre','No se alimenta'],1,'Requiere que las sustancias sean líquidas o licuables por su saliva; tiene probóscide gruesa.'),
+Q('artro','¿Qué patógenos puede transmitir mecánicamente Musca domestica?',['Solo virus','Virus (poliomielitis, hepatitis), Salmonella, Aspergillus, amebas y huevos de helmintos','Solo Plasmodium','Solo rickettsias'],1,'Es un vector mecánico de amplio espectro.'),
+Q('artro','¿Cómo se llama el saco quitinoso donde las cucarachas llevan los huevos?',['Ooteca','Pupario','Cápsula ovígera','Espermateca'],0,'La ooteca se adhiere a la parte posterior de la hembra.','ooteca'),
+Q('artro','¿Qué tipo de metamorfosis tienen las cucarachas?',['Completa','Incompleta, con ninfas similares al adulto','Sin metamorfosis','Directa con pupa'],1,'De la ooteca nacen ninfas morfológicamente similares a los adultos.','incompleta'),
+Q('artro','¿Cuáles son los tres géneros principales de cucarachas de interés médico?',['Musca, Fannia, Calliphora','Periplaneta, Blatta, Blatella','Culex, Aedes, Anopheles','Tunga, Pulex, Xenopsylla'],1,'Periplaneta americana (4 cm), Blatta orientalis (2.5 cm) y Blatella germanica (1.5 cm).','periplaneta blatta blatella'),
+Q('artro','¿Qué patología alérgica importante se asocia a las cucarachas?',['Rinitis vasomotora','Asma','Urticaria por frío','Dermatitis de contacto'],1,'Son causa importante de asma, con valores altos de inmunoglobulina.','asma'),
+Q('artro','¿En qué orden se clasifican actualmente las cucarachas?',['Orthoptera','Blattaria','Diptera','Hemiptera'],1,'Antes en Orthoptera, actualmente en Blattaria.','blattaria'),
+Q('artro','¿Qué posición de reposo tiene Anopheles?',['Paralela a la superficie','Vertical u oblicua','Cabeza abajo','Con alas plegadas'],1,'Anopheles reposa en ángulo; Aedes y Culex, paralelos.','vertical u oblicua'),
+Q('artro','¿Cómo pone los huevos Anopheles?',['En paquetes de 100','Separados y con un par de flotadores laterales','Separados y sin flotadores','En ooteca'],1,'Huevos separados con flotadores, en aguas limpias y quietas.','separados con flotadores'),
+Q('artro','¿Cómo pone los huevos Culex?',['Separados con flotadores','En paquetes o balsas de 100 huevos','En ooteca','En tierra húmeda'],1,'Culex pone balsas de unos 100 huevos.','paquetes de 100'),
+Q('artro','¿Cómo pone los huevos Aedes?',['En balsas','Separados y sin flotadores','Con flotadores laterales','En ooteca'],1,'Aedes: huevos separados, sin flotadores.','separados sin flotadores'),
+Q('artro','¿Qué largo tiene el sifón respiratorio de la larva de Anopheles?',['Largo','Mediano','No tiene sifón largo (es corto)','Bifurcado'],2,'La larva de Anopheles reposa paralela a la superficie; Culex tiene sifón largo y Aedes mediano.'),
+Q('artro','¿Qué enfermedades transmite Anopheles?',['Dengue y fiebre amarilla','Malaria, filariasis por Brugia y Wuchereria, y algunas arbovirosis','Encefalitis equina exclusivamente','Leishmaniasis'],1,'Anopheles es el vector de la malaria.'),
+Q('artro','¿Qué enfermedades transmite Aedes?',['Malaria','Fiebre amarilla urbana, dengue, encefalitis equina y filariasis por Wuchereria','Solo Zika','Tripanosomiasis'],1,'Aedes es el vector de arbovirosis urbanas.'),
+Q('artro','¿Qué transmite principalmente Culex?',['Malaria','Encefalitis virales (especialmente equina) y filariasis por Brugia y Wuchereria','Fiebre amarilla','Leishmania'],1,'Culex se asocia a encefalitis virales y filariasis.'),
+Q('artro','¿Qué sexo del mosquito es hematófago?',['El macho','La hembra','Ambos','Ninguno'],1,'Solo las hembras son hematófagas; los machos se alimentan de líquidos de plantas.','la hembra'),
+Q('artro','¿Qué atrae a la hembra del mosquito hacia el humano?',['El color del cabello','Sudor, calor, humedad y producción de CO2','El sonido','La altura'],1,'También influyen la luz y determinados colores.','co2|sudor calor humedad co2'),
+Q('artro','¿Cómo se llama el aparato bucal perforador del mosquito?',['Hipostoma','Probóscide','Rostelo','Ctenidio'],1,'Probóscide formada por epifaringe, hipofaringe, mandíbulas y maxilas.','proboscide'),
+Q('artro','¿Cuánto vive un mosquito adulto?',['1 a 3 días','4 a 40 días','6 meses','2 años'],1,'La longevidad varía entre 4 y 40 días según especie y condiciones.','4 a 40 dias'),
+Q('artro','¿Dónde se crían las larvas de Simulium?',['Aguas estancadas','Arroyos de agua oxigenada y corriente','Pantanos','Colchones'],1,'Las pupas se adhieren a piedras bajo el agua corriente.','arroyos de agua oxigenada|arroyos'),
+Q('artro','¿Cuándo pica Simulium?',['De noche','De día','Al amanecer solamente','No pica'],1,'La hembra de Simulium pica de día; Culicoides pica al atardecer o de noche.','de dia'),
+Q('artro','¿Dónde se crían las larvas de Culicoides?',['Arroyos rápidos','Pantanos','Colchones','Basura seca'],1,'Culicoides se cría en pantanos y pica al atardecer o de noche.','pantanos'),
+Q('artro','¿Qué transmite Culicoides en el temario?',['Malaria','Prurito e irritación local, filariasis y Mansonella ozzardi','Dengue','Leishmania'],1,'Es vector de Mansonella ozzardi junto con Simulium.'),
+Q('artro','¿Qué enfermedades se asocian a Simulium además de la oncocercosis?',['Dengue y Zika','Encefalitis equina, mastitis vesicular y mansonelosis','Peste','Tifus'],1,'Simulium: jején vector de Onchocerca y de otros agentes.'),
+Q('artro','¿Cuál es el vector biológico de la tripanosomiasis africana?',['Chrysops','Glossina','Simulium','Culicoides'],1,'Glossina, la mosca tsé-tsé del continente africano.','glossina'),
+Q('artro','¿De qué es vector biológico Chrysops?',['Onchocerca volvulus','Loa loa','Trypanosoma brucei','Leishmania'],1,'Chrysops, el tábano, transmite la filariasis por Loa loa.','loa loa'),
+Q('artro','¿Cuáles son las dos especies de chinche de cama del temario?',['Cimex lectularius y Cimex hemipterus','Triatoma y Rhodnius','Pulex y Xenopsylla','Pediculus y Pthirus'],0,'Cimex lectularius y C. hemipterus, de 3 a 5 mm.','cimex lectularius y cimex hemipterus'),
+Q('artro','¿Transmiten enfermedades las chinches de cama?',['Sí, la enfermedad de Chagas','No transmiten enfermedades; causan reacciones alérgicas'],1,'Producen pápulas eritematosas pruriginosas e infecciones bacterianas por rascado, pero no transmiten enfermedades.'),
+Q('artro','¿Qué requiere la chinche de cama para mudar?',['Luz solar','Ingestión de sangre','Humedad alta','Cambio de huésped'],1,'Metamorfosis incompleta y cada muda requiere una ingesta de sangre.'),
+Q('artro','¿Cuánto mide Pediculus humanus var. capitis?',['0.5 mm','2 a 3 mm','5 mm','1 cm'],1,'2 a 3 mm, más largo que ancho, con patas adaptadas al cabello.','2 a 3 mm'),
+Q('artro','¿Cuántos huevos pone la hembra del piojo de la cabeza?',['30','100','500','1000'],1,'Pone 100 liendres, que embrionan en 5 a 10 días.','100'),
+Q('artro','¿Cuánto tarda el piojo de la cabeza en pasar de huevo a adulto?',['3 días','2 a 4 semanas','3 meses','1 semana exacta'],1,'2 a 4 semanas, con metamorfosis incompleta y 3 mudas ninfales, todo en el huésped humano.','2 a 4 semanas'),
+Q('artro','¿Cómo se transmite el piojo de la cabeza?',['Por contacto sexual','De cabeza a cabeza o por peines y gorras','Por picadura de pulga','Por el agua'],1,'Contacto directo o fómites del cabello.'),
+Q('artro','¿Cómo se transmite el piojo púbico?',['Por peines','Por contacto sexual','Por el aire','Por alimentos'],1,'Pthirus pubis se transmite por contacto sexual.','contacto sexual'),
+Q('artro','¿Cuántos huevos pone la hembra del piojo púbico?',['30','100','300','1000'],0,'Unos 30 huevos; el ciclo dura 1 mes.','30'),
+Q('artro','¿Qué morfología tiene el piojo púbico frente al de la cabeza?',['Más largo que ancho','Casi tan ancho como largo, con patas cortas y fuertes con garras','Sin patas','Alargado y móvil'],1,'Se fija de forma prolongada a la base del pelo y se mueve poco.'),
+Q('artro','¿Cuál es el tratamiento indicado para la pediculosis de la cabeza en el temario?',['Solo rasurado','Ivermectina, antihistamínico y antibióticos si hay sobreinfección','Extracción quirúrgica','Insecticida ambiental'],1,'Además del tratamiento tópico y la extracción mecánica con peine.'),
+Q('artro','¿Cuál es la pulga de los humanos?',['Xenopsylla cheopis','Pulex irritans','Ctenocephalides','Tunga penetrans'],1,'Pulex irritans en humanos, Xenopsylla cheopis en ratas, Ctenocephalides en perros y gatos.','pulex irritans'),
+Q('artro','¿Cuál es la pulga de las ratas asociada a la peste?',['Pulex irritans','Xenopsylla cheopis','Ctenocephalides felis','Tunga penetrans'],1,'Xenopsylla cheopis transmite Yersinia pestis.','xenopsylla cheopis'),
+Q('artro','¿Cómo se llaman las estructuras quitinosas en forma de peine de las pulgas?',['Ctenidios','Botrias','Ooteca','Espiráculos'],0,'Los ctenidios pueden estar en cabeza y tórax.','ctenidios'),
+Q('artro','¿Cómo están aplanadas las pulgas?',['Dorsoventralmente','Lateralmente','No están aplanadas','Radialmente'],1,'Las pulgas son aplanadas lateralmente; las cucarachas, dorsoventralmente.','lateralmente'),
+Q('artro','¿Dónde se reproducen las pulgas?',['Sobre el huésped','Fuera del huésped, en suelo o muebles','En el agua','Dentro de la piel'],1,'Metamorfosis completa fuera del huésped.'),
+Q('artro','¿Cuál es el nombre común de la tungiasis?',['Sarna','Nigua','Miasis','Larva migrans'],1,'La nigua: Tunga penetrans y T. trimamillata, de 1 mm.','nigua'),
+Q('artro','¿Qué hace la hembra grávida de Tunga penetrans?',['Se queda en la superficie','Penetra la piel, aumenta de volumen y revienta liberando los huevos','Pone huevos en el suelo','Migra al intestino'],1,'Produce pápulas con un orificio central, sobre todo en los pies.'),
+Q('artro','¿Qué es una miasis obligada?',['La larva llega por accidente','La fase larvaria requiere tejido vivo de humano o animal','La larva vive en materia orgánica','Es una picadura alérgica'],1,'Géneros: Dermatobia y Cordylobia.','miasis obligada'),
+Q('artro','¿Qué géneros producen miasis facultativa?',['Dermatobia y Cordylobia','Cochliomyia y Calliphora','Musca y Fannia','Tunga y Pulex'],1,'Facultativa: larvas en materia orgánica en descomposición o heridas.','cochliomyia y calliphora'),
+Q('artro','¿Qué géneros producen miasis accidentales?',['Dermatobia','Cochliomyia','Musca y Fannia','Cordylobia'],2,'Las larvas llegan ocasionalmente al hombre.','musca y fannia'),
+Q('artro','¿Cómo deposita sus huevos Dermatobia?',['Directamente en la piel','Los adhiere a artrópodos hematófagos que los transfieren al vertebrado','En el agua','En el suelo'],1,'Foresis: la mosca usa otro artrópodo como transportador.'),
+Q('artro','¿Cuál es el tratamiento de las miasis?',['Ivermectina siempre','Extracción de las larvas por métodos manuales o quirúrgicos','Antibióticos solamente','Antihistamínicos'],1,'Algunos usan lidocaína bajo los nódulos para facilitar la extracción.','extraccion de las larvas'),
+Q('artro','¿Cuáles son los géneros de garrapatas más importantes en humanos?',['Sarcoptes y Demodex','Dermacentor, Ornithodoros, Amblyomma, Ixodes y Rhipicephalus','Tunga y Pulex','Latrodectus y Loxosceles'],1,'Todos son ectoparásitos hematófagos y vectores biológicos.'),
+Q('artro','¿Qué familia agrupa a las garrapatas duras?',['Argasidae','Ixodidae','Sarcoptidae','Pyroglyphidae'],1,'Duras: Ixodidae (con escudo). Blandas: Argasidae.','ixodidae'),
+Q('artro','¿Cómo se distingue el escudo entre macho y hembra de garrapata dura?',['Solo el macho lo tiene','Cubre todo el dorso en el macho y solo el tercio anterior en la hembra','Cubre todo el dorso en la hembra','Ninguno lo tiene'],1,'Por eso la hembra puede ingurgitarse y crecer mucho.'),
+Q('artro','¿Cómo se llama la "cabeza" de la garrapata?',['Escólex','Capítulo','Rostelo','Hipostoma'],1,'El capítulo sobresale en las duras y es ventral en las blandas.','capitulo'),
+Q('artro','¿Qué órgano usa la garrapata para fijarse al tejido?',['Quelíceros','Hipostoma, con dientes dirigidos hacia atrás','Pedipalpos','Ctenidios'],1,'Hipostoma central; queliceros cortantes y pedipalpos que no penetran.','hipostoma'),
+Q('artro','¿Qué bacteria transmitida por garrapatas causa la enfermedad de Lyme?',['Yersinia pestis','Borrelia','Rickettsia prowazekii','Bartonella'],1,'Las garrapatas transmiten virus, rickettsias (fiebre manchada de las Montañas Rocosas, fiebre Q) y bacterias como Borrelia.','borrelia'),
+Q('artro','¿Cómo se llama la secuencia de desarrollo de las garrapatas?',['Huevo, larva, pupa, adulto','Huevo, larva hexápoda, ninfa octópoda, adulto','Huevo, ninfa, adulto','Huevo, cisticercoide, adulto'],1,'La larva es hexápoda (6 patas) y la ninfa octópoda (8 patas).','larva hexapoda ninfa octopoda'),
+Q('artro','¿Cuánto mide Sarcoptes scabiei?',['350 µ la hembra y 250 µ el macho','1 mm la hembra','2 mm ambos','50 µ'],0,'Hembra 350 µ, macho 250 µ.','350 y 250'),
+Q('artro','¿Qué hace la hembra de Sarcoptes scabiei en la piel?',['Vive en el folículo piloso','Excava túneles en la capa córnea de la epidermis','Se fija a la base del pelo','Penetra hasta la dermis profunda'],1,'Deposita unos 150 huevos en hilera dentro del túnel.','excava tuneles'),
+Q('artro','¿Cuánto dura el ciclo de Sarcoptes scabiei?',['3 días','2 semanas','1 mes','3 meses'],1,'El ciclo dura 2 semanas, con metamorfosis incompleta.','2 semanas'),
+Q('artro','¿Cómo se transmite la escabiosis?',['Por agua','Por contacto directo, incluyendo transmisión sexual','Por picadura de vector','Por alimentos'],1,'Se considera infección familiar o de grupos cerrados y también ETS.','contacto directo'),
+Q('artro','¿Cuántos pares de patas tiene la larva de Sarcoptes scabiei?',['2','3','4','6'],1,'La larva tiene 3 pares de patas; la ninfa y el adulto, 4 pares.','3 pares'),
+Q('artro','¿Dónde habita Demodex folliculorum?',['En la capa córnea','En folículos pilosos y glándulas sebáceas, sobre todo nariz y párpados','En el intestino','En el pelo púbico exclusivamente'],1,'Demodex mide 100-400 µ y produce dermatitis, blefaritis y acné.','foliculos pilosos y glandulas sebaceas'),
+Q('artro','¿Qué ácaros del polvo doméstico causan alergia respiratoria?',['Sarcoptes y Demodex','Dermatophagoides y géneros de la familia Pyroglyphidae','Ixodes y Amblyomma','Trombicula'],1,'Se alimentan de fragmentos de epitelio y habitan en polvo, pisos y colchones.','dermatophagoides'),
+Q('artro','¿Qué géneros de mariposas y polillas producen lepidopterismo?',['Hylesia','Lonomia','Megalopyge','Premolis'],0,'Hylesia tiene escamas urticantes en el abdomen de la hembra.','hylesia'),
+Q('artro','¿Qué es el erucismo?',['Dermatitis por escamas de mariposa adulta','Cuadro por contacto con larvas (orugas) con pelos urticantes','Alergia a ácaros','Reacción a veneno de abeja'],1,'Lepidopterismo: adultos. Erucismo: larvas.','erucismo'),
+Q('artro','¿Cuál es la oruga con veneno más importante del temario?',['Automeris','Dirphia','Lonomia','Eacles'],2,'Lonomia es la única del grupo con veneno de importancia clínica.','lonomia'),
+Q('artro','¿Dónde se encuentra el veneno de las larvas de mariposa?',['En la saliva','En la hemolinfa, secretado por glándulas tegumentarias','En las patas','En las alas'],1,'Componentes clave: histamina, serotonina y acetilcolina.','hemolinfa'),
+Q('artro','¿Qué efecto hematológico produce el veneno de Lonomia?',['Trombosis masiva','Hipofibrinogenemia y fibrinólisis con descenso de factores XIII y V','Anemia megaloblástica','Leucemia'],1,'Tiene actividad coagulante, fibrinolítica y PLA2.','hipofibrinogenemia'),
+Q('artro','¿Qué enfermedad produce Premolis semirufa?',['Lepidopterismo','Pararamosis','Erucismo clásico','Loxoscelismo'],1,'Pararamosis, con compromiso articular.','pararamosis'),
+Q('artro','¿A qué familia pertenecen los escorpiones de importancia médica?',['Sicariidae','Buthidae','Ctenidae','Apidae'],1,'Familia Buthidae, géneros Tityus y Centruroides; son ovovivíparos.','buthidae'),
+Q('artro','¿Dónde se sintetiza la ponzoña del escorpión?',['En los pedipalpos','En dos glándulas exocrinas del telson','En el prosoma','En los quelíceros'],1,'El telson, al final del metasoma, contiene el aguijón.','telson'),
+Q('artro','¿Cuál es el mecanismo de acción de la ponzoña del escorpión?',['Bloquea canales de calcio','Activa y prolonga la apertura de los canales de sodio','Inhibe la acetilcolinesterasa','Destruye la membrana del eritrocito'],1,'Prolonga la despolarización y libera catecolaminas y acetilcolina de forma exagerada.','canales de sodio'),
+Q('artro','¿Qué actividad NO tiene la ponzoña del escorpión?',['Neurotóxica','Hemolítica y proteolítica','Liberadora de catecolaminas','Inflamatoria'],1,'Está desprovista de actividad hemolítica y proteolítica, y no consume fibrinógeno.'),
+Q('artro','¿En cuánto tiempo se detecta en sangre la ponzoña del escorpión y cuándo alcanza su pico?',['A las 2 horas, pico a las 6','A los 5 minutos, pico entre 15 y 30 minutos','A las 24 horas','Inmediatamente y pico a las 8 horas'],1,'Desaparece casi totalmente entre las 7 y 8 horas; se elimina por riñón.','5 minutos'),
+Q('artro','¿Qué complicaciones graves produce el escorpionismo?',['Necrosis cutánea','Edema agudo de pulmón, falla cardíaca aguda y pancreatitis','Anemia hemolítica','Ceguera'],1,'También hemorragia digestiva.'),
+Q('artro','¿Qué componente del veneno de abeja es el principal alérgeno mediado por IgE?',['Melitina','Fosfolipasa A2','Hialuronidasa','Apamina'],1,'PLA2 es el 10-12% del veneno y el principal anafiláctico; reacción de hipersensibilidad tipo I.','fosfolipasa a2'),
+Q('artro','¿Qué porcentaje del veneno de abeja representa la melitina?',['3%','10-12%','40-60%','90%'],2,'Melitina 40-60%: citolítica no enzimática, produce hemólisis.','40-60'),
+Q('artro','¿Qué función tiene la hialuronidasa del veneno de abeja?',['Hemólisis','Hidroliza el ácido hialurónico y facilita la entrada del veneno','Neurotoxicidad','Coagulación'],1,'Representa el 3% del veneno; es factor de difusión.','factor de difusion'),
+Q('artro','¿Qué acción tiene la apamina del veneno de abeja?',['Citolítica','Neurotóxica y cardiotóxica','Fibrinolítica','Alergénica principal'],1,'Apamina: 3% del veneno, acción neurotóxica y cardiotóxica.','apamina'),
+Q('artro','¿Cuánto veneno deposita una abeja en una picadura?',['5 microgramos','50 microgramos','500 microgramos','5 miligramos'],1,'50 microgramos; el aguijón queda adherido y sigue segregando veneno.','50 microgramos'),
+Q('artro','¿Cuántas picaduras de abeja son letales para un niño de 2 años?',['5 a 10','30 a 60','200','1000'],1,'Entre 30 y 60 en un niño pequeño; más de 500 en un adulto.','30-60'),
+Q('artro','¿Qué es la corbícula de la abeja?',['La glándula del veneno','Una cavidad en las patas posteriores para transportar polen','El aguijón','El ovipositor'],1,'La corbícula transporta polen al panal.','corbicula'),
+Q('artro','¿Qué diferencia principal hay entre la picadura de abeja y la de avispa?',['La abeja no inocula veneno','La abeja deja el aguijón y muere; la avispa lo retira y puede picar varias veces','La avispa deja el aguijón','Ninguna'],1,'El aguijón de la obrera es un ovipositor modificado.'),
+Q('artro','¿Qué enzima de la avispa es hemolítica y cardiotóxica, 20 veces más potente?',['Fosfolipasa A2','Fosfolipasa A1','Hialuronidasa','Melitina'],1,'La avispa (familia Vespidae) tiene PLA1.','fosfolipasa a1'),
+Q('artro','¿Cuántas picaduras de avispa se requieren para cuadros graves?',['50','200','1000','5'],2,'Se requieren cerca de 1000 avispas; los niños tienen mayor riesgo.','1000'),
+Q('artro','¿Qué género de hormiga es el más importante en medicina?',['Camponotus','Solenopsis','Paraponera','Formica'],1,'Solenopsis (hormiga fogonera / fire ants), subfamilia Myrmicinae.','solenopsis'),
+Q('artro','¿Qué alcaloides componen el 95% del veneno de Solenopsis?',['Poneratoxina','Solenopsinas (alquil piperidinas)','Melitina','Histamina'],1,'Las solenopsinas tienen propiedades hemolíticas.','solenopsinas'),
+Q('artro','¿Qué veneno posee Paraponera clavata, la hormiga "conga"?',['Solenopsina','Poneratoxina','Melitina','Apamina'],1,'Su picadura produce hipertermia y temblores.','poneratoxina'),
+Q('artro','¿Qué género de araña produce síndrome cutáneo dermonecrótico?',['Latrodectus','Loxosceles','Phoneutria','Lycosa'],1,'Loxosceles, la araña casera, con mancha de violín invertido en el cefalotórax.','loxosceles'),
+Q('artro','¿Cuál es la enzima clave del veneno de Loxosceles?',['Fosfolipasa A2','Esfingomielinasa D','Hialuronidasa','Poneratoxina'],1,'Esfingomielinasa D, proteína de 32-35 kDa, activa el sistema inflamatorio.','esfingomielinasa d'),
+Q('artro','¿Qué signo cutáneo identifica a Loxosceles?',['Mancha de violín invertido en el cefalotórax','Reloj de arena rojo','Abdomen naranja','Ovillos encapsulados'],0,'Mide 8-15 mm, 30 mm con patas extendidas, cubierta de pelo.','mancha de violin'),
+Q('artro','¿Cómo evoluciona la lesión del loxoscelismo cutáneo?',['Cura en 48 horas','Ampollas, mancha roja-violeta, escara negra que cae en 5-7 semanas y deja úlcera','Nódulo indoloro permanente','Elefantiasis'],1,'La necrosis se debe a microtrombosis; las úlceras tardan meses en cicatrizar.'),
+Q('artro','¿En quién es más frecuente el síndrome sistémico por Loxosceles?',['Ancianos','Niños','Embarazadas','Deportistas'],1,'Poco frecuente; cursa con hemólisis intravascular, anemia y falla renal.','ninos'),
+Q('artro','¿Cómo se llama el accidente por araña Phoneutria?',['Loxoscelismo','Foneutrismo','Latrodectismo','Aracnoidismo lycósico'],1,'Phoneutria es la araña de las bananeras.','foneutrismo'),
+Q('artro','¿Qué cuadro produce Latrodectus?',['Necrosis cutánea','Dolor local intenso, linfangitis, síntomas renales y neurológicos, con convulsiones','Solo prurito','Hemólisis masiva'],1,'Latrodectismo, causado por la viuda negra.','latrodectismo'),
+Q('artro','¿Qué género de araña produce solo dolor local y eritema sin síntomas generales?',['Loxosceles','Phoneutria','Latrodectus','Lycosa'],3,'Lycosa, la araña de jardín.','lycosa'),
+Q('artro','¿Cuál es el mecanismo neurotóxico general de los venenos de araña?',['Inhiben la coagulación','Alteran los canales de sodio, potasio, calcio y cloro y la transmisión glutamatérgica','Destruyen el hematíe','Bloquean la síntesis proteica'],1,'También estimulan la liberación presináptica y bloquean receptores colinérgicos postsinápticos.'),
+Q('dx','¿Qué cantidad de heces examina la técnica de Kato-Katz?',['2 mg','50 mg','500 mg','1 g'],1,'50 mg, mucho más representativo que los 2 mg de un frotis corriente.','50 mg'),
+Q('dx','¿Qué materiales requiere Kato-Katz?',['Formol y éter','Portaobjetos, celofán humectante, glicerina y verde malaquita','Papel filtro y agua','Cinta adhesiva'],1,'Celofán de 24 x 30 mm previamente sumergido 24 horas en glicerina y agua.'),
+Q('dx','¿Por cuánto se multiplica el número de huevos hallados en Kato-Katz para obtener huevos por gramo?',['10','23','50','100'],1,'El número de huevos del frotis multiplicado por 23 da los huevos por gramo (h.p.g.).','23'),
+Q('dx','¿Cuánto hay que esperar antes de leer una lámina de Kato-Katz?',['5 minutos','1 a 2 horas','24 horas','No requiere espera'],1,'1-2 horas; después los huevos de uncinaria se vuelven muy transparentes y no se identifican.','1 a 2 horas'),
+Q('dx','¿Qué organismo recomienda Kato-Katz como método de elección para estudios epidemiológicos?',['CDC','OMS','FDA','OPS únicamente'],1,'Preferido por la OMS para diagnóstico individual, ensayos de antihelmínticos y epidemiología.','oms'),
+Q('dx','¿Qué concentración de verde malaquita usa la técnica de Kato-Katz?',['1%','3%','10%','30%'],1,'Solución acuosa de verde malaquita al 3%.','3'),
+Q('dx','¿Qué limitación tiene Kato-Katz con los huevos de uncinaria?',['No los detecta nunca','Se aclaran y desaparecen si se lee tarde','Los deforma siempre','Los tiñe de negro'],1,'Por eso la lectura debe hacerse en la ventana de 1-2 horas.'),
+Q('dx','¿En qué se basa el método de Ritchie?',['Flotación con sulfato de zinc','Concentración por sedimentación con formol-éter o acetato de etilo','Cultivo en papel filtro','Cinta adhesiva'],1,'Es la técnica de concentración por sedimentación más usada en heces.','sedimentacion'),
+Q('dx','¿Para qué sirve la técnica de Harada-Mori?',['Cuantificar huevos','Cultivar y recuperar larvas de nematodos en papel filtro','Concentrar quistes','Buscar microfilarias'],1,'Útil sobre todo para uncinarias y Strongyloides.','cultivo de larvas'),
+Q('dx','¿Cuál es la técnica de elección para Enterobius vermicularis?',['Kato-Katz','Método de Graham con cinta engomada','Ritchie','Baermann'],1,'Se toma la muestra perianal por la mañana, antes del aseo.','graham'),
+Q('dx','¿Qué técnica se usa para concentrar microfilarias en sangre?',['Kato-Katz','Knott o QBC','Harada-Mori','Graham'],1,'Extendidos, gota gruesa, concentración de Knott o QBC.','knott'),
+Q('dx','¿Cuál es el diagnóstico de elección de la oncocercosis?',['Gota gruesa nocturna','Biopsia de piel o del nódulo','Coprológico','Ritchie'],1,'Onchocerca no circula en sangre: se busca en dermis.','biopsia'),
+Q('dx','¿Qué tinción se usa en la biopsia muscular para triquinosis?',['Giemsa','Hematoxilina-eosina','Ziehl-Neelsen','Tinta china'],1,'Biopsia muscular con H-E; además ELISA, Western blot e inmunofluorescencia indirecta.','hematoxilina-eosina|hematoxilina eosina'),
+Q('dx','¿Cómo se reporta el hallazgo de huevos de Ancylostoma y Necator?',['Por especie','Como "huevo de Ancylostoma duodenale / Necator americanus"','Como huevo de Ascaris','No se reportan'],1,'Son morfológicamente indistinguibles.'),
+Q('dx','¿Qué muestra se usa para diagnosticar Schistosoma haematobium?',['Heces','Orina','Esputo','Sangre'],1,'S. haematobium elimina los huevos por la orina.','orina'),
+Q('dx','¿Qué técnica permite conocer la intensidad del parasitismo?',['Graham','Kato-Katz (recuento de huevos por gramo)','Harada-Mori','Ritchie'],1,'La cuantificación permite clasificar cargas leves, moderadas e intensas.','kato-katz'),
+Q('med','¿Cuánto mide el huevo fértil de Ascaris lumbricoides?',['30 µm','45 µm','60 µm','150 µm'],2,'Huevo fértil: 60 µm, con 2 membranas lisas y 1 mamelonada.','60 um|60'),
+Q('med','¿Cuánto mide la hembra adulta de Ascaris lumbricoides?',['10-15 cm','15-20 cm','20-30 cm','30-40 cm'],2,'Hembra 20-30 cm; macho 15-20 cm.','20-30 cm|20 a 30 cm'),
+Q('med','¿Cuánto mide el macho de Ascaris lumbricoides?',['7-10 mm','15-20 cm','20-30 cm','2-4 cm'],1,'Macho 15-20 cm, termina curvo y tiene 2 espículas.','15-20 cm'),
+Q('med','¿Cuánto mide el huevo de Trichuris trichiura?',['30 µm','50 µm de largo por 25 µm de ancho','70 x 45 µm','100 µm'],1,'50 µm de largo y 25 µm de ancho, en forma de limón.','50 x 25|50x25'),
+Q('med','¿Cuánto mide la hembra de Trichuris trichiura?',['3 cm','5 cm','7 cm','10 cm'],2,'Hembra 7 cm; macho 3 a 5 cm.','7 cm'),
+Q('med','¿Cuánto mide el huevo de las uncinarias?',['30 x 20 µm','60 x 40 µm','70 x 45 µm','100 x 150 µm'],1,'60 x 40 µm, ovalado, con membrana única muy uniforme.','60 x 40|60x40'),
+Q('med','¿Cuánto mide la hembra de Ancylostoma duodenale?',['5-9 mm','7-10 mm','9-15 mm','2 cm'],2,'Hembra 9-15 mm, macho 7-10 mm.','9-15 mm'),
+Q('med','¿Cuánto mide la hembra de Necator americanus?',['5-9 mm','9-11 mm','9-15 mm','2 cm'],1,'Hembra 9-11 mm, macho 5-9 mm.','9-11 mm'),
+Q('med','¿Cuánto mide la larva filariforme de uncinaria?',['100 µm','250 µm','500 µm','700 µm'],1,'250 µm de largo, muy móvil y sin cavidad bucal.','250 um|250'),
+Q('med','¿Cuánto mide el huevo de Enterobius vermicularis?',['30 x 20 µm','50 x 25 µm','60 x 40 µm','70 x 45 µm'],1,'50 x 25 µm, en forma de D.','50 x 25'),
+Q('med','¿Cuánto mide la hembra de Enterobius vermicularis?',['0.5 cm','1 cm','2 cm','7 cm'],1,'Hembra 1 cm; macho 0.5 cm.','1 cm'),
+Q('med','¿Cuánto mide la hembra parásita de Strongyloides stercoralis?',['250 µm','1 mm','2 mm','2 cm'],2,'2 mm de largo por 50 µm de diámetro.','2 mm'),
+Q('med','¿Cuánto mide la larva rabditiforme de Strongyloides stercoralis?',['100 µm','250 µm','500 µm','700 µm'],1,'250 µm, con cavidad bucal corta y primordio genital grande.','250 um|250'),
+Q('med','¿Cuánto mide la larva filariforme de Strongyloides stercoralis?',['250 µm','350 µm','500 a 700 µm','1 mm'],2,'500 a 700 µm, sin cavidad bucal y con estilete anterior.','500 a 700|500-700'),
+Q('med','¿Cuánto mide la hembra de vida libre de Strongyloides stercoralis?',['250 µm','1 mm','2 mm','5 mm'],1,'Las hembras de vida libre miden 1 mm.','1 mm'),
+Q('med','¿Cuánto mide la hembra de Trichinella spiralis?',['2-4 mm','2-4 cm','100 µm','7 cm'],1,'Hembra 2-4 cm, vivípara.','2-4 cm'),
+Q('med','¿Cuánto mide la larva de Trichinella spiralis?',['10 µm','100 µm','250 µm','500 µm'],1,'Larvas de 100 µm.','100 um|100'),
+Q('med','¿Cuánto mide el quiste muscular de Trichinella spiralis?',['50 a 100 µm','100 a 250 µm','250 a 500 µm','1 a 2 mm'],2,'Quiste ovalado de 250 a 500 µm.','250 a 500'),
+Q('med','¿Cuánto mide la hembra de Wuchereria bancrofti?',['3-4 cm','6-10 cm','5-7 cm','50 cm'],1,'Hembra 6-10 cm; macho 3-4 cm.','6-10 cm'),
+Q('med','¿Cuánto mide la microfilaria de Wuchereria bancrofti?',['25 µm','100 µm','250 µm','300 µm'],0,'Microfilaria de 25 µm en el torrente circulatorio.','25 um|25'),
+Q('med','¿Cuánto mide el macho de Brugia malayi?',['1 cm','2 cm','5-6 cm','3-4 cm'],1,'Macho 2 cm; hembra 5-6 cm, con periodicidad nocturna.','2 cm'),
+Q('med','¿Cuánto mide la hembra de Onchocerca volvulus?',['5 cm','10 cm','50 cm','1 m'],2,'Hembra 50 cm; macho 5 cm.','50 cm'),
+Q('med','¿Cuánto miden las microfilarias de Onchocerca volvulus?',['25 µm','150 a 350 µm','230 a 300 µm','500 µm'],1,'150 a 350 µm, sin membrana envolvente.','150 a 350'),
+Q('med','¿Cuánto mide la hembra de Loa loa?',['3-3.5 cm','5-7 cm','6-10 cm','50 cm'],1,'Hembra 5-7 cm; macho 3-3.5 cm; ambos con diámetro de 0.05 mm.','5-7 cm'),
+Q('med','¿Cuánto miden las microfilarias de Loa loa?',['25 µm','150-350 µm','230 a 300 µm','200 µm'],2,'230 a 300 µm, con periodicidad diurna.','230 a 300'),
+Q('med','¿Cuánto miden las microfilarias de Mansonella ozzardi?',['25 µm','200 µm','300 µm','500 µm'],1,'200 µm; los adultos miden 3-7 cm.','200 um|200'),
+Q('med','¿Cuánto mide el adulto de Taenia solium?',['2 m','5 m','10 m','20 m'],1,'T. solium hasta 5 m; T. saginata hasta 10 m.','5 m'),
+Q('med','¿Cuánto mide el huevo de Taenia?',['20-25 µm','30-40 µm','50-60 µm','70-80 µm'],1,'30 a 40 µm, ovalado o redondeado, membrana doble gruesa y radiada.','30-40 um|30 a 40'),
+Q('med','¿Cuánto mide el cisticerco de Taenia?',['1 mm x 2 mm','5 mm de ancho x 10 mm de largo','1 cm x 2 cm','250 µm'],1,'5 mm de ancho por 10 mm de largo, con escólex invaginado.','5 mm x 10 mm'),
+Q('med','¿Cuánto mide el adulto de Diphyllobothrium latum?',['20-60 cm','1-2 m','3 a 10 m','20 m'],2,'3 a 10 m, con escólex de 2 mm de largo y 1 mm de ancho.','3 a 10 m'),
+Q('med','¿Cuánto mide el huevo de Diphyllobothrium latum?',['30-40 µm','40-50 µm','70 x 45 µm','100 µm'],2,'70 x 45 µm, ovalado y operculado.','70 x 45'),
+Q('med','¿Cuánto mide el adulto de Hymenolepis nana?',['2 a 4 cm','20 a 60 cm','5 m','2 mm'],0,'2-4 cm: es el cestodo más pequeño del temario.','2 a 4 cm'),
+Q('med','¿Cuánto mide el huevo de Hymenolepis nana?',['30-40 µm','40-50 µm','60-80 µm','70 x 45 µm'],1,'40 a 50 µm, con filamentos polares.','40-50 um|40 a 50'),
+Q('med','¿Cuánto mide el huevo de Hymenolepis diminuta?',['30-40 µm','40-50 µm','60 a 80 µm','100 µm'],2,'60 a 80 µm, amarillento y sin filamentos polares.','60 a 80'),
+Q('med','¿Cuánto mide el adulto de Dipylidium caninum?',['2-4 cm','20 a 30 cm','1 m','5 m'],1,'20 a 30 cm, con escólex pequeño y romboidal.','20 a 30 cm'),
+Q('med','¿Cuánto mide el adulto de Echinococcus granulosus?',['2 a 10 mm','2 a 10 cm','20 cm','1 m'],0,'2 a 10 mm, con 2 a 5 proglótides.','2 a 10 mm'),
+Q('med','¿Cuánto mide el adulto de Fasciola hepatica?',['1-2 cm','2 a 3 cm de largo por 1 de ancho','5 cm','20-75 mm'],1,'2-3 cm de largo por 1 cm de ancho.','2 a 3 cm'),
+Q('med','¿Cuánto mide el huevo de Fasciola hepatica?',['30 µm','80 x 50 µm','100-150 µm','150 µm'],3,'150 µm, ovalado, operculado y de color café: es de los huevos más grandes.','150 um|150'),
+Q('med','¿Cuánto mide el huevo de Clonorchis sinensis?',['30 µm','60 µm','80 µm','150 µm'],0,'Huevo pequeño de 30 µm, con opérculo y prominencia en el extremo opuesto.','30 um|30'),
+Q('med','¿Cuánto mide el adulto de Clonorchis sinensis?',['0.5 cm','1 a 2 cm de largo por 0.2-0.4 de ancho','3 cm','5 cm'],1,'1-2 cm de largo, plano y alargado.','1 a 2 cm'),
+Q('med','¿Cuánto mide el adulto de Fasciolopsis buski?',['2-3 cm','20 a 75 mm de largo por 8 a 20 de ancho','1 cm','10 cm'],1,'Es el tremátodo intestinal más grande: 20-75 mm.','20 a 75 mm'),
+Q('med','¿Cuánto miden los huevos de Schistosoma?',['30-40 µm','60 x 40 µm','100 a 150 µm','200 µm'],2,'100 a 150 µm, ovalados; lo que cambia es la espina.','100 a 150'),
+Q('med','¿Cuánto miden los adultos de Schistosoma mansoni?',['2 mm','1 a 2 cm','5 cm','10 cm'],1,'1-2 cm, alargados y cilíndricos; viven hasta 30 años.','1 a 2 cm'),
+Q('med','¿Cuánto miden los huevos de Paragonimus westermani?',['30 µm','60 x 40 µm','80 x 50 µm','150 µm'],2,'80 x 50 µm, con opérculo.','80 x 50'),
+Q('med','¿Cuánto mide el adulto de Paragonimus westermani?',['2 mm','1 a 2 cm','3 cm','5 cm'],1,'1-2 cm, aplanado, café rojizo y cubierto de espinas escamosas.','1 a 2 cm'),
+Q('med','¿Cuánto mide la hembra de Sarcoptes scabiei?',['150 µ','250 µ','350 µ','500 µ'],2,'Hembra 350 µ; macho 250 µ.','350'),
+Q('med','¿Cuánto mide Demodex folliculorum?',['25-50 µ','100 a 400 µ','350 µ','1 mm'],1,'100 a 400 µ de longitud, con cuatro pares de patas sin vellosidades.','100 a 400'),
+Q('med','¿Cuánto mide Pediculus humanus var. capitis?',['1 a 2 mm','2 a 3 mm','5 mm','600 µm'],1,'2 a 3 mm; la liendre mide 600 µm.','2 a 3 mm'),
+Q('med','¿Cuánto mide la liendre del piojo de la cabeza?',['100 µm','300 µm','600 µm','1 mm'],2,'600 µm.','600 um|600'),
+Q('med','¿Cuánto mide el piojo púbico?',['1 a 2 mm','2 a 3 mm','5 mm','1 cm'],0,'1 a 2 mm, casi tan ancho como largo.','1 a 2 mm'),
+Q('med','¿Cuánto mide una pulga adulta?',['1 mm','2 mm','5 mm','1 cm'],1,'Unos 2 mm, aplanada lateralmente.','2 mm'),
+Q('med','¿Cuánto mide Tunga penetrans?',['1 mm','2 mm','5 mm','1 cm'],0,'1 mm, con cabeza grande y angulada.','1 mm'),
+Q('med','¿Cuánto mide Simulium?',['1 mm','2 a 3 mm','5 mm','5-15 mm'],1,'Simulium 2-3 mm; Culicoides 1 mm.','2 a 3 mm'),
+Q('med','¿Cuánto mide Culicoides?',['1 mm','2-3 mm','5 mm','1 cm'],0,'1 mm, oscuro, con antenas largas y manchas claras en las alas.','1 mm'),
+Q('med','¿Cuánto mide una chinche de cama adulta?',['1 mm','3 a 5 mm','5 a 15 mm','1 cm'],1,'3 a 5 mm, aplanada dorsalmente, color rojo-marrón.','3 a 5 mm'),
+Q('med','¿Cuánto miden las moscas de importancia médica?',['1-2 mm','2-3 mm','5 a 15 mm','2-3 cm'],2,'5 a 15 mm de longitud.','5 a 15 mm'),
+Q('med','¿Cuánto miden las garrapatas?',['100 µ','1 a 10 mm','1 a 2 cm','5 cm'],1,'1 a 10 mm, y más al ingurgitarse de sangre.','1 a 10 mm'),
+Q('med','¿Cuánto miden los ácaros del polvo doméstico?',['10 a 30 µ','75 a 420 µ','500 a 900 µ','1 a 2 mm'],1,'Entre 75 µ y 420 µ.','75 a 420'),
+Q('med','¿Cuánto mide el huevo de un mosquito?',['0.07 mm','0.7 mm','7 mm','7 µm'],1,'0.7 mm, tanto en Anopheles como en Aedes y Culex.','0.7 mm'),
+Q('med','¿Cuánto mide la larva vermiforme del mosquito?',['1-2 mm','8 a 10 mm','2 cm','0.7 mm'],1,'8 a 10 mm, muy móvil y voraz.','8 a 10 mm'),
+Q('med','¿Cuánto mide Loxosceles?',['2-3 mm','8 a 15 mm (30 mm con patas extendidas)','3 cm','5 cm'],1,'8-15 mm de cuerpo; con patas extendidas, 30 mm.','8 a 15 mm'),
+Q('med','¿Cuánto mide Phoneutria?',['8 mm','3 cm de cuerpo y 15 cm con patas extendidas','1 cm','5 mm'],1,'Arañas grandes; hembra de abdomen negro, macho naranja.','3 cm'),
+Q('med','¿Cuánto mide Paraponera clavata, la hormiga conga?',['4 mm','1 cm','4 cm','10 cm'],2,'4 cm, de la subfamilia Ponerinae.','4 cm'),
+Q('med','¿Cuánto mide el escólex de Diphyllobothrium latum?',['0.5 mm','2 mm de largo y 1 mm de ancho','5 mm','1 cm'],1,'Escólex pequeño con dos botrias.','2 mm'),
+Q('med','¿Cuántos huevos deposita la hembra de Sarcoptes scabiei?',['30','50','150','500'],2,'150 huevos colocados en hilera dentro del túnel.','150'),
+Q('med','¿Cuántos huevos pone una chinche de cama?',['30','100','500','2000'],2,'500 huevos depositados en masa de color amarillo.','500'),
+Q('med','¿Cuántos huevos deposita la mosca en una miasis facultativa?',['5 a 10','50 a 200','500','2000'],1,'50 a 200 huevos en úlceras expuestas o heridas.','50 a 200'),
+Q('trap','Anopheles o Aedes: ¿quién transmite dengue, Zika, chikungunya y fiebre amarilla?',['Anopheles','Aedes'],1,'Anopheles → malaria. Aedes → arbovirosis urbanas.'),
+Q('trap','Chrysops o Simulium: ¿quién transmite Onchocerca volvulus?',['Chrysops','Simulium'],1,'Chrysops → Loa loa. Simulium → Onchocerca.'),
+Q('trap','Lutzomyia o Glossina: ¿quién transmite Leishmania en América?',['Glossina','Lutzomyia'],1,'Lutzomyia → Leishmania. Glossina → tripanosomiasis africana.'),
+Q('trap','Lymnaea o Biomphalaria: ¿cuál es el caracol de Fasciola hepatica?',['Biomphalaria','Lymnaea'],1,'Lymnaea → Fasciola y Clonorchis. Biomphalaria → S. mansoni.'),
+Q('trap','Bulinus u Oncomelania: ¿cuál corresponde a Schistosoma haematobium?',['Bulinus','Oncomelania'],0,'Bulinus → haematobium. Oncomelania → japonicum.'),
+Q('trap','Miracidio o cercaria: ¿cuál entra al caracol?',['Cercaria','Miracidio'],1,'El miracidio entra al caracol; la cercaria sale y penetra la piel.'),
 Q('trap','Metacercaria o plerocercoide: ¿cuál corresponde a Diphyllobothrium?',['Metacercaria','Plerocercoide'],1,'Metacercaria → tremátodos. Plerocercoide → Diphyllobothrium.'),
-Q('trap','Filariforme o cercaria: ¿cuál pertenece a uncinarias y Strongyloides?',['Cercaria','Filariforme'],1,'Filariforme → uncinarias/Strongyloides. Cercaria → tremátodos.'),
-Q('trap','Rostelo o escólex: ¿cuál es el órgano completo de fijación del céstodo?',['Rostelo','Escólex'],1,'Escólex = órgano completo. Rostelo = componente posible del escólex.'),
-Q('trap','Schüffner o Maurer: ¿cuál corresponde a P. vivax y P. ovale?',['Maurer','Schüffner'],1,'Schüffner → vivax/ovale. Maurer → falciparum.'),
-Q('trap','Taquizoíto o bradizoíto: ¿cuál corresponde al quiste tisular crónico?',['Taquizoíto','Bradizoíto'],1,'Taquizoíto → fase aguda. Bradizoíto → quiste crónico.'),
-Q('trap','Ritchie o Harada-Mori: ¿cuál concentra por sedimentación?',['Harada-Mori','Ritchie'],1,'Ritchie concentra por sedimentación; Harada-Mori cultiva larvas.'),
-Q('trap','Kato-Katz o Harada-Mori: ¿cuál cuantifica huevos?',['Kato-Katz','Harada-Mori'],0,'Kato-Katz cuantifica huevos; Harada-Mori recupera larvas.'),
-Q('trap','Pediculus humanus capitis o Pthirus pubis: ¿cuál es el del pubis?',['Pediculus humanus capitis','Pthirus pubis'],1,'Cabeza vs pubis: el género y la ortografía importan.'),
-Q('trap','Cystoisospora belli o Sarcocystis hominis: ¿cuál se adquiere por carne bovina con sarcoquistes?',['Cystoisospora belli','Sarcocystis hominis'],1,'La profesora corrigió exactamente este par.'),
-Q('trap','Huevo embrionado o larva filariforme: ¿cómo se adquiere Ascaris lumbricoides?',['Huevo embrionado','Larva filariforme'],0,'Ascaris se ingiere como huevo embrionado; la filariforme es de uncinarias.'),
-Q('trap','Esporozoíto o gametocito: ¿qué inocula el mosquito al humano?',['Gametocito','Esporozoíto'],1,'Inocula esporozoítos e ingiere gametocitos.'),
-Q('trap','Hierro o vitamina B12: ¿qué déficit se asocia a Diphyllobothrium latum?',['Hierro','Vitamina B12'],1,'Vitamina B12, con anemia megaloblástica.'),
-Q('trap','Intestino grueso o delgado: ¿dónde están Giardia y los coccidios intestinales?',['Intestino grueso','Intestino delgado'],1,'Intestino delgado; la profesora corrigió "grueso".'),
-Q('trap','Hígado o conductos biliares: ¿dónde viven los adultos de Fasciola?',['Hígado (respuesta general)','Conductos biliares'],1,'"Hígado" era demasiado general; exige conductos biliares.'),
-Q('trap','Citostoma o disco suctorio: ¿qué usa Giardia para adherirse?',['Citostoma','Disco suctorio'],1,'El citostoma es de ciliados como Balantidium.'),
+Q('trap','Procercoide o plerocercoide: ¿cuál está en el copépodo?',['Procercoide','Plerocercoide'],0,'Procercoide en el copépodo; plerocercoide en el pez.'),
+Q('trap','Cisticerco o cisticercoide: ¿cuál se forma en la pulga de Dipylidium?',['Cisticerco','Cisticercoide'],1,'Cisticercoide en artrópodos; cisticerco en músculo de cerdo o bovino.'),
+Q('trap','Filariforme o cercaria: ¿cuál pertenece a uncinarias y Strongyloides?',['Cercaria','Filariforme'],1,'Filariforme → nematodos. Cercaria → tremátodos.'),
+Q('trap','Rostelo o escólex: ¿cuál es el órgano completo de fijación?',['Rostelo','Escólex'],1,'Escólex = órgano completo. Rostelo = componente posible.'),
+Q('trap','Schüffner o Maurer: ¿cuál corresponde a P. vivax y P. ovale?',['Maurer','Schüffner'],1,'Schüffner → vivax y ovale. Maurer → falciparum.'),
+Q('trap','Taquizoíto o bradizoíto: ¿cuál está en el quiste tisular crónico?',['Taquizoíto','Bradizoíto'],1,'Taquizoíto → fase aguda. Bradizoíto → quiste crónico.'),
+Q('trap','Ritchie o Harada-Mori: ¿cuál concentra por sedimentación?',['Harada-Mori','Ritchie'],1,'Ritchie sedimenta; Harada-Mori cultiva larvas.'),
+Q('trap','Kato-Katz o Harada-Mori: ¿cuál cuantifica huevos?',['Kato-Katz','Harada-Mori'],0,'Kato-Katz cuantifica; Harada-Mori recupera larvas.'),
+Q('trap','Pediculus humanus capitis o Pthirus pubis: ¿cuál es el del pubis?',['Pediculus humanus capitis','Pthirus pubis'],1,'Cabeza vs pubis; la ortografía del género cuenta.'),
+Q('trap','Cystoisospora belli o Sarcocystis hominis: ¿cuál se adquiere por carne bovina con sarcoquistes?',['Cystoisospora belli','Sarcocystis hominis'],1,'Sarcocystis hominis se adquiere por carne bovina.'),
+Q('trap','Huevo embrionado o larva filariforme: ¿cómo se adquiere Ascaris?',['Huevo embrionado','Larva filariforme'],0,'Ascaris se ingiere; las uncinarias penetran la piel.'),
+Q('trap','Esporozoíto o gametocito: ¿qué inocula el mosquito?',['Gametocito','Esporozoíto'],1,'Inocula esporozoítos e ingiere gametocitos.'),
+Q('trap','Hierro o vitamina B12: ¿qué déficit produce Diphyllobothrium latum?',['Hierro','Vitamina B12'],1,'B12, con anemia megaloblástica.'),
+Q('trap','Intestino grueso o delgado: ¿dónde vive el adulto de Trichuris trichiura?',['Intestino delgado','Intestino grueso'],1,'Trichuris vive en intestino grueso; Ascaris en delgado.'),
+Q('trap','Hígado o conductos biliares: ¿dónde viven los adultos de Fasciola?',['Hígado (respuesta general)','Conductos biliares'],1,'"Hígado" es demasiado general.'),
+Q('trap','Citostoma o disco suctorio: ¿qué usa Giardia para adherirse?',['Citostoma','Disco suctorio'],1,'El citostoma es de los ciliados.'),
+Q('trap','Melitina o hialuronidasa: ¿cuál es el principal péptido citolítico del veneno de abeja?',['Hialuronidasa','Melitina'],1,'Melitina 40-60%; la hialuronidasa es factor de difusión.'),
+Q('trap','Fosfolipasa A1 o A2: ¿cuál corresponde a la avispa?',['Fosfolipasa A1','Fosfolipasa A2'],0,'Avispa → PLA1. Abeja → PLA2.'),
+Q('trap','Latrodectus o Loxosceles: ¿cuál produce necrosis cutánea?',['Latrodectus','Loxosceles'],1,'Loxosceles → dermonecrosis. Latrodectus → neurotoxicidad.'),
+Q('trap','Ancylostoma o Necator: ¿cuál tiene dientes puntiagudos?',['Ancylostoma duodenale','Necator americanus'],0,'Ancylostoma: dientes. Necator: placas cortantes.'),
+Q('trap','Forma de C o forma de S: ¿cuál corresponde a Necator americanus?',['Forma de C','Forma de S'],1,'A. duodenale "C"; N. americanus "S".'),
+Q('trap','T. solium o T. saginata: ¿cuál tiene escólex armado con ganchos?',['Taenia solium','Taenia saginata'],0,'T. solium tiene doble corona de ganchos; T. saginata es inerme.'),
+Q('trap','Taenia solium o saginata: ¿cuál tiene más de 12 ramas uterinas laterales?',['Taenia solium','Taenia saginata'],1,'T. saginata: más de 12. T. solium: unas 12.'),
+Q('trap','E. granulosus o E. multilocularis: ¿cuál da quiste unilocular?',['Echinococcus granulosus','Echinococcus multilocularis'],0,'Granulosus → unilocular. Multilocularis → alveolar infiltrante.'),
+Q('trap','Espina lateral o terminal: ¿cuál tiene el huevo de S. mansoni?',['Espina lateral','Espina terminal'],0,'S. mansoni lateral; S. haematobium terminal.'),
+Q('trap','Nocturna o diurna: ¿qué periodicidad tiene Loa loa?',['Nocturna','Diurna'],1,'Loa loa diurna (Chrysops pica de día); Wuchereria nocturna.'),
+Q('trap','Graham o Kato-Katz: ¿cuál se usa para Enterobius?',['Graham','Kato-Katz'],0,'Graham con cinta engomada en región perianal.'),
+Q('trap','Tres o cuatro pares de patas: ¿cuántas tiene un insecto adulto?',['Tres pares','Cuatro pares'],0,'Insectos 6 patas; arácnidos 8.'),
+Q('artro','¿Qué género de mosquito transmite dengue, Zika, chikungunya y fiebre amarilla?',['Anopheles','Culex','Aedes','Mansonia'],2,'Aedes es el vector de las arbovirosis urbanas.','aedes'),
+Q('artro','¿Qué género de mosquito transmite la malaria?',['Aedes','Anopheles','Culex','Mansonia'],1,'Anopheles transmite Plasmodium.','anopheles'),
+Q('artro','¿Qué pulga penetra la piel y causa tungiasis?',['Pulex irritans','Xenopsylla cheopis','Tunga penetrans','Ctenocephalides felis'],2,'Tunga penetrans, sobre todo en los pies.','tunga penetrans'),
+Q('artro','¿Cuál es el agente bacteriano de la peste transmitida por pulgas de roedores?',['Rickettsia prowazekii','Yersinia pestis','Borrelia recurrentis','Bartonella henselae'],1,'Yersinia pestis, transmitida por Xenopsylla cheopis.','yersinia pestis'),
+Q('artro','¿Cuál es el nombre correcto del ácaro de la escabiosis humana?',['Sarcoptes scabiei var. hominis','Scabiosis hominis','Sarcoptes hominis var. scabiei','Demodex scabiei'],0,'"Escabiosis" es la enfermedad, no el género.','sarcoptes scabiei var hominis|sarcoptes scabiei'),
+Q('artro','¿Qué dos géneros de escorpiones de importancia médica se esperan como respuesta?',['Buthidae y Scorpionidae','Centruroides y Tityus','Latrodectus y Lycosa','Tityus y Loxosceles'],1,'Se piden géneros, no la familia Buthidae.','centruroides y tityus'),
+Q('artro','¿Qué género de arañas produce latrodectismo?',['Loxosceles','Phoneutria','Latrodectus','Lycosa'],2,'Latrodectus, la viuda negra, con cuadro neurotóxico.','latrodectus'),
+Q('artro','¿Cuál es el nombre correcto del piojo de la cabeza?',['Pthirus pubis','Pediculus humanus capitis','Pediculus pubis','Phthirus capitis'],1,'Pediculus humanus var. capitis.','pediculus humanus capitis'),
+Q('artro','¿Cuál es el nombre correcto del piojo púbico?',['Pediculus humanus corporis','Pthirus pubis','Sarcoptes pubis','Cimex pubis'],1,'Pthirus pubis: cuida la ortografía del género.','pthirus pubis'),
+Q('artro','¿Cuántos pares de patas tiene un insecto adulto?',['Dos','Tres','Cuatro','Cinco'],1,'Tres pares = 6 patas. Los arácnidos tienen cuatro pares = 8 patas.','tres pares|3'),
+Q('artro','¿Qué vector transmite la tripanosomiasis africana?',['Lutzomyia','Glossina','Chrysops','Simulium'],1,'Glossina, la mosca tsé-tsé.','glossina'),
+Q('artro','¿Qué es Culicoides?',['Una garrapata','Un díptero pequeño hematófago','Un ácaro','Una pulga'],1,'Díptero de 1 mm, vector de Mansonella ozzardi.','culicoides'),
+Q('dx','¿Qué técnica fecal es de concentración por sedimentación?',['Kato-Katz','Harada-Mori','Ritchie','Graham'],2,'Ritchie con formol-éter o acetato de etilo.','ritchie'),
+Q('dx','¿Qué técnica usa papel filtro para desarrollar larvas de nematodos?',['Kato-Katz','Harada-Mori','Ritchie','Ziehl-Neelsen'],1,'Harada-Mori es un cultivo en papel filtro.','harada-mori'),
+Q('dx','¿Qué técnica cuantifica huevos de helmintos por gramo de heces?',['Ritchie','Harada-Mori','Kato-Katz','Baermann'],2,'Kato-Katz: número de huevos del frotis × 23.','kato-katz'),
+Q('dx','¿Es el método de Ritchie una técnica de flotación?',['Sí','No, es de sedimentación'],1,'Ritchie concentra por sedimentación.'),
+Q('artro','¿Cuál es la medida terapéutica primaria en una miasis cutánea localizada?',['Ivermectina','Extracción de la larva','Antibióticos','Vacunación'],1,'La extracción física de la larva es esencial; la ivermectina es coadyuvante.','extraccion de la larva'),
 ];
+const seenQ={};const BANK=RAW.filter(q=>seenQ[q.q]?false:(seenQ[q.q]=1));
 </script>
 <script>
-/* ---------------- configuración ---------------- */
-const TOPICS = [
-  {id:'todo', name:'Todo el semestral'},
-  {id:'proto', name:'Protozoarios'},
-  {id:'helm', name:'Helmintos'},
-  {id:'artro', name:'Artrópodos y diagnóstico'},
-  {id:'trap', name:'Solo trampas'}
+const TOPICS=[
+ {id:'todo',n:'Todo'},{id:'proto',n:'Protozoarios'},{id:'nema',n:'Nematodos'},{id:'cest',n:'Cestodos'},
+ {id:'trem',n:'Tremátodos'},{id:'artro',n:'Artrópodos y venenos'},{id:'dx',n:'Técnicas de laboratorio'},
+ {id:'med',n:'Medidas y cifras'},{id:'trap',n:'Trampas'}
 ];
-
-const MODES = {
-  entrenamiento:{name:'Entrenamiento',desc:'Recorres el bloque completo con 12 segundos por pregunta. Los fallos no te expulsan, pero quedan anotados.',tag:'12 s · sin castigo',lives:Infinity,time:12,reset:false,endless:false},
-  manicomio:{name:'Manicomio',desc:'Diez segundos. Un solo fallo o un reloj en cero te devuelve a cero y baraja todo de nuevo. Solo sales cuando limpias el bloque entero seguido.',tag:'1 fallo = vuelves al inicio',lives:1,time:10,reset:true,endless:false,hell:true},
-  dominio:{name:'Dominio total',desc:'Cada pregunta debe salirte bien dos veces seguidas para retirarse. Si fallas, vuelve a la cola desde cero. No termina hasta que domines todas.',tag:'no termina hasta saberlas',lives:Infinity,time:10,reset:false,endless:false,srs:true},
-  subita:{name:'Muerte súbita',desc:'Preguntas al azar sin fin. Solo importa tu racha más larga. El primer fallo cierra la partida.',tag:'racha infinita',lives:1,time:10,reset:false,endless:true},
-  escritura:{name:'Escritura exacta',desc:'Nada de opciones: escribes el nombre completo. Género y especie, ortografía incluida, como lo exige la profesora.',tag:'15 s · tres vidas',lives:3,time:15,reset:false,endless:false,typed:true},
-  rafaga:{name:'Ráfaga de trampas',desc:'Solo los pares que ya te costaron puntos. Ocho segundos y cero margen de error.',tag:'8 s · 1 fallo = reinicio',lives:1,time:8,reset:true,endless:false,forceTopic:'trap',hell:true}
+const NAMES={proto:'Protozoarios',nema:'Nematodos',cest:'Cestodos',trem:'Tremátodos',artro:'Artrópodos y venenos',dx:'Técnicas de laboratorio',med:'Medidas y cifras',trap:'Trampa'};
+const MODES={
+ entrenamiento:{name:'Entrenamiento',desc:'Recorres el bloque completo con 12 segundos. Los fallos no te expulsan, pero quedan anotados.',tag:'12 s · sin castigo',lives:Infinity,time:12},
+ dominio:{name:'Dominio total',desc:'Cada pregunta debe salirte bien dos veces seguidas para retirarse. Si fallas, vuelve a la cola desde cero.',tag:'no termina hasta saberlas',lives:Infinity,time:10,srs:true},
+ manicomio:{name:'Manicomio',desc:'Diez segundos. Un fallo o un reloj en cero te devuelve a cero y baraja todo otra vez. Solo sales limpiando el bloque entero seguido.',tag:'1 fallo = vuelves al inicio',lives:1,time:10,reset:true,hell:true},
+ subita:{name:'Muerte súbita',desc:'Preguntas al azar sin fin. Solo importa la racha. El primer fallo cierra la partida.',tag:'racha infinita',lives:1,time:10,endless:true},
+ escritura:{name:'Escritura exacta',desc:'Sin opciones: escribes el nombre o el dato completo, con su ortografía.',tag:'15 s · tres vidas',lives:3,time:15,typed:true},
+ rafaga:{name:'Ráfaga',desc:'Seis segundos por pregunta. No hay tiempo para razonar, solo para saber.',tag:'6 s · 1 fallo = reinicio',lives:1,time:6,reset:true,hell:true}
 };
+const RANKS=[[3,'calentando'],[5,'en racha'],[8,'ojo clínico'],[12,'lectura de lámina'],[16,'sin dudar'],[21,'imparable'],[27,'memoria de atlas'],[35,'intocable'],[45,'nivel profesora'],[60,'esto ya es enfermizo']];
+const LEVELS=['Estudiante de primer parcial','Aprendiz de lámina','Técnico en formación','Ojo de microscopio','Lector de frotis','Cazador de huevos','Dominio de ciclos','Memoria de atlas','Parasitólogo de guardia','Terror de la profesora'];
 
-const RANKS=[[3,'calentando'],[5,'en racha'],[8,'ojo clínico'],[12,'lectura de lámina'],[16,'sin dudar'],[21,'imparable'],[27,'memoria de atlas'],[35,'intocable'],[45,'nivel profesora']];
-
-/* ---------------- estado ---------------- */
-let S = {mode:'manicomio', topic:'todo', queue:[], i:0, hits:0, tries:0, streak:0, best:0,
-         lives:1, leaks:[], locked:false, srs:null, resets:0};
-let META = {best:0, runs:0, clears:0};
-let timerRAF=null, tEnd=0, tTotal=10;
-
+let S={mode:'dominio',topic:'todo',queue:[],i:0,hits:0,tries:0,streak:0,best:0,lives:1,leaks:[],locked:false,srs:null,xpRun:0};
+let META={best:0,clears:0,xp:0};
+let timerRAF=null,tEnd=0,tTotal=10;
 const $=id=>document.getElementById(id);
-const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function lev(a,b){const m=[];for(let i=0;i<=b.length;i++)m[i]=[i];for(let j=0;j<=a.length;j++)m[0][j]=j;
-  for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++)m[i][j]=b[i-1]===a[j-1]?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1);
-  return m[b.length][a.length];}
+ for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++)m[i][j]=b[i-1]===a[j-1]?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1);
+ return m[b.length][a.length];}
+const lvlOf=xp=>Math.min(LEVELS.length,Math.floor(Math.sqrt(xp/45))+1);
+const xpFor=l=>Math.round(45*Math.pow(l-1,2));
 
-/* ---------------- audio ---------------- */
+/* audio */
 let AC=null;
-function tone(freq,dur,type,vol){
-  try{
-    if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
-    const o=AC.createOscillator(),g=AC.createGain();
-    o.type=type||'sine';o.frequency.value=freq;o.connect(g);g.connect(AC.destination);
-    g.gain.setValueAtTime(0,AC.currentTime);
-    g.gain.linearRampToValueAtTime(vol||.13,AC.currentTime+.012);
-    g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+(dur||.16));
-    o.start();o.stop(AC.currentTime+(dur||.16)+.02);
-  }catch(e){}
-}
-function sGood(streak){const base=440*Math.pow(2,Math.min(streak,16)/16);tone(base,.12,'triangle',.11);setTimeout(()=>tone(base*1.5,.14,'triangle',.09),70);}
-function sBad(){tone(150,.3,'sawtooth',.1);setTimeout(()=>tone(95,.4,'sawtooth',.1),90);}
-function sTick(){tone(1100,.04,'square',.035);}
-function sWin(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.3,'triangle',.12),i*110));}
+function tone(f,d,t,v,when){
+ try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
+  const o=AC.createOscillator(),g=AC.createGain(),s=AC.currentTime+(when||0);
+  o.type=t||'sine';o.frequency.value=f;o.connect(g);g.connect(AC.destination);
+  g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(v||.12,s+.012);
+  g.gain.exponentialRampToValueAtTime(.0001,s+(d||.16));o.start(s);o.stop(s+(d||.16)+.03);}catch(e){}}
+function sGood(k){const b=392*Math.pow(2,Math.min(k,18)/14);tone(b,.11,'triangle',.11);tone(b*1.26,.12,'triangle',.09,.06);tone(b*1.5,.16,'triangle',.08,.12);}
+function sBad(){tone(160,.28,'sawtooth',.1);tone(98,.42,'sawtooth',.1,.08);}
+function sTick(u){tone(u?1500:1050,.05,'square',u?.07:.04);}
+function sWin(){[523,659,784,1047,1319].forEach((f,i)=>tone(f,.32,'triangle',.12,i*.1));}
+function sLevel(){[440,554,659,880].forEach((f,i)=>tone(f,.35,'sine',.13,i*.08));}
 
-/* ---------------- confeti ---------------- */
+/* partículas */
 const cv=$('fx'),cx=cv.getContext('2d');let parts=[],fxOn=false;
 function sizeFx(){cv.width=innerWidth;cv.height=innerHeight;}sizeFx();addEventListener('resize',sizeFx);
-function burst(n,cols){
-  for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*160,y:innerHeight*0.42,
-    vx:(Math.random()-.5)*11,vy:-Math.random()*13-3,g:.42,s:3+Math.random()*5,
-    c:cols[Math.floor(Math.random()*cols.length)],life:70+Math.random()*40,r:Math.random()*6});
-  if(!fxOn)loopFx();
-}
-function loopFx(){
-  fxOn=true;cx.clearRect(0,0,cv.width,cv.height);
-  parts=parts.filter(p=>p.life-->0);
-  parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=.2;
-    cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.7);cx.restore();});
-  if(parts.length)requestAnimationFrame(loopFx);else{cx.clearRect(0,0,cv.width,cv.height);fxOn=false;}
-}
-function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1400);}
+function burst(n,cols,x,y,pw){
+ x=x==null?innerWidth/2:x;y=y==null?innerHeight*.42:y;
+ for(let i=0;i<n;i++)parts.push({x:x+(Math.random()-.5)*120,y:y,vx:(Math.random()-.5)*(pw||11),vy:-Math.random()*(pw||13)-3,
+  g:.42,s:3+Math.random()*5,c:cols[Math.floor(Math.random()*cols.length)],life:60+Math.random()*50,r:Math.random()*6});
+ if(!fxOn)loopFx();}
+function loopFx(){fxOn=true;cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.life-->0);
+ parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=.2;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);
+  cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.7);cx.restore();});
+ if(parts.length)requestAnimationFrame(loopFx);else{cx.clearRect(0,0,cv.width,cv.height);fxOn=false;}}
+const GOLD=['#FF3D8B','#FFB020','#35E0D0','#F0EAFC','#6B3FA0'];
+function flash(k){const f=$('screenflash');f.className='';void f.offsetWidth;f.className=k;}
+function banner(txt,col){const b=$('banner');b.textContent=txt;b.style.color=col||'var(--serum)';b.classList.remove('show');void b.offsetWidth;b.classList.add('show');}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1400);}
 
-/* ---------------- almacenamiento ---------------- */
-async function loadMeta(){
-  try{const r=await window.storage.get('parasito:meta');if(r&&r.value)META=JSON.parse(r.value);}catch(e){}
-  paintMeta();
-}
-async function saveMeta(){try{await window.storage.set('parasito:meta',JSON.stringify(META));}catch(e){}}
-function paintMeta(){$('rBest').textContent=META.best||0;$('rRuns').textContent=META.runs||0;$('rClear').textContent=META.clears||0;$('rQs').textContent=BANK.length;}
+/* storage */
+async function loadMeta(){try{const r=await window.storage.get('paras2:meta');if(r&&r.value)META=JSON.parse(r.value);}catch(e){}paintMeta();paintXP();}
+async function saveMeta(){try{await window.storage.set('paras2:meta',JSON.stringify(META));}catch(e){}}
+function paintMeta(){$('rBest').textContent=META.best||0;$('rClear').textContent=META.clears||0;$('rLvl').textContent=lvlOf(META.xp||0);$('rQs').textContent=BANK.length;}
+function paintXP(){
+ const xp=META.xp||0,l=lvlOf(xp),a=xpFor(l),b=xpFor(l+1);
+ $('lvlTag').textContent='Nivel '+l+' · '+LEVELS[l-1];
+ $('xpTag').textContent=xp+' XP';
+ $('xpfill').style.width=(l>=LEVELS.length?100:Math.max(3,(xp-a)/(b-a)*100))+'%';}
 
-/* ---------------- portada ---------------- */
+/* portada */
+function poolFor(topic,mode){
+ let p=BANK.filter(q=>topic==='todo'?true:q.t===topic);
+ if(MODES[mode].typed)p=p.filter(q=>q.k&&q.k.length);
+ return p;}
 function paintHome(){
-  $('topics').innerHTML=TOPICS.map(t=>`<button class="chip${t.id===S.topic?' on':''}" data-t="${t.id}">${t.name}</button>`).join('');
-  $('modes').innerHTML=Object.keys(MODES).map(k=>{const m=MODES[k];
-    return `<button class="mode${k===S.mode?' on':''}${m.hell?' hell':''}" data-m="${k}"><strong>${m.name}</strong><em>${m.desc}</em><span class="tagline">${m.tag}</span></button>`;}).join('');
-  $('topics').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.topic=b.dataset.t;paintHome();});
-  $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{S.mode=b.dataset.m;paintHome();});
-  const m=MODES[S.mode];
-  const t=m.forceTopic?TOPICS.find(x=>x.id===m.forceTopic).name:TOPICS.find(x=>x.id===S.topic).name;
-  $('startHint').textContent=`${m.name} · ${t} · ${pool().length} preguntas`;
-}
-function pool(){
-  const m=MODES[S.mode];const top=m.forceTopic||S.topic;
-  let p=BANK.filter(q=>top==='todo'?true:q.t===top);
-  if(m.typed)p=p.filter(q=>q.k&&q.k.length);
-  return p;
-}
+ $('topics').innerHTML=TOPICS.map(t=>{const c=t.id==='todo'?BANK.length:BANK.filter(q=>q.t===t.id).length;
+  return `<button class="chip${t.id===S.topic?' on':''}" data-t="${t.id}">${t.n}<small>${c}</small></button>`;}).join('');
+ $('modes').innerHTML=Object.keys(MODES).map(k=>{const m=MODES[k];
+  return `<button class="mode${k===S.mode?' on':''}${m.hell?' hell':''}" data-m="${k}"><strong>${m.name}</strong><em>${m.desc}</em><span class="tag">${m.tag}</span></button>`;}).join('');
+ $('topics').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{S.topic=b.dataset.t;paintHome();});
+ $('modes').querySelectorAll('.mode').forEach(b=>b.onclick=()=>{S.mode=b.dataset.m;paintHome();});
+ const n=poolFor(S.topic,S.mode).length;
+ $('startHint').textContent=MODES[S.mode].name+' · '+TOPICS.find(t=>t.id===S.topic).n+' · '+n+' preguntas';}
 
-/* ---------------- arranque ---------------- */
+/* partida */
 function start(custom){
-  const m=MODES[S.mode];
-  let p=custom&&custom.length?custom.slice():pool();
-  if(!p.length){toast('No hay preguntas en esa combinación');return;}
-  S.queue=shuffle(p.slice());S.i=0;S.hits=0;S.tries=0;S.streak=0;S.best=0;
-  S.lives=m.lives;S.leaks=[];S.locked=false;
-  S.srs=m.srs?new Map(S.queue.map(q=>[q,0])):null;
-  if(m.endless)S.total=Infinity;
-  META.runs=(META.runs||0)+1;saveMeta();
-  $('home').style.display='none';$('over').style.display='none';$('game').style.display='block';
-  $('hLivesWrap').style.display=isFinite(m.lives)?'':'none';
-  ask();
-}
-function currentQ(){
-  const m=MODES[S.mode];
-  if(m.endless){if(S.i>=S.queue.length){S.queue=shuffle(S.queue);S.i=0;}return S.queue[S.i];}
-  return S.queue[S.i];
-}
+ const m=MODES[S.mode];
+ let p=custom&&custom.length?custom.slice():poolFor(S.topic,S.mode);
+ if(!p.length){toast('Ese bloque no tiene preguntas escritas');return;}
+ S.queue=shuffle(p.slice());S.i=0;S.hits=0;S.tries=0;S.streak=0;S.best=0;S.xpRun=0;
+ S.lives=m.lives;S.leaks=[];S.locked=false;S.srs=m.srs?new Map(S.queue.map(q=>[q,0])):null;
+ $('home').style.display='none';$('over').style.display='none';$('game').style.display='block';
+ $('hLivesWrap').style.display=isFinite(m.lives)?'':'none';
+ paintXP();ask();}
+function curQ(){const m=MODES[S.mode];
+ if(m.endless){if(S.i>=S.queue.length){S.queue=shuffle(S.queue);S.i=0;}return S.queue[S.i];}
+ return S.queue[S.i];}
 function ask(){
-  const m=MODES[S.mode];
-  if(!m.endless&&S.i>=S.queue.length){finish(true);return;}
-  const q=currentQ();S.locked=false;
-  $('qcard').className='qcard';
-  $('verdict').style.display='none';$('btnNext').style.display='none';
-  $('hQ').textContent=S.tries+1;$('hHit').textContent=S.hits;
-  $('hLives').textContent=isFinite(S.lives)?S.lives:'∞';
-  $('hLeft').textContent=m.endless?'∞':(S.queue.length-S.i);
-  const names={proto:'Protozoarios',helm:'Helmintos',artro:'Artrópodos y diagnóstico',trap:'Trampa de la profesora'};
-  $('qmeta').textContent=names[q.t]+(m.srs?` · dominio ${S.srs.get(q)||0}/2`:'');
-  $('qtext').textContent=q.q;
-  paintCombo();
-  if(m.typed){
-    $('opts').innerHTML='';$('typebox').style.display='flex';
-    $('typein').value='';$('typein').disabled=false;setTimeout(()=>$('typein').focus(),40);
-  }else{
-    $('typebox').style.display='none';
-    const letters=['A','B','C','D','E'];
-    $('opts').innerHTML=q.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${letters[i]}</span><span>${o}</span></button>`).join('');
-    $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(parseInt(b.dataset.i)));
-  }
-  runTimer(m.time);
-}
+ const m=MODES[S.mode];
+ if(!m.endless&&S.i>=S.queue.length){finish(true);return;}
+ const q=curQ();S.locked=false;
+ $('qcard').className='qcard';$('verdict').style.display='none';$('btnNext').style.display='none';
+ $('hQ').textContent=S.tries+1;$('hHit').textContent=S.hits;
+ $('hLives').textContent=isFinite(S.lives)?S.lives:'∞';
+ $('hLeft').textContent=m.endless?'∞':(S.queue.length-S.i);
+ $('qmeta').textContent=(NAMES[q.t]||'')+(m.srs?' · dominio '+(S.srs.get(q)||0)+'/2':'');
+ $('qtext').textContent=q.q;paintCombo();
+ if(m.typed){$('opts').innerHTML='';$('typebox').style.display='flex';$('typein').value='';$('typein').disabled=false;setTimeout(()=>$('typein').focus(),40);}
+ else{$('typebox').style.display='none';
+  const L=['A','B','C','D','E'];
+  $('opts').innerHTML=q.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${L[i]}</span><span>${o}</span></button>`).join('');
+  $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=e=>answer(parseInt(b.dataset.i),e));}
+ runTimer(m.time);}
 function paintCombo(){
-  const box=$('comboBox');
-  if(S.streak<2){$('comboN').textContent='';$('comboRank').textContent='';return;}
-  $('comboN').textContent='×'+S.streak;
-  let r='';for(const [n,label] of RANKS)if(S.streak>=n)r=label;
-  $('comboRank').textContent=r;
-  box.classList.remove('pulse');void box.offsetWidth;box.classList.add('pulse');
-}
+ const box=$('comboBox');
+ if(S.streak<2){$('comboN').textContent='';$('comboRank').textContent='';return;}
+ $('comboN').textContent='×'+S.streak;
+ let r='';for(const [n,l] of RANKS)if(S.streak>=n)r=l;
+ $('comboRank').textContent=r;
+ box.classList.remove('pulse');void box.offsetWidth;box.classList.add('pulse');}
 
-/* ---------------- temporizador ---------------- */
+/* temporizador con alarma */
 function runTimer(sec){
-  tTotal=sec;tEnd=performance.now()+sec*1000;let lastTick=99;
-  cancelAnimationFrame(timerRAF);
-  const f=$('tfill');f.className='timerfill';
-  (function step(){
-    const left=Math.max(0,tEnd-performance.now())/1000;
-    f.style.transform='scaleX('+(left/tTotal)+')';
-    $('clock').textContent=left.toFixed(1)+' s';
-    f.className='timerfill'+(left<tTotal*0.5?(left<tTotal*0.25?' crit':' warn'):'');
-    const whole=Math.ceil(left);
-    if(left<=3&&whole<lastTick&&whole>0){sTick();lastTick=whole;}
-    if(left<=0){timeout();return;}
-    timerRAF=requestAnimationFrame(step);
-  })();
-}
-function stopTimer(){cancelAnimationFrame(timerRAF);}
+ tTotal=sec;tEnd=performance.now()+sec*1000;let last=99;
+ cancelAnimationFrame(timerRAF);
+ const f=$('tfill'),c=$('clock'),v=$('vignette');
+ f.className='timerfill';c.className='clock';v.classList.remove('on');
+ (function step(){
+  const left=Math.max(0,tEnd-performance.now())/1000;
+  f.style.transform='scaleX('+(left/tTotal)+')';
+  c.textContent=left.toFixed(1)+' s';
+  const crit=left<=3;
+  f.className='timerfill'+(crit?' crit':(left<tTotal*.55?' warn':''));
+  c.className='clock'+(crit?' crit':'');
+  if(crit)v.classList.add('on');else v.classList.remove('on');
+  const w=Math.ceil(left*(left<=1.5?2:1));
+  if(crit&&w<last&&w>0){sTick(left<=1.5);last=w;}
+  if(left<=0){v.classList.remove('on');timeout();return;}
+  timerRAF=requestAnimationFrame(step);})();}
+function stopTimer(){cancelAnimationFrame(timerRAF);$('vignette').classList.remove('on');}
 
-/* ---------------- respuesta ---------------- */
-function timeout(){if(S.locked)return;resolve(false,true);}
-function answer(i){
-  if(S.locked)return;const q=currentQ();
-  $('opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;
-    if(k===q.a)b.classList.add('good');else if(k===i)b.classList.add('bad');});
-  resolve(i===q.a,false);
-}
+/* respuestas */
+function timeout(){if(S.locked)return;resolve(false,true,null);}
+function answer(i,ev){
+ if(S.locked)return;const q=curQ();
+ $('opts').querySelectorAll('.opt').forEach((b,k)=>{b.disabled=true;if(k===q.a)b.classList.add('good');else if(k===i)b.classList.add('bad');});
+ resolve(i===q.a,false,ev);}
 function answerTyped(){
-  if(S.locked)return;const q=currentQ();
-  const v=norm($('typein').value);
-  if(!v)return;
-  let ok=q.k.some(k=>{const n=norm(k);return v===n||(n.length>7&&lev(v,n)<=1);});
-  $('typein').disabled=true;
-  resolve(ok,false);
-}
-function resolve(ok,timedOut){
-  S.locked=true;stopTimer();S.tries++;
-  const m=MODES[S.mode],q=currentQ(),v=$('verdict');
-  const correcta = (q.o&&q.o[q.a])?q.o[q.a]:q.k[0];
-  if(ok){
-    S.hits++;S.streak++;if(S.streak>S.best)S.best=S.streak;
-    sGood(S.streak);$('qcard').classList.add('flashgood');
-    v.className='verdict good';v.innerHTML='<strong>Correcto</strong>'+q.w;v.style.display='block';
-    if([5,10,15,20,25,30,40,50].includes(S.streak)){
-      burst(60,['#FF3D8B','#FFB020','#35E0D0','#EFE9FB']);
-      let r='';for(const [n,label] of RANKS)if(S.streak>=n)r=label;
-      toast('Racha ×'+S.streak+' — '+r);
-    }
-    if(m.srs){const c=(S.srs.get(q)||0)+1;S.srs.set(q,c);
-      if(c<2){S.queue.push(q);}  /* vuelve al final hasta dominarla */
-    }
-    $('hHit').textContent=S.hits;
-    S.i++;paintCombo();
-    setTimeout(()=>{if(!MODES[S.mode].endless&&S.i>=S.queue.length){finish(true);}else ask();},950);
-    return;
-  }
-  /* fallo */
-  S.streak=0;sBad();$('qcard').classList.add('shake');
-  if(!S.leaks.some(x=>x.q===q.q))S.leaks.push(q);
-  v.className='verdict bad';
-  v.innerHTML='<strong>'+(timedOut?'Se acabó el tiempo':'Incorrecto')+'</strong>Respuesta: <b style="color:var(--slide)">'+correcta+'</b>. '+q.w;
-  v.style.display='block';paintCombo();
-  if(m.reset){
-    setTimeout(()=>finish(false,'reset'),2400);return;
-  }
-  if(isFinite(S.lives)){S.lives--;$('hLives').textContent=S.lives;
-    if(S.lives<=0){setTimeout(()=>finish(false,'lives'),2400);return;}}
-  if(m.srs){S.srs.set(q,0);S.queue.push(q);}
-  if(m.endless){setTimeout(()=>finish(false,'lives'),2400);return;}
-  S.i++;
-  $('btnNext').style.display='inline-block';$('btnNext').focus();
-}
+ if(S.locked)return;const q=curQ(),v=norm($('typein').value);
+ if(!v)return;
+ const ok=q.k.some(k=>{const n=norm(k);return v===n||(n.length>7&&lev(v,n)<=1);});
+ $('typein').disabled=true;resolve(ok,false,null);}
+function grantXP(n){
+ const before=lvlOf(META.xp||0);
+ META.xp=(META.xp||0)+n;S.xpRun+=n;paintXP();
+ const after=lvlOf(META.xp);
+ if(after>before){sLevel();banner('NIVEL '+after,'var(--vital)');burst(110,GOLD);toast(LEVELS[after-1]);}
+ saveMeta();}
+function resolve(ok,timedOut,ev){
+ S.locked=true;stopTimer();S.tries++;
+ const m=MODES[S.mode],q=curQ(),v=$('verdict');
+ const correcta=(q.o&&q.o[q.a]!=null)?q.o[q.a]:q.k[0];
+ if(ok){
+  S.hits++;S.streak++;if(S.streak>S.best)S.best=S.streak;
+  sGood(S.streak);flash('g');$('qcard').classList.add('flashgood');
+  const mult=1+Math.min(S.streak,20)*0.15;
+  grantXP(Math.round((m.hell?14:10)*mult));
+  const px=ev&&ev.clientX?ev.clientX:null,py=ev&&ev.clientY?ev.clientY:null;
+  burst(S.streak>=10?26:14,GOLD,px,py,8);
+  v.className='verdict good';v.innerHTML='<strong>Correcto</strong>'+q.w;v.style.display='block';
+  const hit=RANKS.find(r=>r[0]===S.streak);
+  if(hit){banner('×'+S.streak+' '+hit[1]);burst(90,GOLD);}
+  else if(S.streak%10===0&&S.streak>0){banner('×'+S.streak);burst(70,GOLD);}
+  $('hHit').textContent=S.hits;
+  if(m.srs){const c=(S.srs.get(q)||0)+1;S.srs.set(q,c);if(c<2)S.queue.push(q);}
+  S.i++;paintCombo();
+  setTimeout(()=>{if(!MODES[S.mode].endless&&S.i>=S.queue.length)finish(true);else ask();},900);
+  return;}
+ S.streak=0;sBad();flash('r');$('qcard').classList.add('shake');
+ if(!S.leaks.some(x=>x.q===q.q))S.leaks.push(q);
+ v.className='verdict bad';
+ v.innerHTML='<strong>'+(timedOut?'Se acabó el tiempo':'Incorrecto')+'</strong>Respuesta: <b style="color:var(--slide)">'+correcta+'</b>. '+q.w;
+ v.style.display='block';paintCombo();
+ if(m.reset){banner('DE VUELTA A CERO','var(--lysis)');setTimeout(()=>finish(false,'reset'),2500);return;}
+ if(isFinite(S.lives)){S.lives--;$('hLives').textContent=S.lives;
+  if(S.lives<=0){setTimeout(()=>finish(false,'lives'),2500);return;}}
+ if(m.srs){S.srs.set(q,0);S.queue.push(q);}
+ if(m.endless){setTimeout(()=>finish(false,'lives'),2500);return;}
+ S.i++;$('btnNext').style.display='inline-block';$('btnNext').focus();}
 $('btnNext').onclick=()=>{if(!MODES[S.mode].endless&&S.i>=S.queue.length)finish(true);else ask();};
 $('typego').onclick=answerTyped;
 $('typein').addEventListener('keydown',e=>{if(e.key==='Enter')answerTyped();});
 
-/* ---------------- fin ---------------- */
+/* fin */
 function finish(won,why){
-  stopTimer();
-  const m=MODES[S.mode];
-  if(S.best>(META.best||0)){META.best=S.best;}
-  if(won&&!m.endless){META.clears=(META.clears||0)+1;}
-  saveMeta();paintMeta();
-  $('game').style.display='none';$('over').style.display='block';
-  $('oHit').textContent=S.hits;$('oStreak').textContent=S.best;
-  $('oAcc').textContent=S.tries?Math.round(S.hits/S.tries*100)+'%':'0%';
-  const T=$('overTitle'),M=$('overMsg');
-  if(won){
-    sWin();burst(150,['#FF3D8B','#FFB020','#35E0D0','#EFE9FB','#6B3FA0']);
-    T.textContent='Bloque limpio';
-    M.textContent=m.srs?'Respondiste dos veces seguidas cada pregunta del bloque. Eso ya es memoria, no suerte. Sube al modo Manicomio con el semestral completo.'
-      :'Terminaste el bloque. Si aún no lo has hecho en Manicomio con todo el semestral, ese es el siguiente paso.';
-  }else if(why==='reset'){
-    T.textContent='Vuelves a cero';
-    M.textContent='Un fallo reinicia la ronda entera. Lee la respuesta que acabas de ver, dila en voz alta y arranca otra vez.';
-  }else{
-    T.textContent = m.endless?('Racha rota en '+S.best):'Sin vidas';
-    M.textContent = m.endless?'Tu racha más larga queda registrada. Intenta superarla.':'Se te acabaron las vidas. Repasa tus fallos antes de repetir.';
-  }
-  const seen=new Set();
-  $('leaks').innerHTML = S.leaks.length
-    ? '<h3>Lo que se te escapó en esta ronda</h3><ul>'+S.leaks.filter(q=>!seen.has(q.q)&&seen.add(q.q)).map(q=>
-        '<li><b>'+q.q+'</b><br>'+((q.o&&q.o[q.a])?q.o[q.a]:q.k[0])+' — '+q.w+'</li>').join('')+'</ul>'
-    : (won?'':'<h3>Sin fallos anotados en esta ronda</h3>');
-  $('btnLeak').style.display=S.leaks.length?'inline-block':'none';
-}
+ stopTimer();const m=MODES[S.mode];
+ if(S.best>(META.best||0))META.best=S.best;
+ if(won&&!m.endless){META.clears=(META.clears||0)+1;grantXP(60);}
+ saveMeta();paintMeta();
+ $('game').style.display='none';$('over').style.display='block';
+ $('oHit').textContent=S.hits;$('oStreak').textContent=S.best;
+ $('oAcc').textContent=S.tries?Math.round(S.hits/S.tries*100)+'%':'0%';
+ $('oXp').textContent=S.xpRun;
+ const T=$('overTitle'),M=$('overMsg');
+ if(won){sWin();burst(190,GOLD);banner('BLOQUE LIMPIO','var(--vital)');
+  T.textContent='Bloque limpio';
+  M.textContent=m.srs?'Respondiste dos veces seguidas cada pregunta del bloque. Eso ya es memoria. Sube a Manicomio con el bloque completo.'
+   :'Terminaste el bloque. Si no lo has hecho en Manicomio con todo el temario, ese es el siguiente paso.';}
+ else if(why==='reset'){T.textContent='Vuelves a cero';
+  M.textContent='Un fallo reinicia la ronda entera. Lee la respuesta, dila en voz alta y arranca otra vez.';}
+ else{T.textContent=m.endless?('Racha rota en '+S.best):'Sin vidas';
+  M.textContent=m.endless?'Tu racha más larga quedó registrada. Supérala.':'Repasa tus fallos antes de repetir.';}
+ const seen=new Set();
+ $('leaks').innerHTML=S.leaks.length
+  ?'<h3>Lo que se te escapó</h3><ul>'+S.leaks.filter(q=>!seen.has(q.q)&&seen.add(q.q)).map(q=>
+    '<li><b>'+q.q+'</b><br>'+((q.o&&q.o[q.a]!=null)?q.o[q.a]:q.k[0])+' — '+q.w+'</li>').join('')+'</ul>'
+  :(won?'':'<h3>Sin fallos anotados</h3>');
+ $('btnLeak').style.display=S.leaks.length?'inline-block':'none';}
 $('btnRetry').onclick=()=>start();
-$('btnLeak').onclick=()=>{const l=S.leaks.slice();if(MODES[S.mode].reset)S.mode='entrenamiento';start(l);};
-$('btnHome').onclick=goHome;
-$('btnQuit').onclick=()=>{stopTimer();goHome();};
-function goHome(){stopTimer();$('game').style.display='none';$('over').style.display='none';$('home').style.display='block';paintHome();}
-$('btnStart').onclick=()=>start();
+$('btnLeak').onclick=()=>{const l=S.leaks.slice();if(MODES[S.mode].reset||MODES[S.mode].typed)S.mode='entrenamiento';start(l);};
+$('btnHome').onclick=goHome;$('btnQuit').onclick=goHome;$('btnStart').onclick=()=>start();
+function goHome(){stopTimer();$('game').style.display='none';$('over').style.display='none';$('home').style.display='block';paintHome();paintMeta();}
 
-/* ---------------- teclado ---------------- */
 addEventListener('keydown',e=>{
-  if($('game').style.display!=='block')return;
-  if(MODES[S.mode].typed)return;
-  const k=e.key.toLowerCase();
-  const map={'1':0,'2':1,'3':2,'4':3,'5':4,'a':0,'b':1,'c':2,'d':3,'e':4};
-  if(k in map&&!S.locked){const b=$('opts').querySelector('[data-i="'+map[k]+'"]');if(b)b.click();}
-  if((k==='enter'||k===' ')&&S.locked&&$('btnNext').style.display!=='none'){e.preventDefault();$('btnNext').click();}
-});
+ if($('game').style.display!=='block')return;
+ if(MODES[S.mode].typed)return;
+ const k=e.key.toLowerCase(),map={'1':0,'2':1,'3':2,'4':3,'a':0,'b':1,'c':2,'d':3};
+ if(k in map&&!S.locked){const b=$('opts').querySelector('[data-i="'+map[k]+'"]');if(b)b.click();}
+ if((k==='enter'||k===' ')&&S.locked&&$('btnNext').style.display!=='none'){e.preventDefault();$('btnNext').click();}});
 
 paintHome();loadMeta();
 </script>
